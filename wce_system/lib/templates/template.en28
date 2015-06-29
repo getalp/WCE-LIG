@@ -1,0 +1,25 @@
+# *** This template contains most of features  - Loai bo cac feature moi - -> Copy from template2 & Disable all 2 gram & 3 gram nhung lien ket trong alignments; copy from template 8 & enable bing & google; from template 13 & enable target stem
+#--> copy from template 20 & enable Proper name & disable Num of stem & enable Proper Name + Current Target Word
+#--> copy from template 26 va loai bo cac thuoc tinh chua gia tri lon
+# *** current max index of U = 133
+
+U1:%x[0,0]
+U2:%x[0,1]
+U3:%x[0,2]
+U4:%x[0,3]
+U5:%x[0,4]
+U6:%x[0,5]
+U7:%x[0,6]
+U8:%x[0,7]
+#U9:%x[0,8]
+#U10:%x[0,9]
+#U11:%x[0,10]
+#U12:%x[0,11]
+#U13:%x[0,12]
+#U14:%x[0,13]
+#U15:%x[0,14]
+#U16:%x[0,15]
+#U17:%x[0,16]
+
+#Bigram
+B

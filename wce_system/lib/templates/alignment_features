@@ -1,0 +1,164 @@
+# alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
+### Window = -2 --> +2
+### Target word
+###### 1gram
+U35:%x[-2,18]
+U36:%x[-1,18]
+U37:%x[0,18]
+U38:%x[1,18]
+U39:%x[2,18]
+
+###### 2gram
+U40:%x[-2,18]/%x[-1,18]
+U41:%x[-1,18]/%x[0,18]
+U42:%x[0,18]/%x[1,18]
+U43:%x[1,18]/%x[2,18]
+
+###### 3gram
+U44:%x[-2,18]/%x[-1,18]/%x[0,18]
+U45:%x[-1,18]/%x[0,18]/%x[1,18]
+U46:%x[0,18]/%x[1,18]/%x[2,18]
+
+### Target POS
+###### 1gram
+U47:%x[-2,19]
+U48:%x[-1,19]
+U49:%x[0,19]
+U50:%x[1,19]
+U51:%x[2,19]
+
+###### 2gram
+U52:%x[-2,19]/%x[-1,19]
+U53:%x[-1,19]/%x[0,19]
+U54:%x[0,19]/%x[1,19]
+U55:%x[1,19]/%x[2,19]
+
+###### 3gram
+U56:%x[-2,19]/%x[-1,19]/%x[0,19]
+U57:%x[-1,19]/%x[0,19]/%x[1,19]
+U58:%x[0,19]/%x[1,19]/%x[2,19]
+
+### Target stem
+###### 1gram
+U59:%x[-2,20]
+U60:%x[-1,20]
+U61:%x[0,20]
+U62:%x[1,20]
+U63:%x[2,20]
+
+###### 2gram
+U64:%x[-2,20]/%x[-1,20]
+U65:%x[-1,20]/%x[0,20]
+U66:%x[0,20]/%x[1,20]
+U67:%x[1,20]/%x[2,20]
+
+###### 3gram
+U68:%x[-2,20]/%x[-1,20]/%x[0,20]
+U69:%x[-1,20]/%x[0,20]/%x[1,20]
+U70:%x[0,20]/%x[1,20]/%x[2,20]
+
+### Source Phrase (Word Source)
+###### 1gram
+U71:%x[0,27]
+U72:%x[0,30]
+U73:%x[0,33]
+
+###### 2gram
+###### Left + Current Word-Source
+U74:%x[0,33]/%x[0,27]
+U75:%x[0,27]/%x[0,30]
+
+###### 3gram
+U76:%x[0,33]/%x[0,27]/%x[0,30]
+
+### Source POS
+###### 1gram
+U77:%x[0,28]
+U78:%x[0,31]
+U79:%x[0,34]
+
+###### 2gram
+###### Left + Current Word-Source
+U80:%x[0,34]/%x[0,28]
+U81:%x[0,28]/%x[0,31]
+
+###### 3gram
+U82:%x[0,34]/%x[0,28]/%x[0,31]
+
+### Source Stem
+###### 1gram
+U83:%x[0,29]
+U84:%x[0,32]
+U85:%x[0,35]
+
+###### 2gram
+###### Left + Current Word-Source
+U86:%x[0,35]/%x[0,29]
+U87:%x[0,29]/%x[0,32]
+
+###### 3gram
+U88:%x[0,35]/%x[0,29]/%x[0,32]
+
+### Alignment Context (word)
+###### Left Source 
+U89:%x[0,33]/%x[0,18]
+
+###### Right Source 
+U90:%x[0,30]/%x[0,18]
+
+###### current Word-Source -align to- Left Word-Target
+U91:%x[0,18]/%x[0,27]
+U92:%x[0,27]/%x[0,18]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U93:%x[-2,18]/%x[0,27]
+U94:%x[-1,18]/%x[0,27]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U95:%x[0,27]/%x[1,18]
+U96:%x[0,27]/%x[2,18]
+
+### Alignment Context (POS)
+###### Left Source 
+U97:%x[0,34]/%x[0,19]
+
+###### Right Source 
+U98:%x[0,31]/%x[0,19]
+
+###### current Word-Source -align to- Left Word-Target
+U99:%x[0,19]/%x[0,28]
+U100:%x[0,28]/%x[0,19]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U101:%x[-2,19]/%x[0,28]
+U102:%x[-1,19]/%x[0,28]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U103:%x[0,28]/%x[1,19]
+U104:%x[0,28]/%x[2,19]
+
+### Alignment Context (stem)
+###### Left Source 
+U105:%x[0,35]/%x[0,20]
+
+###### Right Source 
+U106:%x[0,32]/%x[0,20]
+
+###### current Word-Source -align to- Left Word-Target
+U107:%x[0,20]/%x[0,29]
+U108:%x[0,29]/%x[0,20]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U109:%x[-2,20]/%x[0,29]
+U110:%x[-1,20]/%x[0,29]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U111:%x[0,29]/%x[1,20]
+U112:%x[0,29]/%x[2,20]
+
+### Alignment Context + POS
+U113:%x[0,28]/%x[-2,18]
+U114:%x[0,28]/%x[-1,18]
+U115:%x[0,28]/%x[0,18]
+U116:%x[0,28]/%x[1,18]
+U117:%x[0,28]/%x[2,18]

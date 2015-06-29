@@ -1,0 +1,16 @@
+#####################################################################################################
+# Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole (GETALP)
+# Homepage: http://getalp.imag.fr
+#
+# Author: Tien LE & Christophe Servan (ngoc-tien.le@imag.fr,christophe.servan@imag.fr)
+# Advisors: Laurent Besacier & Benjamin Lecouteux
+# URL: tienhuong.weebly.com
+#####################################################################################################
+Requirements:
++ Set the WCE_ROOT environment variable (see Readme file)
++ python3
++ PyYAML-3.11
++ NLTK for python 3
++ tools: see tools directory
++ 7zip to decompress data in the input_data directory
+

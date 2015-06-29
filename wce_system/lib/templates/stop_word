@@ -1,0 +1,4 @@
+# Stop Word
+U3:%x[0,1]
+### Stop word + POS
+U4:%x[0,1]/%x[0,19]

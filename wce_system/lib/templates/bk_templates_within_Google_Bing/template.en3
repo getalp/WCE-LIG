@@ -1,0 +1,271 @@
+# *** This template contains most of features
+# *** current max index of * = 125
+# Punctuation
+*1:%x[0,0]
+### Punc + POS
+*2:%x[0,0]/%x[0,19]
+
+# Stop Word
+*3:%x[0,1]
+### Stop word + POS
+*4:%x[0,1]/%x[0,19]
+
+
+# Numeric
+*5:%x[0,2]
+### Numeric + POS
+*6:%x[0,2]/%x[0,19]
+
+
+# Proper Name
+*7:%x[0,3]
+### Proper Name + Current Target Word
+*8:%x[0,3]/%x[0,18]
+
+
+# unknown lemma
+*9:%x[0,4]
+### unknown lemma + Current Target Word
+*10:%x[0,4]/%x[0,18]
+
+
+# Number Of Occurrences word
+*11:%x[0,5]
+### Number Of Occurrences word + Current Target Word
+*12:%x[0,5]/%x[0,18]
+
+# Number of occurrences stem (frequency of stemmed word)
+*13:%x[0,6]
+### Number Of Occurrences stem + Current Target Word
+*14:%x[0,6]/%x[0,18]
+
+# Occur in Google Translator
+*15:%x[0,7]
+
+# Occur in Bing Translator
+*16:%x[0,8]
+
+# Constituent Label
+*17:%x[0,9]
+### Constituent Label + Current Target Word
+*18:%x[0,9]/%x[0,18]
+### Constituent Label + POS
+*19:%x[0,9]/%x[0,19]
+
+# Distance to Root
+*20:%x[0,10]
+
+# Polysemy Count - Target
+*21:%x[0,11]
+### Polysemy Count-Target + Current Target Word
+*22:%x[0,11]/%x[0,18]
+
+# Longest Target gram length
+*23:%x[-1,12]
+*24:%x[0,12]
+*25:%x[1,12]
+### Combine with window = -1 --> +1 ~ 3gram
+*26:%x[-1,12]/%x[0,12]
+*27:%x[0,12]/%x[1,12]
+*28:%x[-1,12]/%x[0,12]/%x[1,12]
+
+# Backoff Behaviour
+*29:%x[0,13]
+
+# Longest Source gram length: Max + Min + INT_AVG + First
+*30:%x[0,14]
+*31:%x[0,15]
+*32:%x[0,16]
+*33:%x[0,17]
+
+### Max + Min
+*34:%x[0,14]/%x[0,15]
+
+# alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
+### Window = -2 --> +2
+### Target word
+###### 1gram
+*35:%x[-2,18]
+*36:%x[-1,18]
+*37:%x[0,18]
+*38:%x[1,18]
+*39:%x[2,18]
+
+###### 2gram
+*40:%x[-2,18]/%x[-1,18]
+*41:%x[-1,18]/%x[0,18]
+*42:%x[0,18]/%x[1,18]
+*43:%x[1,18]/%x[2,18]
+
+###### 3gram
+*44:%x[-2,18]/%x[-1,18]/%x[0,18]
+*45:%x[-1,18]/%x[0,18]/%x[1,18]
+*46:%x[0,18]/%x[1,18]/%x[2,18]
+
+### Target POS
+###### 1gram
+*47:%x[-2,19]
+*48:%x[-1,19]
+*49:%x[0,19]
+*50:%x[1,19]
+*51:%x[2,19]
+
+###### 2gram
+*52:%x[-2,19]/%x[-1,19]
+*53:%x[-1,19]/%x[0,19]
+*54:%x[0,19]/%x[1,19]
+*55:%x[1,19]/%x[2,19]
+
+###### 3gram
+*56:%x[-2,19]/%x[-1,19]/%x[0,19]
+*57:%x[-1,19]/%x[0,19]/%x[1,19]
+*58:%x[0,19]/%x[1,19]/%x[2,19]
+
+### Target stem
+###### 1gram
+*59:%x[-2,20]
+*60:%x[-1,20]
+*61:%x[0,20]
+*62:%x[1,20]
+*63:%x[2,20]
+
+###### 2gram
+*64:%x[-2,20]/%x[-1,20]
+*65:%x[-1,20]/%x[0,20]
+*66:%x[0,20]/%x[1,20]
+*67:%x[1,20]/%x[2,20]
+
+###### 3gram
+*68:%x[-2,20]/%x[-1,20]/%x[0,20]
+*69:%x[-1,20]/%x[0,20]/%x[1,20]
+*70:%x[0,20]/%x[1,20]/%x[2,20]
+
+### Source Phrase (Word Source)
+###### 1gram
+*71:%x[0,27]
+*72:%x[0,30]
+*73:%x[0,33]
+
+###### 2gram
+###### Left + Current Word-Source
+*74:%x[0,33]/%x[0,27]
+*75:%x[0,27]/%x[0,30]
+
+###### 3gram
+*76:%x[0,33]/%x[0,27]/%x[0,30]
+
+### Source POS
+###### 1gram
+*77:%x[0,28]
+*78:%x[0,31]
+*79:%x[0,34]
+
+###### 2gram
+###### Left + Current Word-Source
+*80:%x[0,34]/%x[0,28]
+*81:%x[0,28]/%x[0,31]
+
+###### 3gram
+*82:%x[0,34]/%x[0,28]/%x[0,31]
+
+### Source Stem
+###### 1gram
+*83:%x[0,29]
+*84:%x[0,32]
+*85:%x[0,35]
+
+###### 2gram
+###### Left + Current Word-Source
+*86:%x[0,35]/%x[0,29]
+*87:%x[0,29]/%x[0,32]
+
+###### 3gram
+*88:%x[0,35]/%x[0,29]/%x[0,32]
+
+### Alignment Context (word)
+###### Left Source 
+*89:%x[0,33]/%x[0,18]
+
+###### Right Source 
+*90:%x[0,30]/%x[0,18]
+
+###### current Word-Source -align to- Left Word-Target
+*91:%x[0,18]/%x[0,27]
+*92:%x[0,27]/%x[0,18]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+*93:%x[-2,18]/%x[0,27]
+*94:%x[-1,18]/%x[0,27]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+*95:%x[0,27]/%x[1,18]
+*96:%x[0,27]/%x[2,18]
+
+### Alignment Context (POS)
+###### Left Source 
+*97:%x[0,34]/%x[0,19]
+
+###### Right Source 
+*98:%x[0,31]/%x[0,19]
+
+###### current Word-Source -align to- Left Word-Target
+*99:%x[0,19]/%x[0,28]
+*100:%x[0,28]/%x[0,19]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+*101:%x[-2,19]/%x[0,28]
+*102:%x[-1,19]/%x[0,28]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+*103:%x[0,28]/%x[1,19]
+*104:%x[0,28]/%x[2,19]
+
+### Alignment Context (stem)
+###### Left Source 
+*105:%x[0,35]/%x[0,20]
+
+###### Right Source 
+*106:%x[0,32]/%x[0,20]
+
+###### current Word-Source -align to- Left Word-Target
+*107:%x[0,20]/%x[0,29]
+*108:%x[0,29]/%x[0,20]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+*109:%x[-2,20]/%x[0,29]
+*110:%x[-1,20]/%x[0,29]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+*111:%x[0,29]/%x[1,20]
+*112:%x[0,29]/%x[2,20]
+
+### Alignment Context + POS
+*113:%x[0,28]/%x[-2,18]
+*114:%x[0,28]/%x[-1,18]
+*115:%x[0,28]/%x[0,18]
+*116:%x[0,28]/%x[1,18]
+*117:%x[0,28]/%x[2,18]
+
+# WPP Exact   
+*118:%x[0,36]
+
+# Chu y: trong file nay column dau tien la word cua Target Language
+### *119:%x[0,37] ~ *124:%x[0,18] ~ Target Word
+
+# WPP any
+*120:%x[0,38]
+
+# Nodes
+*121:%x[0,39]
+
+# Min
+*122:%x[0,40]
+
+# Max
+*123:%x[0,41]
+
+### Min + Max
+*125:%x[0,40]/%x[0,41]
+
+#Bigram
+B

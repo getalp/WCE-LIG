@@ -1,0 +1,4 @@
+# Numeric
+U5:%x[0,2]
+### Numeric + POS
+U6:%x[0,2]/%x[0,19]

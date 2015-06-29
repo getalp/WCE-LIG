@@ -1,0 +1,4 @@
+# Polysemy Count - Target
+U21:%x[0,11]
+### Polysemy Count-Target + Current Target Word
+U22:%x[0,11]/%x[0,18]

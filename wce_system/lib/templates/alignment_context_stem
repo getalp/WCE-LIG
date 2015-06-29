@@ -1,0 +1,18 @@
+### Alignment Context (stem)
+###### Left Source 
+U105:%x[0,35]/%x[0,20]
+
+###### Right Source 
+U106:%x[0,32]/%x[0,20]
+
+###### current Word-Source -align to- Left Word-Target
+U107:%x[0,20]/%x[0,29]
+U108:%x[0,29]/%x[0,20]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U109:%x[-2,20]/%x[0,29]
+U110:%x[-1,20]/%x[0,29]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U111:%x[0,29]/%x[1,20]
+U112:%x[0,29]/%x[2,20]

@@ -1,0 +1,301 @@
+# *** This template contains most of features
+#copy from temp 1 and ideas from temp 27
+#copy from temp 34, loai bo U voi 2gram (alignment)
+#copy from temp 35, loai bo cac U lien quan den stem, va MIN, Max dong 79
+#copy from temp 36, loai bo tat ca cac U ### Alignment Context (stem)
+# *** current max index of U = 133
+# Punctuation
+U1:%x[0,0]
+### Punc + POS
+#U2:%x[0,0]/%x[0,19]
+
+# Stop Word
+U3:%x[0,1]
+### Stop word + POS
+#U4:%x[0,1]/%x[0,19]
+
+
+# Numeric
+U5:%x[0,2]
+### Numeric + POS
+#U6:%x[0,2]/%x[0,19]
+
+
+# Proper Name
+U7:%x[0,3]
+### Proper Name + Current Target Word
+#U8:%x[0,3]/%x[0,18]
+
+
+# unknown lemma
+U9:%x[0,4]
+### unknown lemma + Current Target Word
+#U10:%x[0,4]/%x[0,18]
+
+
+# Number Of Occurrences word
+U11:%x[0,5]
+### Number Of Occurrences word + Current Target Word
+#U12:%x[0,5]/%x[0,18]
+
+# Number of occurrences stem (frequency of stemmed word)
+U13:%x[0,6]
+### Number Of Occurrences stem + Current Target Word
+#U14:%x[0,6]/%x[0,18]
+
+# Occur in Google Translator
+U15:%x[0,7]
+
+# Occur in Bing Translator
+U16:%x[0,8]
+
+# Constituent Label
+U17:%x[0,9]
+### Constituent Label + Current Target Word
+#U18:%x[0,9]/%x[0,18]
+### Constituent Label + POS
+#U19:%x[0,9]/%x[0,19]
+
+# Distance to Root
+U20:%x[0,10]
+
+# Polysemy Count - Target
+U21:%x[0,11]
+### Polysemy Count-Target + Current Target Word
+#U22:%x[0,11]/%x[0,18]
+
+# Longest Target gram length
+#########U23:%x[-1,12]
+U24:%x[0,12]
+#########U25:%x[1,12]
+### Combine with window = -1 --> +1 ~ 3gram
+#U26:%x[-1,12]/%x[0,12]
+#U27:%x[0,12]/%x[1,12]
+#U28:%x[-1,12]/%x[0,12]/%x[1,12]
+
+# Backoff Behaviour
+U29:%x[0,13]
+
+# Longest Source gram length: Max + Min + INT_AVG + First
+#########U30:%x[0,14]
+#########U31:%x[0,15]
+#########U32:%x[0,16]
+U33:%x[0,17]
+
+### Max + Min
+#U34:%x[0,14]/%x[0,15]
+
+# alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
+### Window = -2 --> +2
+### Target word
+###### 1gram
+U35:%x[-2,18]
+U36:%x[-1,18]
+U37:%x[0,18]
+U38:%x[1,18]
+U39:%x[2,18]
+
+###### 2gram
+#########U40:%x[-2,18]/%x[-1,18]
+#########U41:%x[-1,18]/%x[0,18]
+#########U42:%x[0,18]/%x[1,18]
+#########U43:%x[1,18]/%x[2,18]
+
+###### 3gram
+#########U44:%x[-2,18]/%x[-1,18]/%x[0,18]
+#########U45:%x[-1,18]/%x[0,18]/%x[1,18]
+#########U46:%x[0,18]/%x[1,18]/%x[2,18]
+
+### Target POS
+###### 1gram
+U47:%x[-2,19]
+U48:%x[-1,19]
+U49:%x[0,19]
+U50:%x[1,19]
+U51:%x[2,19]
+
+###### 2gram
+#########U52:%x[-2,19]/%x[-1,19]
+#########U53:%x[-1,19]/%x[0,19]
+#########U54:%x[0,19]/%x[1,19]
+#########U55:%x[1,19]/%x[2,19]
+
+###### 3gram
+#########U56:%x[-2,19]/%x[-1,19]/%x[0,19]
+#########U57:%x[-1,19]/%x[0,19]/%x[1,19]
+#########U58:%x[0,19]/%x[1,19]/%x[2,19]
+
+### Target stem
+###### 1gram
+#########U59:%x[-2,20]
+#########U60:%x[-1,20]
+#########U61:%x[0,20]
+#########U62:%x[1,20]
+#########U63:%x[2,20]
+
+###### 2gram
+#########U64:%x[-2,20]/%x[-1,20]
+#########U65:%x[-1,20]/%x[0,20]
+#########U66:%x[0,20]/%x[1,20]
+#########U67:%x[1,20]/%x[2,20]
+
+###### 3gram
+#########U68:%x[-2,20]/%x[-1,20]/%x[0,20]
+#########U69:%x[-1,20]/%x[0,20]/%x[1,20]
+#########U70:%x[0,20]/%x[1,20]/%x[2,20]
+
+### Source Phrase (Word Source)
+###### 1gram
+U71:%x[0,27]
+U72:%x[0,30]
+U73:%x[0,33]
+
+###### 2gram
+######### Left + Current Word-Source
+#########U74:%x[0,33]/%x[0,27]
+#########U75:%x[0,27]/%x[0,30]
+
+###### 3gram
+#########U76:%x[0,33]/%x[0,27]/%x[0,30]
+
+### Source POS
+###### 1gram
+U77:%x[0,28]
+U78:%x[0,31]
+U79:%x[0,34]
+
+###### 2gram
+###### Left + Current Word-Source
+#########U80:%x[0,34]/%x[0,28]
+#########U81:%x[0,28]/%x[0,31]
+
+###### 3gram
+#########U82:%x[0,34]/%x[0,28]/%x[0,31]
+
+### Source Stem
+###### 1gram
+#########U83:%x[0,29]
+#########U84:%x[0,32]
+#########U85:%x[0,35]
+
+###### 2gram
+###### Left + Current Word-Source
+#########U86:%x[0,35]/%x[0,29]
+#########U87:%x[0,29]/%x[0,32]
+
+###### 3gram
+#########U88:%x[0,35]/%x[0,29]/%x[0,32]
+
+### Alignment Context (word)
+###### Left Source 
+U89:%x[0,33]/%x[0,18]
+
+###### Right Source 
+U90:%x[0,30]/%x[0,18]
+
+###### current Word-Source -align to- Left Word-Target
+U91:%x[0,18]/%x[0,27]
+U92:%x[0,27]/%x[0,18]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U93:%x[-2,18]/%x[0,27]
+U94:%x[-1,18]/%x[0,27]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U95:%x[0,27]/%x[1,18]
+U96:%x[0,27]/%x[2,18]
+
+### Alignment Context (POS)
+###### Left Source 
+U97:%x[0,34]/%x[0,19]
+
+###### Right Source 
+U98:%x[0,31]/%x[0,19]
+
+###### current Word-Source -align to- Left Word-Target
+U99:%x[0,19]/%x[0,28]
+U100:%x[0,28]/%x[0,19]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U101:%x[-2,19]/%x[0,28]
+U102:%x[-1,19]/%x[0,28]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U103:%x[0,28]/%x[1,19]
+U104:%x[0,28]/%x[2,19]
+
+### Alignment Context (stem)
+###### Left Source 
+#########U105:%x[0,35]/%x[0,20]
+
+###### Right Source 
+#########U106:%x[0,32]/%x[0,20]
+
+###### current Word-Source -align to- Left Word-Target
+#########U107:%x[0,20]/%x[0,29]
+#########U108:%x[0,29]/%x[0,20]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+#########U109:%x[-2,20]/%x[0,29]
+#########U110:%x[-1,20]/%x[0,29]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+#########U111:%x[0,29]/%x[1,20]
+#########U112:%x[0,29]/%x[2,20]
+
+### Alignment Context + POS
+U113:%x[0,28]/%x[-2,18]
+U114:%x[0,28]/%x[-1,18]
+U115:%x[0,28]/%x[0,18]
+U116:%x[0,28]/%x[1,18]
+U117:%x[0,28]/%x[2,18]
+
+# WPP Exact   
+#U118:%x[0,36]
+
+# Chu y: trong file nay column dau tien la word cua Target Language
+### U119:%x[0,37] ~ U124:%x[0,18] ~ Target Word
+
+# WPP any
+#U120:%x[0,38]
+
+# Nodes
+#U121:%x[0,39]
+
+# Min
+#U122:%x[0,40]
+
+# Max
+#U123:%x[0,41]
+
+### Min + Max
+#U125:%x[0,40]/%x[0,41]
+
+# Features' values ASR: de	0.959214	-3.60662	2	2	-0.120692	0.22	PRP
+# word; posterior probability(postPr); log column; ngram column; used context(Ucon); back off probability; word length column; POS
+### word 42
+#U126:%x[0,42]
+
+### Post posterior 43
+#U127:%x[0,43]
+
+### log column 44
+#U128:%x[0,44]
+
+### order of n-gram 45
+#U129:%x[0,45]
+
+### Use context 46 
+#U130:%x[0,46]
+
+### backoff score 47
+#U131:%x[0,47]
+
+### length of frame (ton may giay cho tu nay) 48
+#U132:%x[0,48]
+
+### POS 49
+#U133:%x[0,49]
+
+#Bigram
+B

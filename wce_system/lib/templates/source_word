@@ -1,0 +1,13 @@
+### Source Phrase (Word Source)
+###### 1gram
+U71:%x[0,27]
+U72:%x[0,30]
+U73:%x[0,33]
+
+###### 2gram
+###### Left + Current Word-Source
+U74:%x[0,33]/%x[0,27]
+U75:%x[0,27]/%x[0,30]
+
+###### 3gram
+U76:%x[0,33]/%x[0,27]/%x[0,30]

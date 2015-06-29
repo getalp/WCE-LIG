@@ -1,0 +1,18 @@
+### Alignment Context (word)
+###### Left Source 
+U89:%x[0,33]/%x[0,18]
+
+###### Right Source 
+U90:%x[0,30]/%x[0,18]
+
+###### current Word-Source -align to- Left Word-Target
+U91:%x[0,18]/%x[0,27]
+U92:%x[0,27]/%x[0,18]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U93:%x[-2,18]/%x[0,27]
+U94:%x[-1,18]/%x[0,27]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U95:%x[0,27]/%x[1,18]
+U96:%x[0,27]/%x[2,18]

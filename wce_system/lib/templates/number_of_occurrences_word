@@ -1,0 +1,4 @@
+# Number Of Occurrences word
+U11:%x[0,5]
+### Number Of Occurrences word + Current Target Word
+U12:%x[0,5]/%x[0,18]

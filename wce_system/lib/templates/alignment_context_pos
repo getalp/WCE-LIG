@@ -1,0 +1,25 @@
+### Alignment Context (POS)
+###### Left Source 
+U97:%x[0,34]/%x[0,19]
+
+###### Right Source 
+U98:%x[0,31]/%x[0,19]
+
+###### current Word-Source -align to- Left Word-Target
+U99:%x[0,19]/%x[0,28]
+U100:%x[0,28]/%x[0,19]
+
+###### Left Target ~ current Word-Source -align to- Left Word-Target
+U101:%x[-2,19]/%x[0,28]
+U102:%x[-1,19]/%x[0,28]
+
+###### Right Target ~ current Word-Source -align to- Right Word-Target
+U103:%x[0,28]/%x[1,19]
+U104:%x[0,28]/%x[2,19]
+
+### Alignment Context + POS
+U113:%x[0,28]/%x[-2,18]
+U114:%x[0,28]/%x[-1,18]
+U115:%x[0,28]/%x[0,18]
+U116:%x[0,28]/%x[1,18]
+U117:%x[0,28]/%x[2,18]

@@ -1,0 +1,38 @@
+path: /home/tienle/Documents/Develops/GeTools/BabelSenseCount_v25/BabelNet-2.5/resources/jlt/stopwords
+
+EN:
+bnc_stopwords_en.txt
+english_stop_words.txt
+stopwords_en.txt
+stopwords_online_en.txt
+
+The following stopwords were taken from NLTK's stopword package
+
+* Danish
+* Dutch
+* Finnish
+* French
+* German
+* Hungarian
+* Norvegian
+* Portuguese
+* Russian
+* Spanish
+* Swedish
+
+The following were taken from Lucene 3.4.0
+
+* Arabic
+* Basque
+* Bulgarian
+* Catalan
+* Farsi
+* Greek
+* Hindi
+* Latvian
+* Romanian
+* Turkish
+
+* stopword for Spanish: 
+ref: http://www.ranks.nl/stopwords/spanish
+http://members.unine.ch/jacques.savoy/clef/

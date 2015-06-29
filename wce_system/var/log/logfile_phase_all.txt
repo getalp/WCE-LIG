@@ -1,0 +1,232 @@
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 10:50:33.208215 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 10:50:33.262779 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 10:50:33.262884 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 10:57:03.848802 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 10:57:03.903876 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 10:57:03.903982 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:12:20.936091 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:12:20.989258 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:12:20.989359 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:25:10.543716 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:25:10.598420 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:25:10.598520 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:26:07.319581 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:26:07.374787 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:26:07.374892 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:32:47.332913 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:32:47.387706 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:32:47.387826 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:43:03.324346 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:43:03.380793 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:43:03.380905 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:49:23.276387 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:49:23.330973 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:49:23.331195 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:53:34.149913 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:53:34.206415 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:53:34.206643 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:56:56.468194 =
+=================================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:57:10.917459 =
+=================================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 11:57:20.102597 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 11:57:20.157272 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 11:57:20.157373 =
+=======================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 12:00:44.370151 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 12:00:44.434644 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 12:00:44.434823 =
+=======================================================
+END - Processing - Copy Raw Corpus - Done at 2015-05-11 12:03:04.233045
+
+===================================================================================
+= Using TreeTagger for Source & Target Corpus start at 2015-05-11 12:03:04.233264 =
+===================================================================================
+END - Processing - Using TreeTagger for Source & Target Corpus - Done at 2015-05-11 12:03:07.785170
+
+=======================================================================================================
+= Converting raw text & POS text from format row to format column start at 2015-05-11 12:03:07.785330 =
+=======================================================================================================
+END - Processing - Converting raw text & POS text from format row to format column - Done at 2015-05-11 12:03:08.551186
+
+================================================================
+= END Task - Preprocessing start at 2015-05-11 12:03:08.551378 =
+================================================================
+================================================================================
+= BEGIN Task - Demo Baselines & System CRF start at 2015-05-11 12:03:08.598116 =
+================================================================================
+===================================================================
+= Baseline-Systems 1, 2 and 3 start at 2015-05-11 12:03:09.775023 =
+===================================================================
+END - Processing - Baseline-Systems 1, 2 and 3 - Done at 2015-05-11 12:03:10.364257
+
+===============================================================================================================
+= System WCE - Sequential Corpus - all=10881 train=10000; dev=0; test=881 start at 2015-05-11 12:03:10.364381 =
+===============================================================================================================
+END - Processing - System WCE - Sequential Corpus - all=10881 train=10000; dev=0; test=881 - Done at 2015-05-11 12:19:40.064263
+
+==============================================================================
+= END Task - Demo Baselines & System CRF start at 2015-05-11 12:19:40.064401 =
+==============================================================================
+===============================================================
+= END - DEMO OUR SOLUTION start at 2015-05-11 12:19:40.064539 =
+===============================================================
+Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole Toolkit (eval_agent Toolkit) 
+Homepage: http://getalp.imag.fr 
+Author: Tien Ngoc LE (ngoc-tien.le@imag.fr) 
+Advisors: Laurent Besacier & Benjamin Lecouteux 
+URL: tienhuong.weebly.com 
+
+=================================================================
+= BEGIN - DEMO OUR SOLUTION start at 2015-05-11 13:19:01.915040 =
+=================================================================
+==================================================================
+= BEGIN Task - Preprocessing start at 2015-05-11 13:19:01.969168 =
+==================================================================
+=======================================================
+= Copy Raw Corpus start at 2015-05-11 13:19:01.969302 =
+=======================================================

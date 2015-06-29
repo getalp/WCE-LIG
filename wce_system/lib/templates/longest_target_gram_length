@@ -1,0 +1,8 @@
+# Longest Target gram length
+U23:%x[-1,12]
+U24:%x[0,12]
+U25:%x[1,12]
+### Combine with window = -1 --> +1 ~ 3gram
+U26:%x[-1,12]/%x[0,12]
+U27:%x[0,12]/%x[1,12]
+U28:%x[-1,12]/%x[0,12]/%x[1,12]

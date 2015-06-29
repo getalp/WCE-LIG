@@ -1,0 +1,74 @@
+#copy from temp 39 va them alignment_features
+
+# Punctuation
+U1:%x[0,0]
+
+# Stop Word
+U2:%x[0,1]
+
+# Numeric
+U3:%x[0,2]
+
+# Proper Name
+U4:%x[0,3]
+
+# unknown lemma
+U5:%x[0,4]
+
+# Number Of Occurrences word
+U6:%x[0,5]
+
+# Number of occurrences stem (frequency of stemmed word)
+U7:%x[0,6]
+
+# Occur in Google Translator
+U8:%x[0,7]
+
+# Occur in Bing Translator
+U9:%x[0,8]
+
+# Constituent Label
+U10:%x[0,9]
+
+# Distance to Root
+U11:%x[0,10]
+
+# Polysemy Count - Target
+U12:%x[0,11]
+
+# Longest Target gram length
+U13:%x[0,12]
+
+# Backoff Behaviour
+U14:%x[0,13]
+
+# Longest Source gram length: Max + Min + INT_AVG + First: 14 --> 17
+#U15:%x[0,14]
+#U16:%x[0,15]
+#U17:%x[0,16]
+U17:%x[0,17]
+
+# alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
+### Window = -2 --> +2
+### Target word
+###### 1gram
+U37:%x[0,18]
+
+### Target POS
+###### 1gram]
+U49:%x[0,19]
+
+### Source Phrase (Word Source)
+###### 1gram
+U71:%x[0,27]
+U72:%x[0,30]
+U73:%x[0,33]
+
+### Source POS
+###### 1gram
+U77:%x[0,28]
+U78:%x[0,31]
+U79:%x[0,34]
+
+#Bigram
+B

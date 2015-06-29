@@ -1,0 +1,8 @@
+# Longest Source gram length: Max + Min + INT_AVG + First
+U30:%x[0,14]
+U31:%x[0,15]
+U32:%x[0,16]
+U33:%x[0,17]
+
+### Max + Min
+U34:%x[0,14]/%x[0,15]

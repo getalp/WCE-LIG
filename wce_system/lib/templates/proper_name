@@ -1,0 +1,4 @@
+# Proper Name
+U7:%x[0,3]
+### Proper Name + Current Target Word
+U8:%x[0,3]/%x[0,18]
