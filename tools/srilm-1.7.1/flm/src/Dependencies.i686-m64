@@ -1,0 +1,263 @@
+../obj/i686-m64$(OBJ_OPTION)/FDiscount.o: FDiscount.cc hexdec.h FDiscount.h ../../include/Discount.h \
+ ../../include/Boolean.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/NgramStats.h ../../include/XCount.h \
+ ../../include/LMStats.h ../../include/Vocab.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/TextStats.h ../../include/Prob.h \
+ ../../include/Counts.h ../../include/Trie.h FNgramStats.h \
+ ../../include/TLSWrapper.h ../../include/LMStats.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/LHash.cc ../../include/Array.cc \
+ wmatrix.h ../../include/Trie.h ../../include/NgramStats.h
+../obj/i686-m64$(OBJ_OPTION)/FNgramStats.o: FNgramStats.cc FNgramStats.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/Boolean.h ../../include/LMStats.h \
+ ../../include/Vocab.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/MemStats.h ../../include/SArray.h \
+ ../../include/Array.h ../../include/TLSWrapper.h \
+ ../../include/TextStats.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/Trie.h ../../include/LHash.cc \
+ ../../include/Array.cc wmatrix.h ../../include/Trie.h \
+ ../../include/NgramStats.h ../../include/LMStats.h
+../obj/i686-m64$(OBJ_OPTION)/FNgramStatsInt.o: FNgramStatsInt.cc FNgramStats.cc FNgramStats.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/Boolean.h \
+ ../../include/LMStats.h ../../include/Vocab.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/MemStats.h \
+ ../../include/SArray.h ../../include/Array.h ../../include/TLSWrapper.h \
+ ../../include/TextStats.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/Trie.h ../../include/LHash.cc \
+ ../../include/Array.cc wmatrix.h ../../include/Trie.h \
+ ../../include/NgramStats.h ../../include/LMStats.h
+../obj/i686-m64$(OBJ_OPTION)/FNgramSpecs.o: FNgramSpecs.cc FNgram.h ../../include/LM.h \
+ ../../include/Boolean.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/SubVocab.h ../../include/TextStats.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/NgramStats.h \
+ ../../include/LMStats.h ../../include/Trie.h FNgramStats.h \
+ ../../include/TLSWrapper.h ../../include/LMStats.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/LHash.cc ../../include/Array.cc \
+ wmatrix.h ../../include/Trie.h ../../include/NgramStats.h FDiscount.h \
+ ../../include/Discount.h hexdec.h
+../obj/i686-m64$(OBJ_OPTION)/FNgramSpecsInt.o: FNgramSpecsInt.cc FNgramSpecs.cc FNgram.h \
+ ../../include/LM.h ../../include/Boolean.h ../../include/Prob.h \
+ ../../include/Counts.h ../../include/XCount.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Array.h ../../include/MemStats.h ../../include/Vocab.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ FNgramStats.h ../../include/TLSWrapper.h ../../include/LMStats.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/LHash.cc ../../include/Array.cc \
+ wmatrix.h ../../include/Trie.h ../../include/NgramStats.h FDiscount.h \
+ ../../include/Discount.h hexdec.h
+../obj/i686-m64$(OBJ_OPTION)/FactoredVocab.o: FactoredVocab.cc ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Boolean.h FNgramStats.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/LMStats.h ../../include/Vocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Map.h \
+ ../../include/MemStats.h ../../include/SArray.h ../../include/Array.h \
+ ../../include/TLSWrapper.h ../../include/TextStats.h \
+ ../../include/Prob.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/XCount.h \
+ ../../include/SubVocab.h FactoredVocab.h ../../include/LHash.h \
+ ../../include/Array.h ../../include/MemStats.h ../../include/Vocab.h \
+ ../../include/Debug.h FNgramSpecs.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Trie.cc ../../include/Trie.h \
+ ../../include/LHash.cc ../../include/Array.cc wmatrix.h \
+ ../../include/Trie.h ../../include/NgramStats.h ../../include/LMStats.h \
+ ../../include/MStringTokUtil.h
+../obj/i686-m64$(OBJ_OPTION)/FNgramLM.o: FNgramLM.cc FNgram.h ../../include/LM.h \
+ ../../include/Boolean.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/SubVocab.h ../../include/TextStats.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/NgramStats.h \
+ ../../include/LMStats.h ../../include/Trie.h FNgramStats.h \
+ ../../include/TLSWrapper.h ../../include/LMStats.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/LHash.cc ../../include/Array.cc \
+ wmatrix.h ../../include/Trie.h ../../include/NgramStats.h FDiscount.h \
+ ../../include/Discount.h hexdec.h
+../obj/i686-m64$(OBJ_OPTION)/ProductVocab.o: ProductVocab.cc FNgramStats.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/Boolean.h ../../include/LMStats.h \
+ ../../include/Vocab.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/MemStats.h ../../include/SArray.h \
+ ../../include/Array.h ../../include/TLSWrapper.h \
+ ../../include/TextStats.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Trie.cc ../../include/Trie.h ../../include/LHash.cc \
+ ../../include/Array.cc wmatrix.h ../../include/Trie.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ProductVocab.h
+../obj/i686-m64$(OBJ_OPTION)/ProductNgram.o: ProductNgram.cc ProductNgram.h ../../include/Ngram.h \
+ ../../include/LM.h ../../include/Boolean.h ../../include/Prob.h \
+ ../../include/Counts.h ../../include/XCount.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Array.h ../../include/MemStats.h ../../include/Vocab.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/Discount.h ProductVocab.h ../../include/Vocab.h \
+ FactoredVocab.h ../../include/File.h ../../include/LHash.h \
+ ../../include/Array.h ../../include/XCount.h ../../include/MemStats.h \
+ ../../include/SubVocab.h ../../include/Debug.h FNgramStats.h \
+ ../../include/TLSWrapper.h ../../include/LMStats.h FNgramSpecs.h \
+ ../../include/LHash.cc ../../include/BlockMalloc.h ../../include/Trie.cc \
+ ../../include/LHash.cc ../../include/Array.cc wmatrix.h \
+ ../../include/Trie.h ../../include/NgramStats.h FNgram.h \
+ ../../include/LM.h
+../obj/i686-m64$(OBJ_OPTION)/FLMThreads.o: FLMThreads.cc FLMThreads.h ../../include/LMThreads.h \
+ FNgramStats.h ../../include/TLSWrapper.h ../../include/tls.h \
+ ../../include/Boolean.h ../../include/LMStats.h ../../include/Vocab.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/LHash.h ../../include/Map.h \
+ ../../include/MemStats.h ../../include/SArray.h ../../include/Array.h \
+ ../../include/TLSWrapper.h ../../include/TextStats.h \
+ ../../include/Prob.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/XCount.h \
+ ../../include/SubVocab.h FactoredVocab.h ../../include/File.h \
+ ../../include/LHash.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Vocab.h ../../include/Debug.h FNgramSpecs.h \
+ ../../include/LHash.cc ../../include/BlockMalloc.h ../../include/Trie.cc \
+ ../../include/Trie.h ../../include/LHash.cc ../../include/Array.cc \
+ wmatrix.h ../../include/Trie.h ../../include/NgramStats.h \
+ ../../include/LMStats.h ProductNgram.h ../../include/Ngram.h \
+ ../../include/LM.h ../../include/SubVocab.h ../../include/NgramStats.h \
+ ../../include/Discount.h ProductVocab.h FNgram.h ../../include/LM.h
+../obj/i686-m64$(OBJ_OPTION)/strtolplusb.o: strtolplusb.cc
+../obj/i686-m64$(OBJ_OPTION)/wmatrix.o: wmatrix.cc ../../include/Trie.cc ../../include/Trie.h \
+ ../../include/MemStats.h ../../include/LHash.h ../../include/Map.h \
+ ../../include/Boolean.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Array.cc ../../include/Array.h \
+ FDiscount.h ../../include/Discount.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/NgramStats.h \
+ ../../include/XCount.h ../../include/LMStats.h ../../include/Vocab.h \
+ ../../include/SArray.h ../../include/TLSWrapper.h ../../include/tls.h \
+ ../../include/TextStats.h ../../include/Prob.h ../../include/Counts.h \
+ FNgramStats.h ../../include/TLSWrapper.h ../../include/LMStats.h \
+ ../../include/XCount.h ../../include/SubVocab.h FactoredVocab.h \
+ ../../include/File.h ../../include/LHash.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/Debug.h \
+ FNgramSpecs.h ../../include/LHash.cc wmatrix.h ../../include/Trie.h \
+ ../../include/NgramStats.h hexdec.h
+../obj/i686-m64$(OBJ_OPTION)/pngram.o: pngram.cc ../../lm/src/ngram.cc ../../include/option.h \
+ ../../include/cfuncproto.h ../../include/version.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Boolean.h ../../lm/src/Vocab.h ../../include/Boolean.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/MemStats.h \
+ ../../include/SArray.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../lm/src/SubVocab.h \
+ ../../lm/src/MultiwordVocab.h ../../lm/src/MultiwordLM.h \
+ ../../lm/src/LM.h ../../lm/src/Prob.h ../../lm/src/Counts.h \
+ ../../lm/src/XCount.h ../../lm/src/TextStats.h ../../include/Debug.h \
+ ../../lm/src/NgramStats.h ../../lm/src/LMStats.h ../../include/Trie.h \
+ ../../include/LHash.h ../../lm/src/NonzeroLM.h ../../lm/src/NBest.h \
+ ../../include/Map.h ../../lm/src/Bleu.h ../../lm/src/TaggedVocab.h \
+ ../../lm/src/Ngram.h ../../lm/src/Discount.h ../../lm/src/TaggedNgram.h \
+ ../../lm/src/StopNgram.h ../../lm/src/ClassNgram.h \
+ ../../lm/src/Trellis.h ../../include/Map2.h \
+ ../../lm/src/SimpleClassNgram.h ../../lm/src/DFNgram.h \
+ ../../lm/src/SkipNgram.h ../../lm/src/HiddenNgram.h \
+ ../../lm/src/HiddenSNgram.h ../../lm/src/NullLM.h \
+ ../../lm/src/LMClient.h ../../lm/src/BayesMix.h \
+ ../../lm/src/NgramProbArrayTrie.h ../../include/Array.cc \
+ ../../include/Array.h ../../lm/src/LoglinearMix.h \
+ ../../lm/src/AdaptiveMix.h ../../lm/src/AdaptiveMarginals.h \
+ ../../lm/src/NgramCountLM.h ../../lm/src/MSWebNgramLM.h \
+ ../../lm/src/CacheLM.h ../../lm/src/DynamicLM.h \
+ ../../lm/src/DecipherNgram.h ../../lm/src/HMMofNgrams.h \
+ ../../lm/src/RefList.h ProductNgram.h ../../include/Ngram.h \
+ ProductVocab.h ../../include/Vocab.h FactoredVocab.h \
+ ../../include/XCount.h ../../include/SubVocab.h FNgramStats.h \
+ ../../include/LMStats.h FNgramSpecs.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Trie.cc ../../include/Trie.h \
+ ../../include/LHash.cc wmatrix.h ../../include/NgramStats.h FNgram.h \
+ ../../include/LM.h ../../lm/src/MEModel.h ../../lm/src/hmaxent.h \
+ ../../include/MStringTokUtil.h ../../include/BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/fngram-count.o: fngram-count.cc ../../include/option.h \
+ ../../include/cfuncproto.h ../../include/version.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Boolean.h ../../include/Vocab.h ../../include/File.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/MemStats.h \
+ ../../include/SArray.h ../../include/Array.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/SubVocab.h ../../include/Vocab.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Prob.h \
+ ../../include/Counts.h ../../include/XCount.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h ../../include/Boolean.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/Discount.h ../../include/VarNgram.h ../../include/Ngram.h \
+ ../../include/TaggedNgram.h ../../include/TaggedVocab.h \
+ ../../include/SkipNgram.h ../../include/StopNgram.h \
+ ../../include/NgramStats.h ../../include/TaggedNgramStats.h \
+ ../../include/StopNgramStats.h FNgramStats.h ../../include/TLSWrapper.h \
+ ../../include/LMStats.h ../../include/XCount.h FactoredVocab.h \
+ ../../include/LHash.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Debug.h FNgramSpecs.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Trie.cc ../../include/LHash.cc \
+ ../../include/Array.cc wmatrix.h ../../include/Trie.h FNgram.h \
+ ../../include/LM.h FDiscount.h ../../include/Discount.h hexdec.h
+../obj/i686-m64$(OBJ_OPTION)/fngram.o: fngram.cc ../../include/option.h ../../include/cfuncproto.h \
+ ../../include/version.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Boolean.h \
+ ../../include/Vocab.h ../../include/File.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/MemStats.h ../../include/SArray.h \
+ ../../include/Array.h ../../include/TLSWrapper.h ../../include/tls.h \
+ ../../include/SubVocab.h ../../include/Vocab.h ../../include/NBest.h \
+ ../../include/Prob.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/LM.h ../../include/SubVocab.h ../../include/TextStats.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/NgramStats.h \
+ ../../include/LMStats.h ../../include/Trie.h ../../include/Bleu.h \
+ ../../include/Ngram.h ../../include/Discount.h FNgram.h \
+ ../../include/LM.h FNgramStats.h ../../include/TLSWrapper.h \
+ ../../include/LMStats.h ../../include/XCount.h FactoredVocab.h \
+ ../../include/LHash.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Debug.h FNgramSpecs.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Trie.cc ../../include/LHash.cc \
+ ../../include/Array.cc wmatrix.h ../../include/Trie.h \
+ ../../include/NgramStats.h ../../include/NullLM.h \
+ ../../include/DecipherNgram.h ../../include/Ngram.h hexdec.h
+../bin/i686-m64$(OPTION)/pngram:	../obj/i686-m64$(OPTION)/pngram.o
+pngram:	../bin/i686-m64$(OPTION)/pngram
+../bin/i686-m64$(OPTION)/fngram-count:	../obj/i686-m64$(OPTION)/fngram-count.o
+fngram-count:	../bin/i686-m64$(OPTION)/fngram-count
+../bin/i686-m64$(OPTION)/fngram:	../obj/i686-m64$(OPTION)/fngram.o
+fngram:	../bin/i686-m64$(OPTION)/fngram

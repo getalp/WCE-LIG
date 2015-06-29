@@ -1,0 +1,285 @@
+../obj/i686-m64$(OBJ_OPTION)/Lattice.o: Lattice.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/SArray.cc \
+ ../../include/BlockMalloc.h ../../include/LHash.cc \
+ ../../include/Array.cc ../../include/WordAlign.h
+../obj/i686-m64$(OBJ_OPTION)/LatticeAlign.o: LatticeAlign.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/LatticeExpand.o: LatticeExpand.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Map2.cc ../../include/LHash.cc \
+ ../../include/Array.cc
+../obj/i686-m64$(OBJ_OPTION)/LatticeIndex.o: LatticeIndex.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Array.cc
+../obj/i686-m64$(OBJ_OPTION)/LatticeNBest.o: LatticeNBest.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/Array.cc \
+ ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/IntervalHeap.cc ../../include/IntervalHeap.h \
+ ../../include/mkdir.h LatticeNBest.h
+../obj/i686-m64$(OBJ_OPTION)/LatticeNgrams.o: LatticeNgrams.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/Map2.cc \
+ ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/Array.cc
+../obj/i686-m64$(OBJ_OPTION)/LatticeReduce.o: LatticeReduce.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/SArray.cc \
+ ../../include/BlockMalloc.h ../../include/LHash.cc \
+ ../../include/Array.cc
+../obj/i686-m64$(OBJ_OPTION)/HTKLattice.o: HTKLattice.cc ../../include/Prob.h ../../include/Boolean.h \
+ ../../include/Counts.h ../../include/XCount.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/Array.h ../../include/MemStats.h ../../include/Array.cc \
+ ../../include/LHash.cc ../../include/LHash.h ../../include/Map.h \
+ ../../include/BlockMalloc.h Lattice.h ../../include/Boolean.h \
+ ../../include/Array.h ../../include/LHash.h ../../include/SArray.h \
+ ../../include/Map2.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/RefList.h \
+ ../../include/MStringTokUtil.h
+../obj/i686-m64$(OBJ_OPTION)/LatticeLM.o: LatticeLM.cc LatticeLM.h ../../include/LM.h \
+ ../../include/Boolean.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Vocab.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/SubVocab.h ../../include/TextStats.h \
+ ../../include/Debug.h ../../include/Boolean.h ../../include/NgramStats.h \
+ ../../include/LMStats.h ../../include/Trie.h Lattice.h \
+ ../../include/Prob.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/SArray.h ../../include/Map2.h ../../include/Vocab.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/Trellis.h \
+ ../../include/Trellis.cc ../../include/Trellis.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Array.cc
+../obj/i686-m64$(OBJ_OPTION)/LatticeThreads.o: LatticeThreads.cc LatticeThreads.h Lattice.h \
+ ../../include/Prob.h ../../include/Boolean.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/Boolean.h ../../include/Array.h \
+ ../../include/LHash.h ../../include/Map.h ../../include/SArray.h \
+ ../../include/Map2.h ../../include/LHash.h ../../include/Vocab.h \
+ ../../include/SArray.h ../../include/TLSWrapper.h ../../include/tls.h \
+ ../../include/LM.h ../../include/Prob.h ../../include/Vocab.h \
+ ../../include/SubVocab.h ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/LMThreads.h
+../obj/i686-m64$(OBJ_OPTION)/LatticeDecode.o: LatticeDecode.cc Lattice.h ../../include/Prob.h \
+ ../../include/Boolean.h ../../include/Counts.h ../../include/XCount.h \
+ ../../include/File.h ../../include/zio.h ../../include/zlib.h \
+ ../../include/zconf.h ../../include/Array.h ../../include/MemStats.h \
+ ../../include/Boolean.h ../../include/Array.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LHash.h ../../include/Vocab.h ../../include/SArray.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/LM.h \
+ ../../include/Prob.h ../../include/Vocab.h ../../include/SubVocab.h \
+ ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h LatticeNBest.h ../../include/Array.cc \
+ ../../include/IntervalHeap.cc ../../include/IntervalHeap.h \
+ ../../include/LHash.cc ../../include/BlockMalloc.h \
+ ../../include/CachedMem.cc ../../include/CachedMem.h
+../obj/i686-m64$(OBJ_OPTION)/testLattice.o: testLattice.cc ../../include/Vocab.h \
+ ../../include/Boolean.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/MemStats.h ../../include/SArray.h \
+ ../../include/Array.h ../../include/TLSWrapper.h ../../include/tls.h \
+ Lattice.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/Boolean.h ../../include/Array.h \
+ ../../include/LHash.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LM.h ../../include/Prob.h ../../include/Vocab.h \
+ ../../include/SubVocab.h ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h
+../obj/i686-m64$(OBJ_OPTION)/lattice-tool.o: lattice-tool.cc ../../include/option.h \
+ ../../include/cfuncproto.h ../../include/version.h ../../include/Vocab.h \
+ ../../include/Boolean.h ../../include/File.h ../../include/zio.h \
+ ../../include/zlib.h ../../include/zconf.h ../../include/LHash.h \
+ ../../include/Map.h ../../include/MemStats.h ../../include/SArray.h \
+ ../../include/Array.h ../../include/TLSWrapper.h ../../include/tls.h \
+ Lattice.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/XCount.h ../../include/Boolean.h ../../include/Array.h \
+ ../../include/LHash.h ../../include/SArray.h ../../include/Map2.h \
+ ../../include/LM.h ../../include/Prob.h ../../include/Vocab.h \
+ ../../include/SubVocab.h ../../include/TextStats.h ../../include/Debug.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Trie.h \
+ ../../include/SubVocab.h ../../include/File.h ../../include/Debug.h \
+ ../../include/Ngram.h ../../include/LM.h ../../include/Discount.h \
+ ../../include/VocabMultiMap.h ../../include/Map2.h \
+ ../../include/MultiwordVocab.h ../../include/WordMesh.h \
+ ../../include/MultiAlign.h ../../include/NBest.h ../../include/Bleu.h \
+ ../../include/Array.cc ../../include/VocabDistance.h \
+ ../../include/VocabMultiMap.h ../../include/VocabMap.h \
+ ../../include/NBest.h HTKLattice.h ../../include/ProductVocab.h \
+ ../../include/FactoredVocab.h ../../include/FNgramStats.h \
+ ../../include/FNgramSpecs.h ../../include/LHash.cc \
+ ../../include/BlockMalloc.h ../../include/Trie.cc \
+ ../../include/wmatrix.h ../../include/MultiwordLM.h \
+ ../../include/MultiwordVocab.h ../../include/NonzeroLM.h \
+ ../../include/LMClient.h ../../include/Ngram.h \
+ ../../include/ClassNgram.h ../../include/Trellis.h \
+ ../../include/SimpleClassNgram.h ../../include/ClassNgram.h \
+ ../../include/ProductNgram.h ../../include/ProductVocab.h \
+ ../../include/FNgram.h ../../include/BayesMix.h \
+ ../../include/NgramProbArrayTrie.h ../../include/LoglinearMix.h \
+ ../../include/RefList.h LatticeLM.h ../../include/Trellis.h \
+ ../../include/MEModel.h ../../include/hmaxent.h ../../include/mkdir.h
+../bin/i686-m64$(OPTION)/testLattice:	../obj/i686-m64$(OPTION)/testLattice.o
+testLattice:	../bin/i686-m64$(OPTION)/testLattice
+../bin/i686-m64$(OPTION)/lattice-tool:	../obj/i686-m64$(OPTION)/lattice-tool.o
+lattice-tool:	../bin/i686-m64$(OPTION)/lattice-tool

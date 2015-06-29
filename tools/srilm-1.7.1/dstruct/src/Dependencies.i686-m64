@@ -1,0 +1,66 @@
+../obj/i686-m64$(OBJ_OPTION)/qsort.o: qsort.c
+../obj/i686-m64$(OBJ_OPTION)/maxalloc.o: maxalloc.c ../../include/option.h ../../include/cfuncproto.h
+../obj/i686-m64$(OBJ_OPTION)/MemStats.o: MemStats.cc MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/LHashTrie.o: LHashTrie.cc
+../obj/i686-m64$(OBJ_OPTION)/SArrayTrie.o: SArrayTrie.cc Trie.cc Trie.h MemStats.h SArray.h Map.h \
+ ../../include/Boolean.h SArray.cc BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/BlockMalloc.o: BlockMalloc.cc BlockMalloc.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/Boolean.h
+../obj/i686-m64$(OBJ_OPTION)/DStructThreads.o: DStructThreads.cc DStructThreads.h BlockMalloc.h \
+ ../../include/tserror.h
+../obj/i686-m64$(OBJ_OPTION)/Array.o: Array.cc Array.h ../../include/Boolean.h MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/IntervalHeap.o: IntervalHeap.cc IntervalHeap.h ../../include/Boolean.h \
+ Array.cc Array.h MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/Map.o: Map.cc Map.h ../../include/Boolean.h MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/SArray.o: SArray.cc BlockMalloc.h SArray.h Map.h ../../include/Boolean.h \
+ MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/LHash.o: LHash.cc LHash.h Map.h ../../include/Boolean.h MemStats.h \
+ BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/Map2.o: Map2.cc Map2.h LHash.h Map.h ../../include/Boolean.h MemStats.h \
+ LHash.cc BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/Trie.o: Trie.cc Trie.h MemStats.h LHash.h Map.h ../../include/Boolean.h \
+ LHash.cc BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/CachedMem.o: CachedMem.cc CachedMem.h ../../include/TLSWrapper.h \
+ ../../include/tls.h ../../include/Boolean.h
+../obj/i686-m64$(OBJ_OPTION)/testArray.o: testArray.cc Array.cc Array.h ../../include/Boolean.h \
+ MemStats.h
+../obj/i686-m64$(OBJ_OPTION)/testMap.o: testMap.cc SArray.h Map.h ../../include/Boolean.h MemStats.h \
+ LHash.h SArray.cc BlockMalloc.h LHash.cc
+../obj/i686-m64$(OBJ_OPTION)/testFloatMap.o: testFloatMap.cc SArray.h Map.h ../../include/Boolean.h \
+ MemStats.h LHash.h SArray.cc BlockMalloc.h LHash.cc
+../obj/i686-m64$(OBJ_OPTION)/benchHash.o: benchHash.cc ../../include/option.h \
+ ../../include/cfuncproto.h LHash.cc LHash.h Map.h \
+ ../../include/Boolean.h MemStats.h BlockMalloc.h Trie.cc Trie.h
+../obj/i686-m64$(OBJ_OPTION)/testHash.o: testHash.cc LHash.cc LHash.h Map.h ../../include/Boolean.h \
+ MemStats.h BlockMalloc.h
+../obj/i686-m64$(OBJ_OPTION)/testSizes.o: testSizes.cc Trie.cc Trie.h MemStats.h LHash.h Map.h \
+ ../../include/Boolean.h LHash.cc BlockMalloc.h ../../include/Counts.h \
+ ../../include/Boolean.h ../../include/XCount.h ../../include/File.h \
+ ../../include/zio.h ../../include/zlib.h ../../include/zconf.h \
+ ../../include/XCount.h ../../include/Vocab.h ../../include/LHash.h \
+ ../../include/SArray.h ../../include/Map.h ../../include/Array.h \
+ ../../include/MemStats.h ../../include/TLSWrapper.h ../../include/tls.h \
+ ../../include/NgramStats.h ../../include/LMStats.h ../../include/Vocab.h \
+ ../../include/TextStats.h ../../include/Prob.h ../../include/Counts.h \
+ ../../include/Debug.h ../../include/Trie.h
+../obj/i686-m64$(OBJ_OPTION)/testCachedMem.o: testCachedMem.cc CachedMem.cc CachedMem.h \
+ ../../include/TLSWrapper.h ../../include/tls.h ../../include/Boolean.h
+../obj/i686-m64$(OBJ_OPTION)/testBlockMalloc.o: testBlockMalloc.cc BlockMalloc.h
+../bin/i686-m64$(OPTION)/maxalloc:	../obj/i686-m64$(OPTION)/maxalloc.o
+maxalloc:	../bin/i686-m64$(OPTION)/maxalloc
+../bin/i686-m64$(OPTION)/testArray:	../obj/i686-m64$(OPTION)/testArray.o
+testArray:	../bin/i686-m64$(OPTION)/testArray
+../bin/i686-m64$(OPTION)/testMap:	../obj/i686-m64$(OPTION)/testMap.o
+testMap:	../bin/i686-m64$(OPTION)/testMap
+../bin/i686-m64$(OPTION)/testFloatMap:	../obj/i686-m64$(OPTION)/testFloatMap.o
+testFloatMap:	../bin/i686-m64$(OPTION)/testFloatMap
+../bin/i686-m64$(OPTION)/benchHash:	../obj/i686-m64$(OPTION)/benchHash.o
+benchHash:	../bin/i686-m64$(OPTION)/benchHash
+../bin/i686-m64$(OPTION)/testHash:	../obj/i686-m64$(OPTION)/testHash.o
+testHash:	../bin/i686-m64$(OPTION)/testHash
+../bin/i686-m64$(OPTION)/testSizes:	../obj/i686-m64$(OPTION)/testSizes.o
+testSizes:	../bin/i686-m64$(OPTION)/testSizes
+../bin/i686-m64$(OPTION)/testCachedMem:	../obj/i686-m64$(OPTION)/testCachedMem.o
+testCachedMem:	../bin/i686-m64$(OPTION)/testCachedMem
+../bin/i686-m64$(OPTION)/testBlockMalloc:	../obj/i686-m64$(OPTION)/testBlockMalloc.o
+testBlockMalloc:	../bin/i686-m64$(OPTION)/testBlockMalloc
