@@ -71,6 +71,25 @@ class config(object):
 
         #language_pair
         self.LANGUAGE_PAIR = language_pair
+        self.THREADS=settingsMap[options]['threads']
+        self.punctuation = settingsMap[options]["punctuation"]
+        self.stop_words = settingsMap[options]["stop_words"]
+        self.numeric = settingsMap[options]["numeric"]
+        self.proper_name = settingsMap[options]["proper_name"]
+        self.unknown_lemma = settingsMap[options]["unknown_lemma"]
+        self.occurence_words = settingsMap[options]["occurence_words"]
+        self.occurence_stems = settingsMap[options]["occurence_stems"]
+        self.google_translator = settingsMap[options]["google_translator"]
+        self.bing_translator = settingsMap[options]["bing_translator"]
+        self.longest_ngram_length_tgt = settingsMap[options]["longest_ngram_length_tgt"]
+        self.longest_ngram_length_src = settingsMap[options]["longest_ngram_length_src"]
+        self.backoff = settingsMap[options]["backoff"]
+        self.alignments = settingsMap[options]["alignments"]
+        self.wpp = settingsMap[options]["wpp"]
+        self.wpp_any = settingsMap[options]["wpp_any"]
+        self.distance_to_root = settingsMap[options]["distance_to_root"]
+        self.polysemy_count_target = settingsMap[options]["polysemy_count_target"]
+        self.label = settingsMap[options]["label"]
 
         #******************************************************#
         #language
@@ -366,6 +385,7 @@ class config(object):
         self.TOOL_CREATE_PROBABILITY_EACH_WORD_FROM_LANGUAGE_MODEL = path + settingsMap[TOOL_ROOT]['tool_create_probability_each_word_from_language_model']
         self.TOOL_CREATE_LONGEST_TARGET_GRAM_LENGTH = path + settingsMap[TOOL_ROOT]['tool_create_longest_target_gram_length']
         self.TOOL_N_BEST_TO_LATTICE = path + settingsMap[TOOL_ROOT]['tool_n_best_to_lattice']
+        self.TOOL_N_BEST_TO_LATTICE_THREADS = path + settingsMap[TOOL_ROOT]['tool_n_best_to_lattice_threads']
 
         ##Tool MOSES
         ###self.TOOL_MOSES = path + settingsMap[TOOL_ROOT]['tool_moses']
@@ -409,8 +429,8 @@ class config(object):
         ###self.TOOL_TERPA_WITHIN_TOKENIZING = path + settingsMap[TOOL_ROOT]['tool_terpa_within_tokenizing']
         ###self.TOOL_TERP = path + settingsMap[TOOL_ROOT]['tool_terp']
         ###self.TOOL_TERCOM = path + settingsMap[TOOL_ROOT]['tool_tercom']
-        self.HYPOTHESIS_SET = "refset"
-        self.POST_EDITION_SET = "tstset"
+        self.HYPOTHESIS_SET = "tstset"
+        self.POST_EDITION_SET = "refset"
         self.TOOL_WRAP_TEXT_TO_SGM = path + settingsMap[TOOL_ROOT]['wrap_text_to_sgm']
         self.HYPOTHESIS_SET_SGM = path + settingsMap[language_pair]['hypothesis_set_sgm']
         self.POST_EDITION_SGM = path + settingsMap[language_pair]['post_edition_sgm']

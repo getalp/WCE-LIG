@@ -21,6 +21,8 @@ import shutil
 #import stat
 #import datetime
 import random
+import threading
+import time
 
 #for call shell script
 #import shlex, subprocess
@@ -223,7 +225,7 @@ def get_file_contains_number_of_words_each_line(file_input_path, file_output_pat
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file input')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open files:
@@ -278,10 +280,10 @@ def convert_format_column_to_format_row_from_output_treetagger(file_input_path, 
     if not os.path.exists(file_number_of_words_path):
         raise TypeError('Not Existed file file_number_of_words_path')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
-    str_message_if_not_existed = "Not Existed file file_number_of_words_path"
+    str_message_if_not_existed = "Not Existed file file_number_of_words_path ("+file_number_of_words_path+")"
     is_existed_file(file_number_of_words_path, str_message_if_not_existed)
 
     #open file
@@ -408,7 +410,7 @@ def get_line_given_number_of_sentence(file_input_path, number_of_sentence):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file file_input_path')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #linecache — Random access to text lines
@@ -470,7 +472,7 @@ def get_file_hypothethis_from_output_moses(file_output_from_moses_path, file_out
     if not os.path.exists(file_output_from_moses_path):
         raise TypeError('Not Existed file corpus that is output from MOSES')
     """
-    str_message_if_not_existed = "Not Existed file corpus input that is result of tool MOSES"
+    str_message_if_not_existed = "Not Existed file corpus input that is result of tool MOSES ("+file_output_from_moses_path+")"
     is_existed_file(file_output_from_moses_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1008,6 +1010,32 @@ def delete_all_files_temporary():
     #goi lenh chay
     call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
 #**************************************************************************#
+def delete_all_files_temporary_threads(current_config):
+    """
+    Deleting all files Phrase* in directory "lib/shell_script"
+    """
+    #current_config = load_configuration()
+
+    #using tool MOSES in order to generate n-best-list
+    #path_script = current_config.TOOL_N_BEST_TO_LATTICE #Path to the TOOL_N_BEST_TO_LATTICE Tool
+
+    #change mode execute script
+    #run_chmod(path_script)
+
+    command_line = "rm -rf Phrase*"
+
+    #print(command_line)
+
+    #generate shell script, roi goi lenh chay script
+    #generate shell script
+    list_of_commands = []
+
+    list_of_commands.append(command_line)
+    create_script_temp(list_of_commands)
+
+    #goi lenh chay
+    call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
+#**************************************************************************#
 def delete_all_files_temporary_within_path_pattern(file_output_path_pattern):
     """
     Deleting all files Phrase* in directory "lib/shell_script"
@@ -1102,7 +1130,7 @@ def count_number_of_words_in_sentences(file_input_path, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed input file')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1150,7 +1178,7 @@ def count_number_of_words_in_file_format_row(file_input_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed input file')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1194,7 +1222,7 @@ def count_number_of_words_in_sentences_format_row(file_input_path, file_output_p
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed input file')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1243,7 +1271,7 @@ def count_number_of_words_in_sentences_format_row_to_result_list(file_input_path
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed input file')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1291,7 +1319,7 @@ def count_number_of_sentences_in_file_within_format_column(file_input_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed input file')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open file:
@@ -1342,7 +1370,7 @@ def convert_format_row_to_format_column(file_input_path, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open 2 files:
@@ -1429,7 +1457,7 @@ def convert_format_column_to_format_row(file_input_path, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file file_input_path')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open file
@@ -1516,7 +1544,7 @@ def copy_file_from_path1_to_path2(path1, path2):
     if not os.path.exists(path1):
         raise TypeError('Not Existed file input in path1')
     """
-    str_message_if_not_existed = "Not Existed file corpus input in " + path1
+    str_message_if_not_existed = "Not Existed file corpus input in ("+path1+")"
     is_existed_file(path1, str_message_if_not_existed)
 
     shutil.copy2(path1, path2)
@@ -1545,7 +1573,7 @@ def splitting_corpus_after_merging_all_features(file_input_path, num_of_sentence
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed merged file that contains all features')
     """
-    str_message_if_not_existed = "Not Existed file corpus input that contains all merged features"
+    str_message_if_not_existed = "Not Existed file corpus input that contains all merged features ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     number_of_current_sentence = 1
@@ -1608,7 +1636,7 @@ def splitting_corpus_for_bl(file_input_path, num_of_sentences_skip, file_output_
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed merged file that contains all features')
     """
-    str_message_if_not_existed = "Not Existed file corpus input that contains merged features"
+    str_message_if_not_existed = "Not Existed file corpus input that contains merged features ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     number_of_current_sentence = 1
@@ -1678,7 +1706,7 @@ def creating_sequential_corpus_train_dev_test_file_from_merged_file(demo_name, f
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed merged file that contains all features')
     """
-    str_message_if_not_existed = "Not Existed file corpus input that contains all features"
+    str_message_if_not_existed = "Not Existed file corpus input that contains all features ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #chu y: chuong trinh se sinh ra theo tuan tu 9000 cau dau cho train + 1000 dev + 881 test
@@ -1828,7 +1856,7 @@ def get_list_index_of_empty_line(file_input_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #open file for reading: file_input_path
@@ -1882,7 +1910,7 @@ def get_file_containing_sentence_given_index_sentence_from_merged_file(file_inpu
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #vi du lieu moi lan chay se append nen can phai viet ham xoa file cu
@@ -1947,7 +1975,7 @@ def creating_random_corpus_train_dev_test_file_from_merged_file(demo_name, file_
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed merged file that contains all features')
     """
-    str_message_if_not_existed = "Not Existed file corpus input that contains all features"
+    str_message_if_not_existed = "Not Existed file corpus input that contains all features ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     current_config = load_configuration()
@@ -2083,7 +2111,7 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_within_our_labels():
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2168,7 +2196,7 @@ def get_list_of_file_paths_for_ape_2015_version1():
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2253,7 +2281,7 @@ def get_list_of_file_paths_for_ape_within_extension_included_tag(extension):
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2338,7 +2366,7 @@ def get_list_of_file_paths_for_ape_2015():
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2424,7 +2452,7 @@ def get_list_of_file_paths_for_ape_within_given_dir_path(directory_path):
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2510,7 +2538,7 @@ def get_list_of_file_paths_for_ape_within_extension(extension):
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2595,7 +2623,7 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr():
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2682,7 +2710,7 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_all_numerics():
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2800,7 +2828,7 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_all_numerics_after_PCA
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2892,7 +2920,7 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_all_numerics_for_wmt15
     # Max
     #list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -2981,7 +3009,7 @@ def get_list_of_file_paths_included_asr():
     # Max
     list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -3065,7 +3093,7 @@ def get_list_of_file_paths_included_nbestlist_not_asr():
     # Max
     list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX)
 
-    # Features' values ASR: les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
     # word
     # Post posterior
     # LM probability
@@ -3423,36 +3451,36 @@ def init_all_feature_names_and_path_to_templates():
 #**************************************************************************#
 #F2: top 20 features
 """
-No	Feature name
-1	alignment context pos
-2	alignment context stem
-3	alignment context word
-4	source pos
-5	source stem
-6	source word
-7	target pos
-8	target stem
-9	target word
-10	backoff behaviour
-11	constituent label
-12	distance to root
-13	longest source gram length
-14	longest target gram length
-15	max
-16	min
-17	nodes
-18	number of occurrences stem
-19	number of occurrences word
-20	numeric
-21	occur in bing translator
-22	occur in google translator
-23	polysemycount target
-24	proper namee
-25	punctuation
-26	stop word
-27	unknown lemma
-28	wpp any
-29	wpp exact
+No        Feature name
+1        alignment context pos
+2        alignment context stem
+3        alignment context word
+4        source pos
+5        source stem
+6        source word
+7        target pos
+8        target stem
+9        target word
+10        backoff behaviour
+11        constituent label
+12        distance to root
+13        longest source gram length
+14        longest target gram length
+15        max
+16        min
+17        nodes
+18        number of occurrences stem
+19        number of occurrences word
+20        numeric
+21        occur in bing translator
+22        occur in google translator
+23        polysemycount target
+24        proper namee
+25        punctuation
+26        stop word
+27        unknown lemma
+28        wpp any
+29        wpp exact
 """
 def top_20_feature_names_and_path_to_templates():
     """
@@ -3914,10 +3942,10 @@ def create_n_best_list_by_moses( file_input_path, path_to_moses_ini, N_in_nbestl
     if not os.path.exists(path_to_moses_ini):
         raise TypeError('Not Existed file moses.ini')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
-    str_message_if_not_existed = "Not Existed file path_to_moses_ini"
+    str_message_if_not_existed = "Not Existed file path_to_moses_ini ("+path_to_moses_ini+")"
     is_existed_file(path_to_moses_ini, str_message_if_not_existed)
 
     #path_to_moses -f path_to_moses_ini -include-segmentation-in-n-best -print-alignment-info-in-n-best -n-best-list output_nbestlist_included_alignment_path N < input_path > mt_output_path
@@ -3989,10 +4017,10 @@ def creating_input_format_for_tool_fast_align(file_input_source_language_path, f
     if not os.path.exists(file_input_target_language_path):
         raise TypeError('Not Existed file corpus target language')
     """
-    str_message_if_not_existed = "Not Existed file corpus input - file_input_source_language_path"
+    str_message_if_not_existed = "Not Existed file corpus input - file_input_source_language_path ("+file_input_source_language_path+")"
     is_existed_file(file_input_source_language_path, str_message_if_not_existed)
 
-    str_message_if_not_existed = "Not Existed file corpus input - file_input_target_language_path"
+    str_message_if_not_existed = "Not Existed file corpus input - file_input_target_language_path ("+file_input_target_language_path+")"
     is_existed_file(file_input_target_language_path, str_message_if_not_existed)
 
     str_delimiter = " ||| "
@@ -4050,7 +4078,7 @@ def get_word_alignment_using_tool_fast_align(file_input_path, file_output_alignm
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file input corpus for tool fast-align')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     """
@@ -4092,7 +4120,7 @@ Using other tools, the generated forward and reverse alignments can be symmetriz
     #Run Script
     call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
 #**************************************************************************#
-def lowercase_raw_corpus_not_tokenizer(file_input_path, target_language, file_output_path):
+def lowercase_raw_corpus_not_tokenizer(file_input_path, target_language, file_output_path, current_config):
     """
     Getting lowercasing but NOT tokenizer the raw corpus
 
@@ -4112,10 +4140,10 @@ def lowercase_raw_corpus_not_tokenizer(file_input_path, target_language, file_ou
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
-    current_config = load_configuration()
+    #current_config = load_configuration()
 
     command_line = "" #Path to the shell script Pre_processing
     script_path = current_config.TOOL_PRE_PROCESSING_LOWERCASING
@@ -4127,7 +4155,7 @@ def lowercase_raw_corpus_not_tokenizer(file_input_path, target_language, file_ou
     call_script(command_line, script_path)
 #**************************************************************************#
 #B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser
-def tokenizer_raw_corpus(file_input_path, target_language, file_output_path):
+def tokenizer_raw_corpus(file_input_path, target_language, file_output_path, current_config):
     """
     Getting tokenizer the raw corpus without lowercasing
 
@@ -4147,10 +4175,10 @@ def tokenizer_raw_corpus(file_input_path, target_language, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
-    current_config = load_configuration()
+    #current_config = load_configuration()
 
     command_line = "" #Path to the shell script Pre_processing
     script_path = current_config.TOOL_PRE_PROCESSING
@@ -4182,7 +4210,7 @@ def get_output_treetagger_format_row(file_input_path, target_language, file_outp
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     current_config = load_configuration()
@@ -4212,6 +4240,61 @@ def get_output_treetagger_format_row(file_input_path, target_language, file_outp
 #convert_format_row_to_format_column(file_input_path, file_output_path)
 #replace "<UNK>||||||" --> "<unk>|||<unk>|||<unk>" trong format dong
 #sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < file_format_row > file_format_row_after_customizing
+
+def get_output_treetagger_format_row_threads(file_input_path, target_language, file_output_path, current_config, config_end_user):
+    """
+    Getting output from TreeTagger with format row
+
+    :type file_input_path: string
+    :param file_input_path: contains raw corpus with format ROW.
+
+    :type target_language: string
+    :param target_language: Target Language (EN, ES, FR)
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus after normalizing punctuation and tokenizing
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file corpus input with format - column')
+    """
+
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+
+    command_line = "perl" #Path to the shell script TreeeTagger
+    script_path = current_config.TOOL_TREE_TAGGER
+    #tree_tagger_path = current_config.TREE_TAGGER_PATH
+    #script_path = config_end_user.TOOL_TREE_TAGGER
+    tree_tagger_path = config_end_user.TREE_TAGGER_PATH
+
+    #chmod +x for tree_tagger_path + "/bin/tree-tagger"
+    path_to_tool_treetagger = tree_tagger_path + "/bin/tree-tagger"
+    run_chmod(path_to_tool_treetagger)
+
+    #command_line = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path + " " + file_output_path + " -wordtaglemma"
+
+    #print(command_line)
+    l_threads = []
+    for l_inc in range(1,current_config.THREADS+1):
+        str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path +"."+str(l_inc)+")"
+        is_existed_file(file_input_path +"."+str(l_inc), str_message_if_not_existed)
+        #print (file_input_path +"."+str(l_inc))
+        #print (file_output_path +"."+str(l_inc))
+        command_line_thread = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path +"."+str(l_inc) + " " + file_output_path +".tmp."+str(l_inc) + " -wordtaglemma"
+        print(command_line_thread)
+        ts = threading.Thread(target=call_script, args=(command_line_thread, script_path))
+        l_threads.append(ts)
+        ts.start()
+    for myT in l_threads:
+        myT.join()    
+    time.sleep(1)
+    customize_output_treetagger_format_row_threads(file_output_path +".tmp", file_output_path, current_config)
+#**************************************************************************#
+
 def customize_output_treetagger_format_row(file_input_path, file_output_path):
     """
     Getting output from TreeTagger with format row
@@ -4229,7 +4312,7 @@ def customize_output_treetagger_format_row(file_input_path, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     current_config = load_configuration()
@@ -4242,6 +4325,43 @@ def customize_output_treetagger_format_row(file_input_path, file_output_path):
 
     #print(command_line)
     call_script(command_line, script_path)
+#**************************************************************************#
+def customize_output_treetagger_format_row_threads(file_input_path, file_output_path, current_config):
+    """
+    Getting output from TreeTagger with format row
+
+    :type file_input_path: string
+    :param file_input_path: contains raw corpus with format ROW.
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus after normalizing punctuation and tokenizing
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file corpus input with format - column')
+    """
+
+    #current_config = load_configuration()
+
+    script_path = current_config.CUSTOMIZE_OUTPUT_TREETAGGER
+
+    #run_chmod(script_path)
+
+    #command_line = "sh " + script_path + " " + file_input_path + " " + file_output_path
+
+    #print(command_line)
+    for l_inc in range(1,current_config.THREADS+1):
+        str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path +"."+str(l_inc)+")"
+        is_existed_file(file_input_path +"."+str(l_inc), str_message_if_not_existed)
+        #print (file_input_path +"."+str(l_inc))
+        #print (file_output_path +"."+str(l_inc))
+        command_line = "sh " + script_path + " " + file_input_path +"."+str(l_inc) + " " + file_output_path +"."+str(l_inc)
+        print(command_line)
+        call_script(command_line, script_path)
+    #call_script(command_line, script_path)
 #**************************************************************************#
 def merging_1all_features_original(list_of_file_paths):
     """
@@ -5026,7 +5146,7 @@ def divide_merged_features_file_within_given_input_file(demo_name, file_input_pa
     :type number_of_sentences_in_file_for_developing: string
     :param number_of_sentences_in_file_for_developing: the number of sentences for developing corpus
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #B2: divide corpus to train, dev, test corpus
@@ -5186,7 +5306,7 @@ def get_file_oracle_label_given_all_features_file(file_input_path, file_output_p
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input')
     """
-    str_message_if_not_existed = "Not Existed file corpus input"
+    str_message_if_not_existed = "Not Existed file corpus input ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #for reading: file_input_path
@@ -5195,7 +5315,7 @@ def get_file_oracle_label_given_all_features_file(file_input_path, file_output_p
     #for writing: file_output_path
     file_writer = open(file_output_path, mode = 'w', encoding = 'utf-8')#, 'w')
 
-    #0	1	0	0	0	1	1	1	1	r	7	1	1	F	2	2	2	2	también	ADV	también	aumentó	VLfin	aumentar	_X-1	_X-1	_X-1	also	RB	also	rose	VVD	rise	it	PP	it	G
+    #0        1        0        0        0        1        1        1        1        r        7        1        1        F        2        2        2        2        también        ADV        también        aumentó        VLfin        aumentar        _X-1        _X-1        _X-1        also        RB        also        rose        VVD        rise        it        PP        it        G
     for line in file_reader:
         line = line.strip()
         if len(line) == 0:
@@ -5226,7 +5346,7 @@ def split_input_within_given_list_of_servers(file_input_path, list_of_server_nam
         raise Exception("You should check List of Server_name in Configuration or contact Tien LE")
     #end if
 
-    str_message_if_not_existed = "Not Existed file corpus input within format column"
+    str_message_if_not_existed = "Not Existed file corpus input within format column ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     num_of_sent = count_number_of_sentences_in_file_within_format_column(file_input_path)
@@ -5436,8 +5556,91 @@ def verify_result_old_and_new(file_input_path1, file_input_path2, file_output_pa
     #close file
     file_writer.close()
 #**************************************************************************#
+def split_files(inputFile,numParts,outputName):
+    """
+    Split files in several parts.
+    """
+    print ("Splitting "+inputFile )
+    str_message_if_not_existed = inputFile + " does not exist !!!"
+    is_existed_file(inputFile, str_message_if_not_existed)
+    
+    tot_lines = sum(1 for line in open(inputFile))
+    if (tot_lines % numParts != 0 ):
+        nbr_lines = int((tot_lines)/numParts) + 1
+    else:
+        nbr_lines = int((tot_lines)/numParts)
+    nbr_lines = int((tot_lines)/numParts) + 1
+    #fileSize=os.stat(inputFile).st_size
+    #parts=FileSizeParts(fileSize,numParts)
+    #print ("%d parties pour decouper %s et le mettre dans %s", numParts, inputFile,outputName)
+    openInputFile = open(inputFile, 'r')
+    outPart=1
+    cpt_lines = 0
+    for line in openInputFile:
+        cpt_lines+=1
+        if cpt_lines > nbr_lines:
+            outPart+=1
+            cpt_lines=1
+        if cpt_lines <= nbr_lines:            
+            fullOutputName=outputName+os.extsep+str(outPart)
+            if cpt_lines == 1:
+                openOutputFile=open(fullOutputName,'w')
+            else:
+                openOutputFile=open(fullOutputName,'a')
+            openOutputFile.write(line)
+            openOutputFile.close()
+    openInputFile.close()
+    return outPart-1
+
+#**************************************************************************#
+def split_files_moses_alignment_output(inputFile,numParts,outputName):
+    """
+    Split files in several parts.
+    """
+    for line in open(inputFile):
+        nbest_line = int(line.split('|||')[0])
+    nbest_line+=1
+    tot_lines = nbest_line
+    if (tot_lines % numParts != 0 ):
+        nbr_lines = int((tot_lines)/numParts) + 1
+    else:
+        nbr_lines = int((tot_lines)/numParts)
+    nbr_lines = int((tot_lines)/numParts) + 1
+    limit_lines = nbr_lines
+    #fileSize=os.stat(inputFile).st_size
+    #parts=FileSizeParts(fileSize,numParts)
+    #print ("%d parties pour decouper %s et le mettre dans %s", numParts, inputFile,outputName)
+    openInputFile = open(inputFile, 'r')
+    outPart=1
+    cpt_lines = 0
+    old_nbest_line = 0
+    nbest_line = 0
+    for line in openInputFile:
+        nbest_line = int(line.split('|||')[0])
+        #if nbest_line != old_nbest_line:
+            #cpt_lines+=1
+            #print (str(cpt_lines)+" "+str(nbest_line)+" "+str(old_nbest_line)+" "+str(nbest_line))
+        #old_nbest_line=nbest_line
+        if nbest_line + 1 > limit_lines:
+            outPart+=1
+            limit_lines = limit_lines + nbr_lines
+            cpt_lines=0
+        if nbest_line <= limit_lines:
+            cpt_lines+=1
+            fullOutputName=outputName+os.extsep+str(outPart)
+            if cpt_lines == 1:
+                openOutputFile=open(fullOutputName,'w')
+            else:
+                openOutputFile=open(fullOutputName,'a')
+            openOutputFile.write(line)
+            openOutputFile.close()
+    openInputFile.close()
+    return outPart-1
+
 #**************************************************************************#
 #**************************************************************************#
+
+
 if __name__ == "__main__":
     #Test case:
     current_config = load_configuration()

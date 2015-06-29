@@ -9,6 +9,8 @@
 #$2 --> output name within path
 
 #replace "<UNK>||||||" --> "<unk>|||<unk>|||<unk>" in format row
-sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < $1 > temp2
+#sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < $1 > temp2
 
-mv temp2 $2
+#mv temp2 $2
+sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < $1 > $2
+

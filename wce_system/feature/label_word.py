@@ -14,6 +14,8 @@ Created on Wed Jan  7 16:59:10 2015
 
 import os
 import sys
+import time
+import threading
 
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test with line by line on the server
@@ -479,12 +481,75 @@ terp.v1/bin/terpa -h /home/lent/Develops/Solution/eval_agent/eval_agent/extracte
 """
 
 #**************************************************************************#
-def get_output_terplus(file_hypythesis_path, file_reference_path, input_extension, output_extension):
+
+#**************************************************************************#
+def convert_format_txt_to_sgml_threads(file_input_path, file_output_type, input_extension, output_extension, file_output_path, current_config):
+    """
+    Converting format text to format sgml with two type: refset & tstset
+
+    :type file_input_path: string
+    :param file_input_path: contains corpus with format row.
+
+    :type file_output_type: string
+    :param file_output_type: refset OR tstset
+
+    :type input_extension: string
+    :param input_extension: en/fr/es/...
+
+    :type output_extension: string
+    :param output_extension: en/fr/es/...
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format sgml
+
+    :raise ValueError: if any path is not existed
+    """
+
+    """
+    Buoc 1: chuyen format txt sang format sgml
+    ref = output of Machine Translation
+    hyp = post-edition
+
+    #lenh nay dung de dua vao code python
+    #$1: refset or tstset
+    #$2: input_extension, default = fr
+    #$3: output_extension, default = en
+    #$4: raw-text-corpus with format row
+    #$5: sgml-text-corpus
+    #perl ${lib_script}/wrap_text_to_sgm.perl $1 $2 $3 $4 $5
+
+    #ref set
+    perl ${lib_script}/wrap_text_to_sgm.perl refset ${input_extension} ${output_extension} tgt-mt-all.en tgt-mt-all.en.sgm
+
+    #hypothesis set
+    perl ${lib_script}/wrap_text_to_sgm.perl tstset ${input_extension} ${output_extension} tgt-pe-all.en tgt-pe-all.en.sgm
+    """
+    #self.LANGUAGE_ENGLISH = "en"
+    #self.LANGUAGE_FRENCH = "fr"
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file input')
+    """
+    str_message_if_not_existed = "Not Existed file corpus input"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    #current_config = load_configuration()
+
+    command_line = "perl " #Path to the shell script in Tools lib
+    script_path = current_config.TOOL_WRAP_TEXT_TO_SGM
+
+    command_line = command_line + script_path + " " + file_output_type + " " + input_extension + " " + output_extension + " " + file_input_path + " " + file_output_path
+    print (command_line)
+
+    call_script(command_line, script_path)
+#**************************************************************************#
+def get_output_terplus(file_hypothesis_path, file_reference_path, input_extension, output_extension):
     """
     Getting the output using tool Ter_Plus (terpa). The result path is file "terp.pra" in folder "output_path"
 
-    :type file_hypythesis_path: string
-    :param file_hypythesis_path: path of hypothesis file
+    :type file_hypothesis_path: string
+    :param file_hypothesis_path: path of hypothesis file
 
     :type file_reference_path: string
     :param file_reference_path: path of reference file
@@ -502,7 +567,7 @@ def get_output_terplus(file_hypythesis_path, file_reference_path, input_extensio
 
     #convert_format_txt_to_sgml(file_input_path, file_output_type, input_extension, output_extension, file_output_path)
     #current_config.HYPOTHESIS_SET_SGM
-    convert_format_txt_to_sgml(file_hypythesis_path, current_config.HYPOTHESIS_SET, input_extension,  output_extension, current_config.HYPOTHESIS_SET_SGM)
+    convert_format_txt_to_sgml(file_hypothesis_path, current_config.HYPOTHESIS_SET, input_extension,  output_extension, current_config.HYPOTHESIS_SET_SGM)
 
     #current_config.POST_EDITION_SGM
     convert_format_txt_to_sgml(file_reference_path, current_config.POST_EDITION_SET, input_extension,  output_extension, current_config.POST_EDITION_SGM)
@@ -534,12 +599,73 @@ def get_output_terplus(file_hypythesis_path, file_reference_path, input_extensio
     call_script(command_line, script_path)
 
 #**************************************************************************#
-def get_output_terplus_no_shift_cost(file_hypythesis_path, file_reference_path, input_extension, output_extension):
+def get_output_terplus_threads(file_hypothesis_path, file_reference_path, input_extension, output_extension, n_threads, current_config, config_end_user):
     """
     Getting the output using tool Ter_Plus (terpa). The result path is file "terp.pra" in folder "output_path"
 
-    :type file_hypythesis_path: string
-    :param file_hypythesis_path: path of hypothesis file
+    :type file_hypothesis_path: string
+    :param file_hypothesis_path: path of hypothesis file
+
+    :type file_reference_path: string
+    :param file_reference_path: path of reference file
+
+    :type input_extension: string
+    :param input_extension: input extension = en/fr/es/ar/...
+
+    :type output_extension: string
+    :param output_extension: output extension = en/fr/es/ar/...
+
+    :raise ValueError: if any path is not existed
+    """
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+
+    #convert_format_txt_to_sgml(file_input_path, file_output_type, input_extension, output_extension, file_output_path)
+    #current_config.HYPOTHESIS_SET_SGM
+    convert_format_txt_to_sgml_threads(file_hypothesis_path, current_config.HYPOTHESIS_SET, input_extension,  output_extension, current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads)+".tmp", current_config)
+
+    #current_config.POST_EDITION_SGM
+    convert_format_txt_to_sgml_threads(file_reference_path, current_config.POST_EDITION_SET, input_extension,  output_extension, current_config.POST_EDITION_SGM+"."+str(n_threads)+".tmp", current_config)
+    #return 0
+
+    #Buoc 0: Thay the cac chuoi dac biet lam cho terpa khong the chay duoc
+    #<unk> thanh unk
+    #<UNK> thanh unk
+    customize_input_before_using_terpa_format_row_threads( current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads)+".tmp", current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads)+".sgm", current_config)
+    customize_input_before_using_terpa_format_row_threads( current_config.POST_EDITION_SGM+"."+str(n_threads)+".tmp", current_config.POST_EDITION_SGM+"."+str(n_threads)+".sgm", current_config)
+
+    #print("tam thoi ok")
+
+    #goi ham xu ly terpa
+    #chu y: pwd luc goi terpa phai nam trong thu muc "lib/script"
+    #current_config.SCRIPT_TEMP
+    #terp.v1/bin/terpa -h /home/lent/Develops/Solution/eval_agent/eval_agent/extracted_features/n-tgt-mt-output.sgm -r /home/lent/Develops/Solution/eval_agent/eval_agent/extracted_features/n-tgt-pe-output.sgm
+
+    #command_line = current_config.TOOL_TERPA #Path to the terpa Tool
+    command_line = config_end_user.TOOL_JAVA + " " +  config_end_user.TOOL_JAVA_MEM_PARAM + " -jar " +  config_end_user.TOOL_TERPA_JAR + " " + config_end_user.TOOL_TERPA_PARAM + " " + config_end_user.TOOL_TERPA_PARAM_LOC
+
+    #run_chmod(current_config.TOOL_TERPA)
+    run_chmod(config_end_user.TOOL_TERPA)
+#${PATH_TO_JAVA} ${MEM_PAR} -jar ${PATH_TO_TER}/dist/lib/terp.jar ${PATH_TO_TER}/data/terpa2.param ${PATH_TO_TER}/data/data_loc.param $@
+
+    command_line = command_line + " -h " + current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads)+".sgm" + " -r " + current_config.POST_EDITION_SGM+"."+str(n_threads)+".sgm" + " -o all -n " + current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads) 
+    #+ " >& " + current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads) + ".log"
+    script_path = current_config.SCRIPT_TEMP #path contains output of tool terpa
+
+    #/home/lent/Develops/Solution/ce_agent/ce_agent/config/../../tool/terplus/terp.v1/bin/terpa_TienLE_TanLE -h /home/lent/Develops/Solution/ce_agent/ce_agent/config/../extracted_features/tgt-mt-output.sgm -r /home/lent/Develops/Solution/ce_agent/ce_agent/config/../extracted_features/tgt-pe-output.sgm
+    #print(command_line)
+    #return 0
+    #time.sleep(1)
+    call_script(command_line, current_config.POST_EDITION_SGM)
+    return current_config.HYPOTHESIS_SET_SGM+"."+str(n_threads)
+
+#**************************************************************************#
+def get_output_terplus_no_shift_cost(file_hypothesis_path, file_reference_path, input_extension, output_extension):
+    """
+    Getting the output using tool Ter_Plus (terpa). The result path is file "terp.pra" in folder "output_path"
+
+    :type file_hypothesis_path: string
+    :param file_hypothesis_path: path of hypothesis file
 
     :type file_reference_path: string
     :param file_reference_path: path of reference file
@@ -556,7 +682,7 @@ def get_output_terplus_no_shift_cost(file_hypythesis_path, file_reference_path, 
 
     #convert_format_txt_to_sgml(file_input_path, file_output_type, input_extension, output_extension, file_output_path)
     #current_config.HYPOTHESIS_SET_SGM
-    convert_format_txt_to_sgml(file_hypythesis_path, current_config.HYPOTHESIS_SET, input_extension,  output_extension, current_config.HYPOTHESIS_SET_SGM)
+    convert_format_txt_to_sgml(file_hypothesis_path, current_config.HYPOTHESIS_SET, input_extension,  output_extension, current_config.HYPOTHESIS_SET_SGM)
 
     #current_config.POST_EDITION_SGM
     convert_format_txt_to_sgml(file_reference_path, current_config.POST_EDITION_SET, input_extension,  output_extension, current_config.POST_EDITION_SGM)
@@ -576,12 +702,12 @@ def get_output_terplus_no_shift_cost(file_hypythesis_path, file_reference_path, 
     #print(command_line)
     call_script(command_line, script_path)
 #**************************************************************************#
-def get_output_terplus_within_tokenizing(file_hypythesis_path, file_reference_path, input_extension, output_extension):
+def get_output_terplus_within_tokenizing(file_hypothesis_path, file_reference_path, input_extension, output_extension):
     """
     After tokenizing hypothesis and then getting the output using tool Ter_Plus (terpa). The result path is file "terp.pra" in folder "output_path"
 
-    :type file_hypythesis_path: string
-    :param file_hypythesis_path: path of hypothesis file
+    :type file_hypothesis_path: string
+    :param file_hypothesis_path: path of hypothesis file
 
     :type file_reference_path: string
     :param file_reference_path: path of reference file
@@ -598,7 +724,7 @@ def get_output_terplus_within_tokenizing(file_hypythesis_path, file_reference_pa
 
     #convert_format_txt_to_sgml(file_input_path, file_output_type, input_extension, output_extension, file_output_path)
     #current_config.HYPOTHESIS_SET_SGM
-    convert_format_txt_to_sgml( file_hypythesis_path, current_config.HYPOTHESIS_SET, input_extension, output_extension, current_config.HYPOTHESIS_SET_SGM)
+    convert_format_txt_to_sgml( file_hypothesis_path, current_config.HYPOTHESIS_SET, input_extension, output_extension, current_config.HYPOTHESIS_SET_SGM)
 
     #current_config.POST_EDITION_SGM
     convert_format_txt_to_sgml( file_reference_path, current_config.POST_EDITION_SET, input_extension, output_extension, current_config.POST_EDITION_SGM)
@@ -1013,15 +1139,46 @@ def customize_input_before_using_terpa_format_row(file_input_path, file_output_p
     #print(command_line)
     call_script(command_line, script_path)
 #**************************************************************************#
+def customize_input_before_using_terpa_format_row_threads(file_input_path, file_output_path,current_config):
+    """
+    Getting output from TreeTagger with format row
+
+    :type file_input_path: string
+    :param file_input_path: contains raw corpus with format ROW.
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus after normalizing punctuation and tokenizing
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file corpus input with format - column')
+    """
+    str_message_if_not_existed = "Not Existed file corpus input"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    #current_config = load_configuration()
+
+    script_path = current_config.CUSTOMIZE_INPUT_BEFORE_USING_TERPA
+
+    run_chmod(script_path)
+
+    command_line = "sh " + script_path + " " + file_input_path + " " + file_output_path
+
+    #print(command_line)
+    call_script(command_line, script_path)
+#**************************************************************************#
 """
 Buoc: Trich du lieu can thiet trong result of terp-a
 """
-def extracting_label_for_word_format_column(file_hypythesis_path, file_reference_path, input_extension, output_extension, file_output_path):
+def extracting_label_for_word_format_column(file_hypothesis_path, file_reference_path, input_extension, output_extension, file_output_path):
     """
     Extracting label for word format column and each sentence separates by an empty line
 
-    :type file_hypythesis_path: list
-    :param file_hypythesis_path: path of hypothesis file
+    :type file_hypothesis_path: list
+    :param file_hypothesis_path: path of hypothesis file
 
     :type file_reference_path: string
     :param file_reference_path: path of reference file
@@ -1044,13 +1201,13 @@ def extracting_label_for_word_format_column(file_hypythesis_path, file_reference
 
     #Buoc 1: Lay ket qua cua terp_a
     #cach 1: khong can tokenize
-    get_output_terplus(file_hypythesis_path, file_reference_path, input_extension, output_extension)
+    get_output_terplus(file_hypothesis_path, file_reference_path, input_extension, output_extension)
 
     #cach 2; chua bo sung Buoc 0
-    #get_output_terplus_no_shift_cost(file_hypythesis_path, file_reference_path, input_extension, output_extension)
+    #get_output_terplus_no_shift_cost(file_hypothesis_path, file_reference_path, input_extension, output_extension)
 
     #cach 3 : within tokenizing; chua bo sung Buoc 0
-    #get_output_terplus_within_tokenizing(file_hypythesis_path, file_reference_path, input_extension, output_extension)
+    #get_output_terplus_within_tokenizing(file_hypothesis_path, file_reference_path, input_extension, output_extension)
 
     #Buoc 2: Lay cau truc tung cau dua vao trong danh sach cac doi tuong "Sentence_Terpa"
     current_config = load_configuration()
@@ -1107,6 +1264,74 @@ Num Phrase Substitutions: 2
 
 Score: 0,181 (9,583 / 53,000)
 """
+#**************************************************************************#
+def extracting_label_for_word_format_column_threads(file_hypothesis_path, file_reference_path, input_extension, output_extension, file_output_path, n_threads, current_config, config_end_user):
+    """
+    Extracting label for word format column and each sentence separates by an empty line
+
+    :type file_hypothesis_path: list
+    :param file_hypothesis_path: path of hypothesis file
+
+    :type file_reference_path: string
+    :param file_reference_path: path of reference file
+
+    :type input_extension: string
+    :param input_extension: en/fr/es/...
+
+    :type output_extension: string
+    :param output_extension: en/fr/es/...
+
+    :type file_output_path: string
+    :param file_output_path: path of file that contains label of word with format column; each "sentence" separates by an empty line
+
+    :raise ValueError: if any path is not existed
+    """
+
+    #Buoc 0: Thay the cac chuoi dac biet lam cho terpa khong the chay duoc
+    #<unk> thanh unk
+    #<UNK> thanh unk
+
+    #Buoc 1: Lay ket qua cua terp_a
+    #cach 1: khong can tokenize
+    l_hyp_file=get_output_terplus_threads(file_hypothesis_path, file_reference_path, input_extension, output_extension, n_threads, current_config, config_end_user)
+    #return 0
+
+    #cach 2; chua bo sung Buoc 0
+    #get_output_terplus_no_shift_cost(file_hypothesis_path, file_reference_path, input_extension, output_extension)
+
+    #cach 3 : within tokenizing; chua bo sung Buoc 0
+    #get_output_terplus_within_tokenizing(file_hypothesis_path, file_reference_path, input_extension, output_extension)
+
+    #Buoc 2: Lay cau truc tung cau dua vao trong danh sach cac doi tuong "Sentence_Terpa"
+    #current_config = load_configuration()
+    #print(current_config.TERP_PRA+"."+str(n_threads))
+    #print (file_hypothesis_path) 
+    #print(file_reference_path)
+    #print (input_extension)
+    print (l_hyp_file+".pra")
+    print (file_output_path)
+    list_sentences = get_list_sentences_terpa(l_hyp_file+".pra")
+    extracting_corresponding_label_format_column(list_sentences, file_output_path)
+        
+        #ts = threading.Thread(target=call_script, args=(command_line_thread, script_path))
+        #l_threads.append(ts)
+        #ts.start()
+    #for myT in l_threads:
+        #myT.join()      
+    #list_sentences = get_list_sentences_terpa(current_config.TERP_PRA)
+    #print(current_config.TERP_PRA)
+    """
+    #for verifying old output Terpa "Labels-MT"
+    #TERP_PRA_FROM_WCE_SLT_LIG
+    current_config = load_configuration()
+    list_sentences = get_list_sentences_terpa(current_config.TERP_PRA_FROM_WCE_SLT_LIG)
+    """
+    #Trich nhung thong tin phu hop de ghi vao output file
+    #extracting_corresponding_label_format_column(list_sentences, file_output_path)
+
+    #Buoc 3: xoa file khong can thiet ~ output from tool terpa
+    #delete_all_files_temporary_terpa()
+
 #**************************************************************************#
 #**************************************************************************#
 def extracting_given_label(file_tags_path, file_output_path):

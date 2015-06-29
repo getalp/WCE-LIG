@@ -266,6 +266,101 @@ def feature_polysemy_count_language( file_input_path, target_language, file_outp
         #print("command_line: %s" %command_line)
 
 #**************************************************************************#
+def feature_polysemy_count_language_threads( file_input_path, target_language, file_output_path, current_config, config_end_user):
+    """
+    Counting each stemmed - word (w) of each line (in file_input_path) and POS optimized by converting to 5 main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
+
+    :type file_input_path: string
+    :param file_input_path: file output after preprocessing whose each line has format 'stemmed_word POS_after_preprocessing_in_5_types'. Among 'sentences' there is an empty line.
+
+    :type target_language: string
+    :param target_language: Target Language (EN, ES, FR)
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format each "word" in each line is the number of polysemy count and -1 if POS is OTHER; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file corpus input with format - column')
+    """
+    str_message_if_not_existed = "Not Existed file corpus input with format - column"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    #~GeTools/BabelSenseCount_v25/BabelNet-2.5$ ./calculateSenses2.sh 328-result_Stemming.txt 328-result-senses.txt
+    #Chu y: trong file "calculateSenses2.sh" --> "sense2.sh"
+    #Chu y: trong file "calculateSenses2.sh": Can thay doi, neu muon tinh so luong nghia cho ngon ngu khac nhu: EN, FR
+    #Goi script shell tren bang duong dan tuyet doi
+    #/home/tienle/Documents/Develops/GeTools/BabelSenseCount_v25/BabelNet-2.5
+
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+    #print("Shell script name:")
+    #print (current_config.TOOL_BABEL_NET_ES)
+
+    path_script = "" #Path to the shell script in BabelNet Tool
+
+    if target_language == current_config.LANGUAGE_SPANISH:
+        #path_script = current_config.TOOL_BABEL_NET_ES
+        path_script = config_end_user.TOOL_BABEL_NET_ES
+
+    elif target_language == current_config.LANGUAGE_FRENCH:
+        #path_script = current_config.TOOL_BABEL_NET_FR
+        path_script = config_end_user.TOOL_BABEL_NET_FR
+
+    elif target_language == current_config.LANGUAGE_ENGLISH:
+        #path_script = current_config.TOOL_BABEL_NET_EN
+        path_script = config_end_user.TOOL_BABEL_NET_EN
+
+    command_line = path_script + " " + file_input_path + " " + file_output_path
+
+    """
+    #print("Command line:")
+    #print(command_line)
+
+    args = shlex.split(command_line)
+
+    print("args")
+    print(args)
+
+
+    #y tuong:
+    #luu thu muc hien tai vao bien tam
+    #get current working directory
+    current_working_directory = os.getcwd()
+
+    #vao thu muc chua chuong trinh BabelNet -> run script
+    #TOOL_BABEL_NET_DIR
+    #To change current working dir to the one containing your script
+    os.chdir(os.path.dirname(current_config.TOOL_BABEL_NET_ES))
+
+    #run script
+    p = subprocess.Popen(args)
+    #subprocess.call(args)
+    output, err = p.communicate()
+    #print("output: %s ; error: %s" % (output, err))
+
+    #ra thu muc hien hanh ban dau
+    os.chdir(current_working_directory)
+    """
+
+    #call_script(command_line, path_to_script)
+    if target_language == current_config.LANGUAGE_SPANISH:
+        #path_script = current_config.TOOL_BABEL_NET_ES
+        call_script(command_line, config_end_user.TOOL_BABEL_NET_ES)
+
+    elif target_language == current_config.LANGUAGE_FRENCH:
+        #path_script = current_config.TOOL_BABEL_NET_FR
+        call_script(command_line, config_end_user.TOOL_BABEL_NET_FR)
+
+    elif target_language == current_config.LANGUAGE_ENGLISH:
+        #path_script = current_config.TOOL_BABEL_NET_EN
+        call_script(command_line, config_end_user.TOOL_BABEL_NET_EN)
+        #print("command_line: %s" %command_line)
+
+#**************************************************************************#
 """
 Buoc 3: Xoa cac dong khong can thiet; Thay the cac doan khong dung; Loc cac dong chua du lieu can thiet
 """

@@ -127,6 +127,7 @@ Chu y: Neu file Results.txt rong thi xoa tat ca cac file da sinh ra va Goto B2
 
 import os
 import sys
+import threading
 
 #for call shell script
 #import shlex, subprocess
@@ -372,23 +373,172 @@ Phrase4660 co 12 cau trong n-best-list.
 Phrase4661 co 12 cau trong n-best-list.
 """
 #**************************************************************************#
-"""
-Phrase0 1 0.00 1.00 yet 0.18901
-Phrase0 1 1.00 3.00 a 0.51267
-Phrase0 1 5.00 1.00 step 0.58710
-Phrase0 1 6.00 4.00 the 1.00000
-Phrase0 1 10.00 2.00 balkans 0.82912
-Phrase0 1 12.00 2.00 !NULL 1.00000
-a	0.51267 ( time=0 nodes=5 min=0.03497 max=0.51267 mean=0.20000 var=0.13312 svar=0.36486 )
+def split_sentences_with_id_threads(file_input_path, output_path, n_thread, config_end_user):
+    """
+    :type file_input_path: string
+    :param file_input_path: output of moses n-best-list
 
---> a	0.51267	5	0.03497	0.51267
+    :type output_path: string
+    :param output_path: contains path to script "nbestToLattice.sh"
 
-Purpose: Extracting the corresponding features
-Notes: especial cases
+    :rtype: the number of sentences in n-best-list. Default = 1000
 
-since	1.00000 ( time=0 nodes=1 min=1.00000 max=1.00000 mean=1.00000 var=0.00000 svar=0.00000 )
-yet	1.0
-"""
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file output from TreeTagger')
+    """
+    tmp_dir = "/tmp/WCE_wpp_min_max_feature"+ "_" + str(n_thread) + "/"
+    try:
+      os.stat(tmp_dir)
+    except:
+      os.mkdir(tmp_dir)
+    #tmp_dir = current_config.SCRIPT_TEMP + "_" + str(n_thread)
+    print (file_input_path)
+    print (tmp_dir)
+    str_message_if_not_existed = "Not Existed file corpus input that is output from TreeTagger"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    #open files:
+    #for reading: file_input_path
+    file_reader = open(file_input_path, mode='r', encoding='utf-8')
+
+    delimiter = "|||"
+    number_of_sentences = 0
+
+    """MOSES >= 2013
+0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , said m camus .  ||| LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15
+
+0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , declared m camus .  ||| LexicalReordering0= -2.31489 0 0 -1.80126 0 0 Distortion0= 0 LM0= -147.721 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -6.58588 -6.62274 -4.26 -5.77525 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15
+    """
+
+    """MOSES = 2009
+    0 ||| yet a crucial step for the Balkans .  ||| d: 0 -1.39532 0 0 -1.10053 0 0 lm: -135.242 tm: -3.65122 -9.83896 -3.59304 -6.25423 3.99959 w: -8 ||| -164.237 ||| 0=0 1-4=1-4 5=5 6=6 7=7 ||| 0=0 1=1 2=3 3=2 4=4 5=5 6=6 7=7 ||| 0=0 1=1 2=3 3=2 4=4 5=5 6=6 7=7
+    """
+    current_index = -1 # gia su chua doc cau nao
+    current_file_name = "PhraseN"
+    int_number_of_sentences_in_PhraseN = 0
+    max_number_of_sentences_in_PhraseN = 1000
+    first_index = -1
+
+    for line in file_reader:
+        list_items = [] # set empty list
+
+        line = line.strip() #trim line
+
+        if len(line) == 0: #xuong dong hay het file
+            break
+
+        list_items = line.split(delimiter) # Split with delimiter "|||"
+
+        if len(list_items) ==0:
+            break
+        #output: -23.1953 -52.1298 7 yet a crucial step for the balkans
+        #weighted overall score ~ index_3; LM0= -147.721; number of words in hypothesis sentence; hypothesis sentence
+        str_index = list_items[0].strip() # trim string
+        if first_index == -1:
+            first_index = int(str_index)
+
+        #weighted overall score
+        str_weighted_overall_score = list_items[3].strip() # trim string
+
+        #LM0= -147.721
+        str_scores = list_items[2].strip().lower() # trim string
+        #lexicalreordering0= -2.31489 0 0 -1.80126 0 0 distortion0= 0 lm0= -147.721 wordpenalty0= -16 phrasepenalty0= 15 translationmodel0= -6.58588 -6.62274 -4.26 -5.77525
+        start = str_scores.find('lm')
+
+        #config_end_user = load_config_end_user()
+
+        if config_end_user.VERSION_MOSES == 2009:
+            """d: 0 -1.39532 0 0 -1.10053 0 0 lm: -135.242 tm: -3.65122 -9.83896 -3.59304 -6.25423 3.99959 w: -8
+            """
+            end = str_scores.find('tm')
+        else:
+            """LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405
+            """
+            end = str_scores.find('wordpenalty')
+
+        str_lm = str_scores[start:end].strip() #'lm0= -147.721'
+
+        if config_end_user.VERSION_MOSES == 2009:
+            lst_lm = str_lm.split(":")
+        else:
+            lst_lm = str_lm.split("=")
+
+        str_score_lm = lst_lm[1].strip() #trim string
+
+        #hypothesis sentence
+        hyp_sentence = list_items[1].strip() # trim string
+
+        #pre-processing voi nhung cau co dau cau o dau
+        #muc dich: khong lam cho ngram hieu nham la ket thuc cau
+        default_begin_of_sentence = "-"
+        #list_char_end_of_sentence = [".", "!","?", "..."]
+        list_char_end_of_sentence = [".", "!","?"]
+
+        if hyp_sentence[0] in list_char_end_of_sentence:
+            #hyp_sentence[0] = default_begin_of_sentence
+            #TypeError: 'str' object does not support item assignment
+
+            #'J' + word[1:]
+            hyp_sentence = default_begin_of_sentence + hyp_sentence[1:]
+
+        #number of words in hypothesis sentence;
+        num_of_words_in_hyp_sentence = len(hyp_sentence.split())
+
+        #output string for PhraseN
+        str_output = str_weighted_overall_score + " " + str_score_lm + " " + str(num_of_words_in_hyp_sentence) + " " + hyp_sentence
+        #str_output = str_weighted_overall_score + " " + str_score_lm + " " + hyp_sentence
+
+        #lay thu muc hien tai
+        current_working_directory = os.getcwd()
+
+        #chuyen den thu muc chua code script
+        #print (output_path)
+
+        os.chdir(os.path.dirname(tmp_dir))
+
+        #xu ly du lieu dua vao PhraseN
+        current_path = os.path.realpath(tmp_dir)
+
+        int_index = int(str_index)
+
+        if int_index != current_index:
+            #cau moi --> thay file de ghi vao
+            current_index = int_index
+            number_of_sentences += 1
+
+            ##just for checking
+            ##doi voi nhung PhraseN co du so luong N-best-list
+            if int_number_of_sentences_in_PhraseN != max_number_of_sentences_in_PhraseN:
+                print("%s co %d cau trong n-best-list." %(current_file_name, int_number_of_sentences_in_PhraseN))
+
+            #update current_file_name = "PhraseN"
+            #append information to file with new id
+            current_file_name = tmp_dir + "Phrase" + str_index
+            int_number_of_sentences_in_PhraseN = 0
+        #end if
+
+        #for appending: file_output_path
+        file_writer = open(current_file_name, mode = 'a', encoding = 'utf-8')
+        int_number_of_sentences_in_PhraseN += 1
+
+        file_writer.write(str_output)
+        file_writer.write("\n")
+
+        file_writer.close()
+
+        #chuyen lai thu muc hien tai
+        os.chdir(current_working_directory)
+
+    #end for
+    
+    last_index=first_index+number_of_sentences
+
+    return first_index, last_index
+#**************************************************************************#
 def extracting_corresponding_features(file_input_path, file_output_path):
     """
     Extracting the corresponding features: word, WPP any, nodes, min, max
@@ -585,6 +735,54 @@ def generate_wpp_nodes_min_max(file_input_path, output_path):
     #generate the result with FAST tool and SRILM 1.7.1
     call_script(command_line, output_path)
 #**************************************************************************#
+def generate_wpp_nodes_min_max_threads(file_input_path, output_path,n_thread, current_config, config_end_user):
+    """
+    :type file_input_path: string
+    :param file_input_path: output of moses n-best-list
+
+    :type output_path: string
+    :param output_path: contains path to script "nbestToLattice.sh"
+
+    :raise ValueError: if any path is not existed
+    """
+    """
+    + Deleting all files Phrase* in directory that contains code "nbestToLattice.sh"
+    + Change mode execute for 2 files for fastnc & "nbestToLattice.sh"
+    """
+    #just for testing --> should disable
+    #preprocessing_for_extracting()
+
+    #current_config = load_configuration()
+
+    #config_end_user = load_config_end_user()
+    tmp_dir = "/tmp/WCE_wpp_min_max_feature"+ "_" + str(n_thread) + "/"
+
+    first_index, last_index = split_sentences_with_id_threads(file_input_path, output_path, n_thread, config_end_user)
+    #number_of_sentences = 10881
+    #number_of_sentences = 2643
+    #print("number_of_sentences:BEGIN")
+    #print(number_of_sentences)
+    #print("number_of_sentences:END")
+
+    #$1: number of Phrases
+    #$2: path to directory "SRILM_bin"
+    #NOT USED - > Removed - $3: path to language model (target language)
+    #$3: path to file "fastnc"
+    #$4: path to file "RefToCtm.pl" in fastnc
+    #$5: path to file output
+    print ("Here I am : " + output_path)
+    number_of_sentences = 907
+    command_line = output_path + " " + str(first_index) + " " + str(last_index) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + tmp_dir +" " + current_config.WPP_NODES_MIN_MAX_TEMP + "." + str(n_thread)
+
+    print(command_line)
+
+    """
+/home/lent/Develops/Solution/ce_agent/ce_agent/config/../lib/shell_script/nbestToLattice.sh 2643 /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64 /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/bin/fastnc /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/scripts/RefToCtm.pl /home/lent/Develops/Solution/ce_agent/ce_agent/config/../extracted_features/en.column.feature_wpp_nodes_min_max_temp.txt
+    """
+
+    #generate the result with FAST tool and SRILM 1.7.1
+    call_script(command_line, output_path)
+#**************************************************************************#
 def feature_wpp_nodes_min_max(file_input_path, tool_path, file_output_temp_path, file_output_path):
     """
     :type file_input_path: string
@@ -607,6 +805,47 @@ def feature_wpp_nodes_min_max(file_input_path, tool_path, file_output_temp_path,
 
     #step 2: filter corresponding features in result temp
     extracting_corresponding_features(file_output_temp_path, file_output_path)
+
+    #Step 3: delete Phrase files
+    #preprocessing_for_extracting()
+#**************************************************************************#
+def feature_wpp_nodes_min_max_threads(file_input_path, tool_path, file_output_temp_path, file_output_path, current_config, config_end_user):
+    """
+    :type file_input_path: string
+    :param file_input_path: output of moses n-best-list
+
+    :type tool_path: string
+    :param tool_path: contains path to script "nbestToLattice.sh"
+
+    :type file_output_temp_path: string
+    :param file_output_temp_path: contains result from script "nbestToLattice.sh"
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format "word, WPP any, nodes, min, max" in each line; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+
+    #step 1: generate result temp --> file_output_temp_path
+    #generate_wpp_nodes_min_max_threads(file_input_path, tool_path, current_config, config_end_user)
+    l_threads = []
+    for l_inc in range(1,current_config.THREADS+1):
+      ts = threading.Thread(target=generate_wpp_nodes_min_max_threads , args=(file_input_path+"."+str(l_inc), tool_path, l_inc, current_config, config_end_user))
+      l_threads.append(ts)
+      ts.start()
+    for myT in l_threads:
+      myT.join()
+
+    #step 2: filter corresponding features in result temp
+    #extracting_corresponding_features(file_output_temp_path, file_output_path)
+    l_threads = []
+    for l_inc in range(1,current_config.THREADS+1):
+      ts = threading.Thread(target=extracting_corresponding_features , args=(file_output_temp_path+"."+str(l_inc), file_output_path+"."+str(l_inc)))
+      l_threads.append(ts)
+      ts.start()
+    for myT in l_threads:
+      myT.join()
+
 
     #Step 3: delete Phrase files
     #preprocessing_for_extracting()
