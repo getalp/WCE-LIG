@@ -1,0 +1,624 @@
+/*
+ * =====================================================================================
+ * 
+ *       Filename:  alignContainer.h
+ * 
+ *    Description:  generic DTW and SwithWaterman implementations 
+ * 
+ *        Version:  1.2
+ *        Created:  05/03/07 10:41:03 CEST
+ *       Revision:  none
+ *       Compiler:  g++
+ * 
+ *         Author:  LECOUTEUX Benjamin 
+ *        Company:  LIA
+ * 
+ * =====================================================================================
+ */
+
+
+#ifndef INFINI
+#define INFINI 1000000
+#endif
+
+#include <deque>
+#include <vector>
+#include <set>
+#include <iostream>
+#include <algorithm>
+#include <fstream>
+
+using namespace std;
+
+struct SOMMET
+{
+	float Max;
+	int MaxRef;
+	int MaxHyp;
+};
+
+
+
+
+template <class Tr, class Th, class P> class AlignDTW
+{
+	protected:
+		P Sub;
+		P Ins;
+		P Del;
+
+		int NbCommunsPrecedent;
+
+		P **MatriceDTW;
+		P (*CalculerDistance)(Tr Ref, Th Hyp);
+		bool (*PrintRefOrHyp)(Tr Ref, Th Hyp, ofstream *Out);
+		static P DistanceDefaut(Tr Ref, Th Hyp);
+		static bool PrintDefaultRefOrHyp(Tr Ref, Th Hyp, ofstream *Out=NULL);
+		P MaxDTW(P a, P b, P c);
+
+		unsigned int TailleMaxHyp;
+
+
+		vector<Tr> *Reference;
+		vector<int> SubInsDel;
+		vector<int> RefVec;
+		vector<int> HypVec;
+
+		int WindowCut;
+		bool FastCut;
+		bool PrintVerbose;
+		int *BacktraceRef;
+		int *BacktraceHyp;
+
+		ofstream *Out;
+	public:
+		int *Maxis/*[2048]*/;
+		int *MaxTailleRef/*[2048]*/;
+		int *MinTailleRef/*[2048]*/;
+
+		bool IsAligned(int HypNum);
+		int GetAlign(int HypNum);
+		
+		void SetOut(ofstream *COut)
+		{	
+			Out = COut;
+		};
+
+		void SetPrintVerbose(bool v){PrintVerbose = v;};
+
+		P GetMax(vector<Th> &Hyp, int OriRef=0, int OriHyp=0);
+		void PrintBestAlign(vector<Th> &Hyp, int *ins=NULL, int *sub=NULL, int *del=NULL, int *ok=NULL);
+
+		AlignDTW(unsigned int TailleMaxRef, vector<Tr> &Ref, P (*DistFunction)(Tr a, Th b)=NULL,bool (*PrintRefOrHyp)(Tr Ref, Th Hyp, ofstream *Out)=NULL ,P Sub=4, P Ins=8, P Del=5);
+		void InitDTW(P FillBorder=-INFINI, P Fill=0, P Init=0, bool FastCut = false, int WindowCut = 30);
+		P CalculerCheminDTW(vector<Th> &Hyp, int OriI = 0, int OriJ = 0);
+		void BackTrack(vector<Th> &Hyp, int OriRef=0, int OriHyp=0);
+		~AlignDTW();
+};
+
+
+
+
+template <class Tr, class Th, class P> AlignDTW<Tr,Th,P>::AlignDTW(unsigned int TailleMaxHyp, vector<Tr> &Ref , P (*DistFunction)(Tr a, Th b),bool (*PrintRefOrHyp)(Tr Ref, Th Hyp, ofstream *Out) , P Sub, P Ins, P Del)
+{
+	unsigned int i, Max;
+
+
+	Out = static_cast<ofstream*>(&cout);
+
+	Reference = &Ref;
+
+	WindowCut = 50;
+	MatriceDTW = new P*[TailleMaxHyp];
+
+	
+	for (i = 0; i < TailleMaxHyp; i++)
+		MatriceDTW[i] = new P[(*Reference).size()];	
+
+
+	Maxis = new int[ /*(*Reference).size()*/ TailleMaxHyp];
+
+	// Correction du bug d'écrasement de mémoire 04/02/11
+
+
+	MaxTailleRef = new int[ /*(*Reference).size()*/TailleMaxHyp  ];
+	MinTailleRef = new int[ /*(*Reference).size()*/TailleMaxHyp  ];
+
+
+	BacktraceRef = new int[(*Reference).size()];
+	BacktraceHyp = new int[TailleMaxHyp];
+
+	if ((*Reference).size() > TailleMaxHyp) Max = (*Reference).size();
+	else Max = TailleMaxHyp;
+
+
+	//BacktraceAlg = new int[Max];
+
+
+	FastCut = false;
+
+	this->TailleMaxHyp = TailleMaxHyp;
+	this->Sub = Sub;
+	this->Ins = Ins;
+	this->Del = Del;
+
+	if (DistFunction) CalculerDistance = DistFunction;
+	else CalculerDistance = DistanceDefaut;
+
+	if (PrintRefOrHyp) this->PrintRefOrHyp = PrintRefOrHyp;
+	else this->PrintRefOrHyp = PrintDefaultRefOrHyp;
+
+}
+
+
+template <class Tr, class Th, class P> AlignDTW<Tr,Th,P>::~AlignDTW()
+{
+	int i;
+
+	//delete [] BacktraceRef;
+	//delete [] BacktraceHyp;
+	//delete [] BacktraceAlg;
+
+	for (i = 0; i < TailleMaxHyp; i++)
+		delete [] MatriceDTW[i];
+
+	delete [] MatriceDTW;
+}
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th,P>::MaxDTW(P a, P b, P c)
+{
+	if (a >= b && a >= c) return a;
+	if (b >= a && b >= c) return b;
+	return c;
+}
+
+
+template <class Tr, class Th, class P> bool AlignDTW<Tr,Th,P>::PrintDefaultRefOrHyp(Tr Ref, Th Hyp, ofstream *Out)
+{
+	if (Out == NULL) Out = static_cast<ofstream*>(&cout);
+
+	if (Ref) *Out << Ref<<"\t";
+	else *Out <<"-\t";
+
+	if (Hyp) *Out << Hyp<<"\t";
+	else *Out <<"-\t";
+
+	return true;
+}
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th,P>::DistanceDefaut(Tr a, Th b)
+{
+	if (a == (Tr)b) return 5;
+	else return -20;
+}
+
+
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::InitDTW(P FillBorder, P Fill, P Init, bool FastCut, int WindowCut)
+{
+	unsigned int i, j;
+
+	this->WindowCut = WindowCut;
+
+	this->FastCut = FastCut;
+
+	cerr <<"ref size : "<<(*Reference).size() <<" hyp size : "<<TailleMaxHyp<<endl;
+
+	for (i = 0; i < (*Reference).size(); i++)
+		MatriceDTW[0][i] = FillBorder;
+
+	for (i = 0; i < TailleMaxHyp; i++)
+		MatriceDTW[i][0] = FillBorder;
+
+	for (i = 1; i < TailleMaxHyp; i++)
+		for (j = 1; j < (*Reference).size(); j++)
+			MatriceDTW[i][j] = Fill;
+
+	MatriceDTW[0][0] = Init;
+}
+
+
+
+template <class Tr, class Th, class P> int AlignDTW<Tr,Th,P>::GetAlign(int HypNum)
+{
+	//cout <<"isaligned : BacktraceHyp["<<HypNum<<"] : "<<BacktraceHyp[HypNum]<<endl;
+
+	if (BacktraceHyp[HypNum] >= 0) return BacktraceHyp[HypNum];
+	return -1;
+}
+
+
+
+
+template <class Tr, class Th, class P> bool AlignDTW<Tr,Th,P>::IsAligned(int HypNum)
+{
+	//cout <<"isaligned : BacktraceHyp["<<HypNum<<"] : "<<BacktraceHyp[HypNum]<<endl;
+
+	if (HypNum >= 0 &&  BacktraceHyp[HypNum] >= 0) return true;
+	return false;
+}
+
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::PrintBestAlign(vector<Th> &Hyp, int *ins, int *sub, int *del, int *ok)
+{
+	int tmp1, tmp2, tmp3;
+
+	if (ok)  (*ok)=0;
+	if (ins) (*ins)=0;
+	if (del) (*del)=0;
+	if (sub) (*sub)=0;
+
+
+	if (Out == NULL) Out = static_cast<ofstream*>(&cout);
+	//cout <<endl<<endl;
+
+	//cout <<"--->"<<endl;
+	bool ValidPrint;
+
+	if (PrintVerbose)
+	{
+		*Out <<"alignment : "<<endl<<endl;
+		*Out <<"state\tRef\tHyp"<<endl;
+	}
+
+	while (AlignDTW<Tr,Th,P>::SubInsDel.size())
+	{
+		tmp1 = AlignDTW<Tr,Th,P>::SubInsDel.back();
+		AlignDTW<Tr,Th,P>::SubInsDel.pop_back();
+
+		if (PrintVerbose)
+		{
+			if (tmp1 == 0)	
+			{
+				*Out <<"ok\t";
+				if (ok) (*ok)++;
+			}
+			else if (tmp1 == 1) 
+			{
+				*Out <<"ins\t";
+				if (ins) (*ins)++;
+			}
+			else if (tmp1 == 2) 
+			{
+				*Out <<"del\t";
+				if (del) (*del)++;
+			}
+			else 
+			{
+				*Out <<"sub\t";
+				if (sub) (*sub)++;
+			}
+		}
+
+		tmp2 = AlignDTW<Tr,Th,P>::RefVec.back();
+		AlignDTW<Tr,Th,P>::RefVec.pop_back();
+
+		tmp3 = AlignDTW<Tr,Th,P>::HypVec.back();
+		AlignDTW<Tr,Th,P>::HypVec.pop_back();
+
+
+
+		if (tmp2 >= 0 && tmp3 >=0) ValidPrint = PrintRefOrHyp((*Reference)[tmp2], Hyp[tmp3], Out);
+		else if (tmp2 >= 0) ValidPrint = PrintRefOrHyp((*Reference)[tmp2], NULL, Out);
+		else if (tmp3 >= 0) ValidPrint = PrintRefOrHyp(NULL, Hyp[tmp3], Out);
+		else ValidPrint = PrintRefOrHyp(NULL, NULL, Out);
+
+		if (PrintVerbose) *Out << endl;
+		else if (ValidPrint) *Out <<endl;
+	}
+}
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th,P>::GetMax(vector<Th> &Hyp, int OriRef, int OriHyp)
+{
+	int i,j;
+
+	i = Hyp.size()-1;
+
+
+
+	P Max = -INFINI;
+
+
+	for (int k = 0; k < (int) (*Reference).size(); k++)
+		if (MatriceDTW[i][k] > Max)
+			Max = MatriceDTW[i][k];
+
+	return Max;
+}
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::BackTrack(vector<Th> &Hyp, int OriRef, int OriHyp)
+{
+	P Score;
+	P Diag;
+	P Left;
+	P Up;
+
+	int i,j;
+	set<int> Aligned;
+
+	for (i = 0; i < (int)  (*Reference).size(); i++) BacktraceRef[i] = -1;
+	for (i = 0; i < (int) Hyp.size(); i++) BacktraceHyp[i] = -1;
+
+
+	if (OriHyp) i = OriHyp;
+	else	i = Hyp.size()-1;
+
+	if (OriRef) j = OriRef;
+	else j = (*Reference).size()-1;
+
+
+	P Max = -INFINI;
+
+	//cout <<"cuicui :)"<<endl;
+
+	if (FastCut == true)
+	{
+		j = Maxis[i];
+		//cout <<" max["<<i<<"] choisi --> "<<j<<" : "<<(*Reference)[j]->cMot<<endl;
+		Max = MatriceDTW[i][j];
+	}
+	else
+	{
+		for (int k = 0; k < (int) (*Reference).size(); k++)
+			if (MatriceDTW[i][k] > Max)
+			{
+				j = k;
+				Max = MatriceDTW[i][k];
+			}
+	}
+
+	RefVec.clear();
+	HypVec.clear();
+	SubInsDel.clear();
+
+	int svgi=-1, svgj=-1;
+
+	while (i > 0 && j > 0)
+	{
+		Score = MatriceDTW[i][j];
+		Diag = MatriceDTW[i-1][j-1];
+		Left = MatriceDTW[i-1][j];
+		Up = MatriceDTW[i][j-1];
+
+		//Diag = Score;
+
+		//if (Up == 0 && Diag == 0 && Left == 0) cout <<"alignement over"<<endl;
+
+		if (Score > Up && Score > Left)
+		{
+			svgi=i;
+			svgj=j;
+			RefVec.push_back(j);
+			Aligned.insert(j);
+			HypVec.push_back(i);
+
+			if (CalculerDistance((*Reference)[j], Hyp[i]) <= 0) 
+			{
+				SubInsDel.push_back(3);
+				BacktraceRef[j] = BacktraceHyp[i] = -3;
+			}
+			else
+			{
+				SubInsDel.push_back(0);
+				BacktraceRef[j] = i;
+				BacktraceHyp[i] = j;
+			}
+
+			i--, j--;
+		}
+		else if (Up > Score && Up > Left)
+		{
+			SubInsDel.push_back(2);
+			RefVec.push_back(j);
+			Aligned.insert(j);
+			HypVec.push_back(-1);
+			BacktraceRef[j] = -2;
+			BacktraceHyp[i] = -1;
+			j--;
+		}
+		else 
+		{
+			SubInsDel.push_back(1);
+			RefVec.push_back(-1);
+			HypVec.push_back(i);
+			BacktraceRef[j] = -1;
+			BacktraceHyp[i] = -2;
+			//cout <<"i--"<<endl;
+			i--;
+		}
+	}
+
+
+	while (i > 0)
+	{
+		Score = MatriceDTW[i][0];
+		//Diag = MatriceDTW[i-1][j-1];
+		Left = MatriceDTW[i-1][j];
+		//Up = MatriceDTW[i][j-1];
+
+		//Diag = Score;
+
+		//if (Up == 0 && Diag == 0 && Left == 0) cout <<"alignement over"<<endl;
+
+		if (Score >= Left)
+		{
+			RefVec.push_back(j);
+			Aligned.insert(j);
+			HypVec.push_back(i);
+
+			if (CalculerDistance((*Reference)[j], Hyp[i]) <= 0) 
+			{
+				SubInsDel.push_back(3);
+				BacktraceRef[j] = BacktraceHyp[i] = -3;
+			}
+			else
+			{
+				SubInsDel.push_back(0);
+				BacktraceRef[j] = i;
+				BacktraceHyp[i] = j;
+			}
+
+			i--;
+		}
+		else 
+		{
+			SubInsDel.push_back(1);
+			RefVec.push_back(-1);
+			HypVec.push_back(i);
+			BacktraceRef[j] = -2;
+			BacktraceHyp[i] = -1;
+			i--;
+		}
+	}
+
+	//cout <<"i : "<<i<<", j : "<<j<<endl;
+
+	if (i >= 0 && j >= 0)
+	{
+		if (CalculerDistance((*Reference)[j], Hyp[i]) > 0)
+		{
+			SubInsDel.push_back(0);
+			BacktraceRef[j] = i;
+			BacktraceHyp[i] = j;
+			RefVec.push_back(j);
+			Aligned.insert(j);
+			HypVec.push_back(i);
+
+		}
+		else
+		{
+			//cerr <<"le fautif !"<<endl;
+			BacktraceRef[j] = -2;
+			BacktraceHyp[i] = -1;
+
+
+			// modif pour corriger bug d'insertion en debut (on met une substitution
+
+			if (Aligned.find(j) != Aligned.end())
+			{
+				SubInsDel.push_back(1);
+				RefVec.push_back(-1);
+				HypVec.push_back(i);
+			}
+			else
+			{
+				SubInsDel.push_back(3);
+				RefVec.push_back(j);
+				HypVec.push_back(i);
+			}
+		}
+	}
+}
+
+
+
+bool SortByMax(SOMMET *a, SOMMET *b);
+/*{
+  if (a->Max > b->Max) return true;
+  return false;
+  }*/
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th, P>::CalculerCheminDTW(vector<Th> &Hyp, int OriJ, int OriI)
+{
+	unsigned int i, j;
+	P Cout;
+
+	if (OriI < 0) OriI = 0;
+	if (OriJ < 0) OriJ = 0;
+
+	MatriceDTW[0][0] = CalculerDistance((*Reference)[0], Hyp[0]);
+	Maxis[0] = 0;
+
+	P Max;
+	P Mul;
+	P CoutFinal;
+	unsigned int RefSize = (*Reference).size();
+
+
+	for (i = OriI; i < Hyp.size(); i++)
+	{
+		Max = -INFINI;
+
+		if (FastCut == true && i > 0)
+		{
+			OriJ = Maxis[i-1]-WindowCut;
+			if (OriJ < 0) OriJ = 0;
+			RefSize =  Maxis[i-1]+WindowCut;
+		}
+		else if (FastCut == true && i == 0)
+		{
+			OriJ=0;
+			RefSize = WindowCut;
+		}
+
+
+		if (RefSize > (*Reference).size()) 
+			RefSize = (*Reference).size();
+
+
+
+		MaxTailleRef[i] = RefSize; 
+		MinTailleRef[i] = OriJ;
+
+		for (j = (unsigned int)OriJ; j < RefSize; j++)
+		{
+			Cout = CalculerDistance((*Reference)[j], Hyp[i]);
+
+			if (Cout <= 0) CoutFinal = Sub;
+			else CoutFinal = -Cout;
+
+
+			float Penalty;
+
+			if (Cout > 0) Penalty=1;
+			else Penalty = 1;
+
+
+			if (i > 0)
+			{
+				if ((int)j > OriJ)
+				{
+					if ((int)j < MaxTailleRef[i-1] && (int)j > MinTailleRef[i-1])
+					{
+						//MatriceDTW[i][j] = Cout + MaxDTW(MatriceDTW[i-1][j] - Ins, MatriceDTW[i][j-1] - Del, MatriceDTW[i-1][j-1] - Sub);
+						MatriceDTW[i][j] =  MaxDTW(MatriceDTW[i-1][j] - Ins, MatriceDTW[i][j-1] - Del, MatriceDTW[i-1][j-1] - CoutFinal);
+					}
+					else 
+					{
+						if (Cout <= 0) CoutFinal = Del;
+						else CoutFinal = -Cout;
+
+						MatriceDTW[i][j] =  MaxDTW(-INFINI, MatriceDTW[i][j-1] - CoutFinal, -INFINI);
+					}
+				}
+				else 
+				{
+					if ((int)j >= MinTailleRef[i-1])
+					{
+						if (Cout <= 0) CoutFinal = Ins;
+						else CoutFinal = -Cout;
+						MatriceDTW[i][j] =  MaxDTW(MatriceDTW[i-1][j] - CoutFinal, -INFINI, -INFINI);
+					}
+					else MatriceDTW[i][j] = -INFINI;
+				}
+
+			}
+			else if ((int) j > OriJ) 
+			{
+				if (Cout <= 0) CoutFinal = Del;
+				else CoutFinal = -Cout;
+
+				MatriceDTW[i][j] =  MaxDTW(-INFINI, MatriceDTW[i][j-1] - CoutFinal, -INFINI);
+			}
+			else MatriceDTW[i][j] = Cout-Hyp.size();
+
+			if (MatriceDTW[i][j] > Max) 
+			{
+				Max = MatriceDTW[i][j];
+				Maxis[i] = j;
+			}
+
+		}
+	}
+	return MatriceDTW[Hyp.size()-1][(*Reference).size()-1];
+}
+

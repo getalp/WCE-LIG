@@ -1,0 +1,916 @@
+/*
+ * =====================================================================================
+ * 
+ *       Filename:  alignContainer.h
+ * 
+ *    Description:  generic DTW and SwithWaterman implementations 
+ * 
+ *        Version:  1.2
+ *        Created:  05/03/07 10:41:03 CEST
+ *       Revision:  none
+ *       Compiler:  g++
+ * 
+ *         Author:  LECOUTEUX Benjamin 
+ *        Company:  LIA
+ * 
+ * =====================================================================================
+ */
+
+
+
+#include <deque>
+#include <vector>
+#include <iostream>
+#include <math.h>
+
+
+using namespace std;
+
+struct SOMMET
+{
+	float Max;
+	int MaxRef;
+	int MaxHyp;
+};
+
+
+
+
+template <class Tr, class Th, class P> class AlignDTW
+{
+	protected:
+		P Sub;
+		P Ins;
+		P Del;
+
+		int NbCommunsPrecedent;
+
+		P **MatriceDTW;
+
+		P (*CalculerDistance)(Tr Ref, Th Hyp);
+		void (*PrintRefOrHyp)(Tr Ref, Th Hyp);
+		static P DistanceDefaut(Tr Ref, Th Hyp);
+		static void PrintDefaultRefOrHyp(Tr Ref, Th Hyp);
+		P MaxDTW(P a, P b, P c);
+
+		int TailleMaxHyp;
+
+
+		vector<Tr> Reference;
+		vector<int> SubInsDel;
+		vector<int> RefVec;
+		vector<int> HypVec;
+
+
+		int *BacktraceRef;
+		int *BacktraceHyp;
+
+	public:
+		bool IsAligned(int HypNum);
+		int GetAlign(int HypNum);
+
+
+		void PrintBestAlign(vector<Th> &Hyp);
+
+		AlignDTW(int TailleMaxRef, vector<Tr> &Ref, P (*DistFunction)(Tr a, Th b)=NULL,void (*PrintRefOrHyp)(Tr Ref, Th Hyp)=NULL ,P Sub=1, P Ins=1, P Del=1);
+		void InitDTW(P FillBorder=-9000000, P Fill=-9000000, P Init=0.0);
+		P CalculerCheminDTW(vector<Th> &Hyp, int OriI = 0, int OriJ = 0);
+		void BackTrack(vector<Th> &Hyp, int OriRef=0, int OriHyp=0);
+		~AlignDTW();
+};
+
+
+template <class Tr, class Th, class P> class AlignDTWAffine:public AlignDTW<Tr,Th,P>
+{
+	private:
+		P **MatriceOpenGap;
+		P **MatriceExtendedGap;
+		P GapOpen;
+		P GapExtension;
+
+		P MaxOpenGap(int i, int j);
+		P MaxExtendedGap(int i, int j);
+
+	public:
+		AlignDTWAffine(int TailleMaxHyp, vector<Tr> &Ref, P (*DistFunction)(Tr a, Th b)=NULL,void (*PrintRefOrHyp)(Tr Ref, Th Hyp)=NULL ,P Sub=1, P Ins=1, P Del=1, P GapOpen=2, P GapExtension=1);
+		void InitDTW(P FillBorder=-9000000, P Fill=-9000000, P Init=0.0);
+		P CalculerCheminDTW(vector<Th> &Hyp, int OriI = 0, int OriJ = 0);
+		~AlignDTWAffine();
+
+};
+
+
+template <class Tr, class Th, class P> AlignDTWAffine<Tr,Th,P>::AlignDTWAffine(int TailleMaxHyp, vector<Tr> &Ref, P (*DistFunction)(Tr a,     Th b), void (*PrintRefOrHyp)(Tr a, Th b), P Sub, P Ins, P Del, P GapOpen, P GapExtension):AlignDTW<Tr,Th,P>(TailleMaxHyp, Ref, DistFunction, PrintRefOrHyp ,Sub, Ins, Del)
+{
+	this->GapOpen = GapOpen;
+	this->GapExtension = GapExtension;
+
+	MatriceOpenGap = new P*[TailleMaxHyp+1];
+	MatriceExtendedGap = new P*[TailleMaxHyp+1];
+	
+
+	for (int i = 0; i < TailleMaxHyp+1; i++)
+	{
+		MatriceOpenGap[i] = new P[AlignDTW<Tr, Th,P>::Reference.size()+1];	
+		MatriceExtendedGap[i] = new P[AlignDTW<Tr, Th, P>::Reference.size()+1];	
+	}
+
+
+}
+
+
+template <class Tr, class Th, class P> void AlignDTWAffine<Tr,Th,P>::InitDTW(P FillBorder, P Fill, P Init)
+{
+	int i, j;
+
+	for (i = 0; i < AlignDTW<Tr,Th,P>::Reference.size()+1; i++)
+	{
+		MatriceOpenGap[0][i] = FillBorder;
+		MatriceExtendedGap[0][i] = FillBorder;
+	}
+
+	for (i = 0; i < AlignDTW<Tr,Th,P>::TailleMaxHyp+1; i++)
+	{
+		MatriceOpenGap[i][0] = FillBorder;
+		MatriceExtendedGap[i][0] = FillBorder;
+	}
+
+	for (i = 1; i < AlignDTW<Tr,Th,P>::TailleMaxHyp+1; i++)
+		for (j = 1; j < AlignDTW<Tr,Th,P>::Reference.size()+1; j++)
+		{
+			MatriceOpenGap[i][j] = Fill;
+			MatriceExtendedGap[i][j] = Fill;
+		}
+
+	MatriceOpenGap[0][0] = MatriceExtendedGap[0][0]  = Init;
+
+}
+
+template <class Tr, class Th, class P> P AlignDTWAffine<Tr,Th,P>::MaxOpenGap(int i, int j)
+{
+	MatriceExtendedGap[i][j] = MaxDTW(AlignDTW<Tr,Th,P>::MatriceDTW[i-1][j] - GapOpen, MatriceExtendedGap[i-1][j] - GapExtension, -9999999);
+	return MatriceExtendedGap[i][j];
+}
+
+template <class Tr, class Th, class P> P AlignDTWAffine<Tr,Th,P>::MaxExtendedGap(int i, int j)
+{
+	MatriceOpenGap[i][j] = MaxDTW(AlignDTW<Tr,Th,P>::MatriceDTW[i][j-1] - GapOpen,  MatriceOpenGap[i][j-1] - GapExtension, -9999999);
+	return MatriceOpenGap[i][j];
+}
+
+
+
+template <class Tr, class Th, class P> P AlignDTWAffine<Tr,Th,P>::CalculerCheminDTW(vector<Th> &Hyp, int OriI, int OriJ)
+{
+	int i, j;
+	P Cout;
+	
+	if (OriI < 1) OriI = 1;
+	if (OriJ < 1) OriJ = 1;
+
+	//MatriceDTW[0][0] = CalculerDistance(Reference[0], Hyp[0]);
+
+	P Mul;
+
+	for (i = OriI; i <= Hyp.size(); i++)
+	{
+		for (j = OriJ; j <= AlignDTW<Tr,Th,P>::Reference.size(); j++)
+		{
+			Cout = AlignDTW<Tr,Th,P>::CalculerDistance(AlignDTW<Tr,Th,P>::Reference[j-1], Hyp[i-1]);
+
+			if (Cout <= 0) Mul = 1;
+			else Mul = 0;
+
+			AlignDTW<Tr,Th,P>::MatriceDTW[i][j] = MaxDTW(MaxOpenGap(i, j)/* - AlignDTW<Tr,Th,P>::Ins*/, MaxExtendedGap(i, j)/* - AlignDTW<Tr,Th,P>::Del*/ , AlignDTW<Tr,Th,P>::MatriceDTW[i-1][j-1] + Cout);
+			//else if (i > 0) MatriceDTW[i][j] = Cout + MaxDTW(MatriceDTW[i-1][j] - Ins, -100000, -100000);
+			//else if (j > 0) MatriceDTW[i][j] = Cout + MaxDTW(-100000, MatriceDTW[i][j-1] - Del, -100000);
+		}
+	}				
+	return AlignDTW<Tr,Th,P>::MatriceDTW[Hyp.size()][AlignDTW<Tr,Th,P>::Reference.size()];
+}
+
+
+template <class Tr, class Th, class P> AlignDTWAffine<Tr,Th,P>::~AlignDTWAffine()
+{
+
+	for (int i = 0; i < AlignDTW<Tr,Th,P>::TailleMaxHyp; i++)
+	{
+		delete [] MatriceOpenGap[i];
+		delete [] MatriceExtendedGap[i];
+	}
+
+	delete [] MatriceOpenGap;
+	delete [] MatriceExtendedGap;
+}
+
+
+template <class Tr, class Th, class P> class SmithWatermanDTW:public AlignDTW<Tr,Th,P>
+{
+	private:
+
+
+		struct SVG_SWDTW
+		{
+			P MaxI;
+			P MaxJ;
+			int IdMaxI;
+			int IdMaxJ;
+		};
+
+		struct SVG_SWDTW **SvgMatrice;
+
+
+
+		P MaxOfAll;
+		P *MaxI;
+		P *MaxJ;
+
+		int *IdMaxI;
+		int *IdMaxJ;
+
+		P MaxDTW(P a, P b, P c, P d);
+
+
+		deque<SOMMET *> Maximums;
+
+		//deque<P> Maximums;
+		//deque<int> MaxRef;
+		//deque<int> MaxHyp;
+
+		int NbMaximums;
+
+	public:
+
+		SmithWatermanDTW(int TailleMaxHyp, vector<Tr> &Ref, int NbMax, P (*DistFunction)(Tr a, Th b)=NULL, void (*PrintRefOrHyp)(Tr Ref, Th Hyp)=NULL , P Sub=1, P Ins=1, P Del=1);
+		void InitDTW(P FillBorder=0.0, P Fill=0.0, P Init=0.0);
+		~SmithWatermanDTW();
+		P CalculerCheminDTW(vector<Th> &Hyp, int OriI = 0, int OriJ = 0);
+		void BackTrack(vector<Th> &Hyp, int Best = 0);
+
+};
+
+
+template <class Tr, class Th, class P> P SmithWatermanDTW<Tr, Th, P>::MaxDTW(P a, P b, P c, P d)
+{
+	if (a >= b && a >= c && a >= d) return a;
+	if (b >= a && b >= c && b >= d) return b;
+	if (c >= a && c >= b && c >= d) return c;
+	return d;
+}
+
+
+
+template <class Tr, class Th, class P> AlignDTW<Tr,Th,P>::AlignDTW(int TailleMaxHyp, vector<Tr> &Ref , P (*DistFunction)(Tr a, Th b),void (*PrintRefOrHyp)(Tr Ref, Th Hyp) , P Sub, P Ins, P Del)
+{
+	int i, Max;
+
+	Reference = Ref;
+
+	MatriceDTW = new P*[TailleMaxHyp+1];
+
+	for (i = 0; i < TailleMaxHyp+1; i++)
+		MatriceDTW[i] = new P[Reference.size()+1];	
+
+	BacktraceRef = new int[Reference.size()];
+	BacktraceHyp = new int[TailleMaxHyp];
+
+	if (Reference.size() > TailleMaxHyp) Max = Reference.size();
+	else Max = TailleMaxHyp;
+
+	//BacktraceAlg = new int[Max];
+
+	this->TailleMaxHyp = TailleMaxHyp;
+	this->Sub = Sub;
+	this->Ins = Ins;
+	this->Del = Del;
+
+	if (DistFunction) CalculerDistance = DistFunction;
+	else CalculerDistance = DistanceDefaut;
+
+	if (PrintRefOrHyp) this->PrintRefOrHyp = PrintRefOrHyp;
+	else this->PrintRefOrHyp = PrintDefaultRefOrHyp;
+}
+
+
+template <class Tr, class Th, class P> AlignDTW<Tr,Th,P>::~AlignDTW()
+{
+	int i;
+
+	delete [] BacktraceRef;
+	delete [] BacktraceHyp;
+	//delete [] BacktraceAlg;
+
+	for (i = 0; i < TailleMaxHyp; i++)
+		delete [] MatriceDTW[i];
+
+	delete [] MatriceDTW;
+}
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th,P>::MaxDTW(P a, P b, P c)
+{
+	if (a >= b && a >= c) return a;
+	if (b >= a && b >= c) return b;
+	return c;
+}
+
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::PrintDefaultRefOrHyp(Tr Ref, Th Hyp)
+{
+	if (Ref) cout << Ref<<"\t";
+	else cout <<"-\t";
+
+	if (Hyp) cout << Hyp<<"\t";
+	else cout <<"-\t";
+}
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th,P>::DistanceDefaut(Tr a, Th b)
+{
+	if (a == (Tr)b) return 5;
+	else return -20;
+}
+
+
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::InitDTW(P FillBorder, P Fill, P Init)
+{
+	int i, j;
+
+	for (i = 0; i < Reference.size()+1; i++)
+		MatriceDTW[0][i] = FillBorder;
+
+	for (i = 0; i < TailleMaxHyp+1; i++)
+		MatriceDTW[i][0] = FillBorder;
+
+	for (i = 1; i < TailleMaxHyp+1; i++)
+		for (j = 1; j < Reference.size()+1; j++)
+			MatriceDTW[i][j] = Fill;
+
+	MatriceDTW[0][0] = Init;
+}
+
+
+template <class Tr, class Th, class P> void SmithWatermanDTW<Tr,Th, P>::BackTrack( vector<Th> &Hyp, int Best)
+{
+	//int BestHyp = MaxHyp.front();
+	//int BestRef = MaxRef.front();
+	int BestHyp, BestRef, i;
+
+	deque<SOMMET*>::iterator itMax;
+	//deque<SOMMET *>::iterator itMax;
+	//deque<SOMMET *>::iterator itMax;
+	//deque<int>::iterator itHyp;
+
+	cerr <<"nombre d'entrees : "<<Maximums.size()<<endl;
+
+	for (itMax = Maximums.begin(), i = 0; itMax != Maximums.end() && i < Maximums.size() && i < Best ;itMax++, i++);
+
+	cout <<"max : "<<(*itMax)->Max;
+
+	if (itMax != Maximums.end())
+	{
+		BestHyp = (*itMax)->MaxHyp;
+		BestRef = (*itMax)->MaxRef;
+
+		cout <<"alignement sur : "<<BestHyp<<", "<<BestRef<<endl;
+
+		AlignDTW<Tr,Th,P>::BackTrack(Hyp, BestRef, BestHyp);
+	}
+	//else cerr <<"depassement du nombre de solutions"<<endl;
+
+}
+
+
+template <class Tr, class Th, class P> int AlignDTW<Tr,Th,P>::GetAlign(int HypNum)
+{
+	//cout <<"isaligned : BacktraceHyp["<<HypNum<<"] : "<<BacktraceHyp[HypNum]<<endl;
+
+	if (BacktraceHyp[HypNum] >= 0) return BacktraceHyp[HypNum];
+	return -1;
+}
+
+
+
+
+template <class Tr, class Th, class P> bool AlignDTW<Tr,Th,P>::IsAligned(int HypNum)
+{
+	//cout <<"isaligned : BacktraceHyp["<<HypNum<<"] : "<<BacktraceHyp[HypNum]<<endl;
+
+	if (BacktraceHyp[HypNum] >= 0 /**&& abs(BacktraceHyp[HypNum] - HypNum) < 5*/) return true;
+	return false;
+}
+
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::PrintBestAlign(vector<Th> &Hyp)
+{
+	int tmp1, tmp2, tmp3;
+
+	//cout <<endl<<endl;
+
+	//cout <<"--->"<<endl;
+
+
+	cout <<"alignment : "<<endl<<endl;
+	cout <<"state\tRef\tHyp"<<endl;
+
+	while (AlignDTW<Tr,Th,P>::SubInsDel.size())
+	{
+		tmp1 = AlignDTW<Tr,Th,P>::SubInsDel.back();
+		AlignDTW<Tr,Th,P>::SubInsDel.pop_back();
+		if (tmp1 == 0)	cout <<"ok\t";
+		else if (tmp1 == 1) cout <<"ins\t";
+		else if (tmp1 == 2) cout <<"del\t";
+		else cout <<"sub\t";
+
+		tmp2 = AlignDTW<Tr,Th,P>::RefVec.back();
+		AlignDTW<Tr,Th,P>::RefVec.pop_back();
+
+		tmp3 = AlignDTW<Tr,Th,P>::HypVec.back();
+		AlignDTW<Tr,Th,P>::HypVec.pop_back();
+
+		if (tmp2 >= 0 && tmp3 >=0) PrintRefOrHyp(Reference[tmp2], Hyp[tmp3]);
+		else if (tmp2 >= 0) PrintRefOrHyp(Reference[tmp2], NULL);
+		else if (tmp3 >= 0) PrintRefOrHyp(NULL, Hyp[tmp3]);
+		else PrintRefOrHyp(NULL, NULL);
+		cout <<endl;
+	}
+}
+
+template <class Tr, class Th, class P> void AlignDTW<Tr,Th,P>::BackTrack(vector<Th> &Hyp, int OriRef, int OriHyp)
+{
+	P Score;
+	P Diag;
+	P Left;
+	P Up;
+
+	int i,j;
+
+	for (i = 0; i < Reference.size(); i++) BacktraceRef[i] = -1;
+	for (i = 0; i < Hyp.size(); i++) BacktraceHyp[i] = -1;
+
+
+	if (OriHyp) i = OriHyp;
+	else	i = Hyp.size();
+
+	if (OriRef) j = OriRef;
+	else j = Reference.size();
+
+
+	P Max = -9000000;
+
+	for (int k = 1; k <= Reference.size(); k++)
+		if (MatriceDTW[i][k] > Max)
+		{
+			//cout <<"max : "<<Max<<" j : "<<k<<endl;
+			j = k;
+			Max = MatriceDTW[i][k];
+		}
+
+
+	//cout <<"Max : "<<Max<<endl;
+
+	RefVec.clear();
+	HypVec.clear();
+	SubInsDel.clear();
+
+	int svgi,svgj;
+
+	svgi=svgj=-1;
+
+	int Axe = 0;
+	int PreviousAxe = -1;
+	//int Current=-1;
+	//float MaxCurrent;
+	
+	struct BEST
+	{
+		bool Actif;
+		int Hyp;
+		int Ref;
+		float Score;
+	};
+
+	struct BEST *Current;
+
+	Current = new BEST;
+	Current->Actif = false;
+
+
+	while (i > 1 && j > 1)
+	{
+		Score = MatriceDTW[i][j];
+		Diag = MatriceDTW[i-1][j-1];
+		Left = MatriceDTW[i-1][j];
+		Up = MatriceDTW[i][j-1];
+
+
+		if (Current->Actif == true && Current->Hyp != i)
+		{
+			SubInsDel.push_back(0);
+			cout <<"matching : "<<i<<", "<<j<<", mot : "<<Hyp[i-1]->Line<<endl;
+			RefVec.push_back(Current->Ref-1);
+			HypVec.push_back(Current->Hyp-1);
+			BacktraceRef[Current->Ref-1] = Current->Hyp;
+			BacktraceHyp[Current->Hyp-1] = Current->Ref;
+			//PreviousAxe = svgi = svgj = -1;
+			Current->Actif = false;
+		}
+		else if (Current->Actif == true && Current->Hyp == i)
+		{
+			if (CalculerDistance(Reference[j-1], Hyp[i-1]) > CalculerDistance(Reference[Current->Ref-1], Hyp[i-1]))
+			{
+				Current->Ref = j;
+			}	
+		}
+
+
+
+		if (CalculerDistance(Reference[j-1], Hyp[i-1]) > 0) cout <<"ça matche !!"<<endl;
+
+		if (Score > Up && Score > Left)
+		{
+			//RefVec.push_back(j-1);
+			//HypVec.push_back(i-1);
+			cout <<"calc Diag"<<endl;
+
+			if (CalculerDistance(Reference[j-1], Hyp[i-1]) <= 0) 
+			{
+				RefVec.push_back(j-1);
+				HypVec.push_back(i-1);
+				SubInsDel.push_back(3);
+				BacktraceRef[j-1] = BacktraceHyp[i-1] = -3;
+			}
+			else
+			{
+					Current->Hyp = i;
+					Current->Ref = j;
+			}
+			if      (Diag >= Up && Diag >= Left) i--, j--;
+			else if (Up >= Diag && Up >= Left) j--, cout <<"j--"<<endl;
+			else i--, cout <<"i--"<<endl;
+
+		}
+		else if (Up > Score && Up > Left)
+		{
+			cout <<"calc Up"<<endl;
+
+			SubInsDel.push_back(2);
+			cout <<"delete"<<endl;
+			RefVec.push_back(j-1);
+			HypVec.push_back(-1);
+			BacktraceRef[j-1] = -2;
+			BacktraceHyp[i-1] = -1;
+
+			j--;
+		}
+		else 
+		{
+			cout <<"calc Left"<<endl;
+
+			SubInsDel.push_back(1);
+			cout <<"substitute"<<endl;
+			RefVec.push_back(-1);
+			HypVec.push_back(i-1);
+			BacktraceRef[j-1] = -1;
+			BacktraceHyp[i-1] = -2;
+			//cout <<"i--"<<endl;
+			i--;
+		}
+
+
+	}
+
+
+	while (i > 1)
+	{
+		//cout <<"hyp la : i :"<<i<<",j: "<<j<<" hyp : "<<Hyp[i-1] <<endl;
+
+		Score = MatriceDTW[i][1];
+		//Diag = MatriceDTW[i-1][j-1];
+		Left = MatriceDTW[i-1][j];
+		//Up = MatriceDTW[i][j-1];
+
+		//Diag = Score;
+
+		//if (Up == 0 && Diag == 0 && Left == 0) cout <<"alignement over"<<endl;
+
+		if (Score >= Left)
+		{
+			RefVec.push_back(j-1);
+			HypVec.push_back(i-1);
+
+			if (CalculerDistance(Reference[j-1], Hyp[i-1]) <= 0) 
+			{
+				SubInsDel.push_back(3);
+				BacktraceRef[j-1] = BacktraceHyp[i-1] = -3;
+			}
+			else
+			{
+				SubInsDel.push_back(0);
+				BacktraceRef[j-1] = i;
+				BacktraceHyp[i-1] = j;
+			}
+
+			i--;
+		}
+		else 
+		{
+			SubInsDel.push_back(1);
+			RefVec.push_back(-1);
+			HypVec.push_back(i-1);
+			BacktraceRef[j-1] = -2;
+			BacktraceHyp[i-1] = -1;
+			i--;
+		}
+	}
+
+
+	if (i >= 1 && j >= 1)
+	{
+		if (CalculerDistance(Reference[j-1], Hyp[i-1]) > 0)
+		{
+			SubInsDel.push_back(0);
+			BacktraceRef[j-1] = i;
+			BacktraceHyp[i-1] = j;
+			RefVec.push_back(j-1);
+			HypVec.push_back(i-1);
+
+		}
+		else
+		{
+			SubInsDel.push_back(1);
+			BacktraceRef[j-1] = -2;
+			BacktraceHyp[i-1] = -1;
+			RefVec.push_back(-1);
+			HypVec.push_back(i-1);
+		}
+	}
+}
+
+
+template <class Tr, class Th, class P> SmithWatermanDTW<Tr,Th,P>::SmithWatermanDTW(int TailleMaxHyp, vector<Tr> &Ref, int NbMax,  P (*DistFunction)(Tr a, Th b), void (*PrintRefOrHyp)(Tr a, Th b), P Sub, P Ins, P Del):AlignDTW<Tr,Th,P>(TailleMaxHyp, Ref, DistFunction, PrintRefOrHyp ,Sub, Ins, Del)
+{
+	int i;
+
+	NbMaximums = NbMax;
+
+	MaxI = new P[Ref.size()];
+	MaxJ = new P[TailleMaxHyp];
+
+	IdMaxI = new int[Ref.size()];
+	IdMaxJ = new int[TailleMaxHyp];
+
+	SvgMatrice = new struct SVG_SWDTW*[TailleMaxHyp];
+
+	for (i = 0; i < TailleMaxHyp; i++)
+		SvgMatrice[i] = new struct SVG_SWDTW[Ref.size()];
+}
+
+
+template <class Tr, class Th, class P> SmithWatermanDTW<Tr,Th,P>::~SmithWatermanDTW()
+{
+	delete [] MaxI;
+	delete [] MaxJ;
+
+	delete [] IdMaxI;
+	delete [] IdMaxJ;
+}
+
+
+template <class Tr, class Th, class P> void SmithWatermanDTW<Tr,Th,P>::InitDTW(P FillBorder, P Fill, P Init)
+{
+	int i;
+
+	AlignDTW<Tr,Th,P>::InitDTW(FillBorder, Fill, Init);
+
+	for (i = 0; i < AlignDTW<Tr,Th,P>::Reference.size(); i++)
+	{
+		MaxI[i] = 0.0;
+		IdMaxI[i] = 0;
+	}
+
+
+	for (i = 0; i < AlignDTW<Tr,Th,P>::TailleMaxHyp; i++)
+	{
+		MaxJ[i] = 0.0;
+		IdMaxJ[i] = 0;
+	}
+}
+
+
+bool SortByMax(SOMMET *a, SOMMET *b)
+{
+	if (a->Max > b->Max) return true;
+	return false;
+}
+
+template <class Tr, class Th, class P> P SmithWatermanDTW<Tr,Th,P>::CalculerCheminDTW(vector<Th> &Hyp, int OriI, int OriJ)
+{
+	int i, j;
+	P Cout;
+
+
+	if (OriI > 0 || OriJ > 0)
+	{
+		P TheMax = 0.0;
+		int X, Y;
+
+
+		//cout <<"maxJ : ";
+		for (i = 0; i < OriI; i++)
+		{
+			MaxJ[i] = SvgMatrice[i][OriJ].MaxJ;
+			IdMaxJ[i] = SvgMatrice[i][OriJ].IdMaxJ;
+
+			//cout <<MaxJ[i]<<", ";
+
+			if (MaxJ[i] > TheMax) TheMax = MaxJ[i], X = OriI, Y = i; 
+		}
+
+		//cout <<endl;
+
+
+		//cout <<"maxI : ";
+		for (j = 0; j < OriJ; j++)
+		{
+			MaxI[j] = SvgMatrice[OriI][j].MaxI;
+			IdMaxI[j] = SvgMatrice[OriI][j].IdMaxI;
+
+			//cout <<MaxI[j]<<", ";
+
+			if (MaxI[j] > TheMax) TheMax = MaxI[j], X = i, Y = OriJ;
+		}
+
+		//cout <<endl;
+
+		for (i = OriI; i < Hyp.size(); i++) MaxJ[i] = 0;
+		for (j = OriJ; j < AlignDTW<Tr,Th,P>::Reference.size(); j++) MaxI[j] = 0;
+
+
+		struct SOMMET *SommetTmp = new struct SOMMET;
+
+
+		for (i = 0; i < Maximums.size(); i++)
+			delete Maximums[i];
+
+		Maximums.clear();
+
+		SommetTmp->Max = TheMax;
+		SommetTmp->MaxRef = Y;
+		SommetTmp->MaxHyp = X;
+
+		Maximums.push_front(SommetTmp);
+		//Maximums.push_front(TheMax);
+		//MaxRef.clear();
+		//MaxHyp.clear();
+		//MaxRef.push_front(Y);
+		//MaxHyp.push_front(X);
+	}
+
+	float Precedent = 0.0;
+
+
+	for (i = 0; i < Hyp.size(); i++)
+	{
+		for (j = 0; j < AlignDTW<Tr,Th,P>::Reference.size(); j++)
+		{
+			if (i >= OriI || j >= OriJ)
+			{
+				Cout = CalculerDistance(AlignDTW<Tr,Th,P>::Reference[j], Hyp[i]);
+
+				if (i > 0 && j > 0)
+				{
+					AlignDTW<Tr,Th,P>::MatriceDTW[i][j] = MaxDTW(MaxI[j] - AlignDTW<Tr,Th,P>::Ins, MaxJ[i] - AlignDTW<Tr,Th,P>::Del, AlignDTW<Tr,Th,P>::MatriceDTW[i-1][j-1] + AlignDTW<Tr,Th,P>::Sub * Cout, 0.0);
+				}
+				else AlignDTW<Tr,Th,P>::MatriceDTW[i][j] = MaxDTW(MaxI[j] - AlignDTW<Tr,Th,P>::Ins, MaxJ[i] - AlignDTW<Tr,Th,P>::Del, AlignDTW<Tr,Th,P>::Sub * Cout, 0.0);
+
+
+				if (AlignDTW<Tr,Th,P>::MatriceDTW[i][j] > MaxI[j])
+				{
+					MaxI[j] = AlignDTW<Tr,Th,P>::MatriceDTW[i][j];
+					IdMaxI[j] = i;
+				}
+
+				if (AlignDTW<Tr,Th,P>::MatriceDTW[i][j] > MaxJ[i])
+				{
+					MaxJ[i] = AlignDTW<Tr,Th,P>::MatriceDTW[i][j];
+					IdMaxJ[i] = j;
+				}
+
+				SvgMatrice[i][j].MaxJ = MaxJ[i];
+				SvgMatrice[i][j].IdMaxJ = IdMaxJ[i];
+				SvgMatrice[i][j].MaxI = MaxI[j];
+				SvgMatrice[i][j].IdMaxI = IdMaxI[j];
+
+
+
+				//cout <<i<<", "<<j<<", "<<AlignDTW<T,P>::MatriceDTW[i][j]<<endl;
+
+				struct SOMMET *SommetTmp;
+
+				if (Maximums.size() > 0)
+				{
+					if (AlignDTW<Tr,Th,P>::MatriceDTW[i][j] >= Maximums.front()->Max)
+					{
+						if (abs(Maximums.front()->MaxHyp-i) <= 1 && abs(Maximums.front()->MaxRef-j) <= 1)
+						{
+							SommetTmp = Maximums.front();
+							//Maximums.pop_front();
+							//MaxHyp.pop_front();
+							//MaxRef.pop_front();
+						}
+						else
+						{
+							SommetTmp = new struct SOMMET;
+							Maximums.push_front(SommetTmp);
+						}
+
+						SommetTmp->Max = AlignDTW<Tr,Th,P>::MatriceDTW[i][j];
+						SommetTmp->MaxHyp = i;
+						SommetTmp->MaxRef = j;
+
+						//Maximums.push_front(AlignDTW<Tr,Th,P>::MatriceDTW[i][j]);
+						//MaxHyp.push_front(i);
+						//MaxRef.push_front(j);
+
+						if (Maximums.size() > NbMaximums) 
+						{
+							delete Maximums.back();
+							Maximums.pop_back();
+						}
+						//if (MaxHyp.size() > NbMaximums) MaxHyp.pop_back();
+						//if (MaxRef.size() > NbMaximums) MaxRef.pop_back();
+					}
+				}
+				else
+				{	
+					SommetTmp = new struct SOMMET;
+					Maximums.push_front(SommetTmp);
+					SommetTmp->Max = AlignDTW<Tr,Th,P>::MatriceDTW[i][j];
+					SommetTmp->MaxHyp = i;
+					SommetTmp->MaxRef = j;
+
+
+					//Maximums.push_front(AlignDTW<Tr,Th,P>::MatriceDTW[i][j]);
+					//MaxHyp.push_front(i);
+					//MaxRef.push_front(j);
+				}
+
+				Precedent = AlignDTW<Tr,Th,P>::MatriceDTW[i][j];
+			}
+		}
+	}		
+
+
+
+	sort(Maximums.begin(), Maximums.end(), SortByMax);
+
+
+	/*
+	   cout <<" "<<"\t";
+
+	   for (j = 0; j < Hyp.size(); j++)
+	   cout <<Hyp[j]<<"\t";
+
+	   cout <<" (j)"<<endl;
+
+	   for (i = 0; i < Ref.size(); i++)
+	   {
+	   cout <<Ref[i]<<"\t";
+
+	   for (j = 0; j < Hyp.size(); j++)
+	   cout<<AlignDTW<Tr,Th,P>::MatriceDTW[j][i]<<"\t";
+	   cout <<endl;
+	   }
+	   cout <<"(i)"<<endl;
+	   */
+	return AlignDTW<Tr,Th,P>::MatriceDTW[Hyp.size()-1][AlignDTW<Tr,Th,P>::Reference.size()-1];
+
+}
+
+
+template <class Tr, class Th, class P> P AlignDTW<Tr,Th, P>::CalculerCheminDTW(vector<Th> &Hyp, int OriJ, int OriI)
+{
+	int i, j;
+	P Cout;
+
+	if (OriI < 1) OriI = 1;
+	if (OriJ < 1) OriJ = 1;
+
+	P Mul;
+
+	//int TMax
+
+	for (i = OriI; i <= Hyp.size(); i++)
+	{
+		for (j = OriJ; j <= Reference.size(); j++)
+		{
+			Cout = CalculerDistance(Reference[j-1], Hyp[i-1]);
+			if (Cout <= 0) Mul = 1;
+			else Mul = 0;
+
+			MatriceDTW[i][j] = Cout + MaxDTW(MatriceDTW[i-1][j] - Ins, MatriceDTW[i][j-1] - Del, MatriceDTW[i-1][j-1] + Sub*Mul);
+		}
+	}				
+	return MatriceDTW[Hyp.size()][Reference.size()];
+}
+
