@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#####################################################################
+###
+### EDIT THESE LINES APPROPRIATELLY
+###
+#####################################################################
+PATH_TO_JAVA="/usr/bin/java"
+PATH_TO_TER="/home/lent/Develops/Solution/tool/terplus/terp.v1"
+MEM_PAR="-Xms1G -Xmx3G"
+
+#####################################################################
+###
+### DO NOT EDIT BELOW HERE
+###
+#####################################################################
+
+##Tien Ngoc LE update 2015.Jan.02 : changed in "data/terpa2.param"
+${PATH_TO_JAVA} ${MEM_PAR} -jar ${PATH_TO_TER}/dist/lib/terp.jar ${PATH_TO_TER}/data/terpa2.param ${PATH_TO_TER}/data/data_loc.param $@
+
+exit $?

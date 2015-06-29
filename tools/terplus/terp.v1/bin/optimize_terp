@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#####################################################################
+###
+### EDIT THESE TWO LINES APPROPRIATELLY
+###
+#####################################################################
+PATH_TO_JAVA="/usr/bin/java"n
+PATH_TO_TER="/home/lent/Develops/Solution/tool/terplus/terp.v1"
+MEM_PAR="-Xms1G -Xmx3G"
+
+#####################################################################
+###
+### DO NOT EDIT BELOW HERE
+###
+#####################################################################
+
+${PATH_TO_JAVA} ${MEM_PAR} -jar ${PATH_TO_TER}/dist/lib/optimize_terp.jar $@
+
+exit $?

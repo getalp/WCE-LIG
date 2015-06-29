@@ -1,0 +1,13 @@
+(id_TEST_WMT_2845)
+REF:            	parte de ella porque ella parecía jane - daria la bff de la serie de mtv , con precisión , rasgos delicados , ojos oscuros , pelo loco y angular .
+HYP:            	parte de ello fue porque se parecía a jane - la mejor amiga de daria de la serie de mtv - con rasgos delicados , precisos , los ojos oscuros y el pelo angular loco .
+HYP AFTER SHIFT:	parte de ello fue porque se parecía a jane - mejor daria amiga la de de la serie de mtv - con precisos , rasgos delicados , los ojos oscuros el pelo loco y angular .
+ALIG:	A A I S A S A I A A I A I A S A A A A A S A S A A A A I A A S A A A A A ||| NbrShifts: 5	[22, 24, 24/24] (rasgos	delicados	,)	[30, 30, 32/32] (y)	[34, 34, 32/32] (loco)	[10, 10, 12/13] (la)	[14, 14, 11/11] (daria)
+Score: 51.6129 ( 16 / 31 )
+
+(id_TEST_WMT_7525)
+REF:            	en diciembre pasado , hemos decidido no oponernos a la petición de " certiorari " de los organismos de radiodifusión ante el tribunal supremo de los estados unidos .
+HYP:            	en diciembre pasado , hemos decidido no oponerse a la petición de los organismos de radiodifusión de certiorari ante el tribunal supremo de los estados unidos .
+HYP AFTER SHIFT:	en diciembre pasado , hemos decidido no oponerse a la petición de certiorari de los organismos de radiodifusión ante el tribunal supremo de los estados unidos .
+ALIG:	A A A A A A A S A A A A D A D A A A A A A A A A A A A A A ||| NbrShifts: 3	[11, 13, 13/14] (de	los	organismos)	[17, 17, 12/12] (certiorari)	[13, 13, 17/17] (radiodifusión)
+Score: 20.6897 ( 6 / 29 )

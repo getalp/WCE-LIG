@@ -1,0 +1,29 @@
+**** Good Result
+(id_TEST_WMT_7)
+REF:            	" durante los primeros seis meses de rewardstyle , tuve cabello largo , recto y rubio , y me veía como una animadora highland park .
+HYP:            	" durante los primeros seis meses de rewardstyle , tuve larga y recta , cabello rubio , y me veía como una animadora highland park .
+HYP AFTER SHIFT:	" durante los primeros seis meses de rewardstyle , tuve larga recta , cabello y rubio , y me veía como una animadora highland park .
+ALIG:	A A A A A A A A A A S S A S A A A A A A A A A A A A ||| NbrShifts: 1	[11, 11, 14/14] (y)
+Score: 15.3846 ( 4 / 26 )
+
+****"Not Good" Result
+(id_TEST_WMT_42)
+REF:            	reign gana el premio favorito de novo drama de tv favorito en el people ' s choice awards !
+HYP:            	reign gana el premio drama favorita nueva tv al choice awards del pueblo !
+HYP AFTER SHIFT:	reign gana el premio drama tv favorita nueva al del pueblo choice awards !
+ALIG:	A A A A D D D A D A D S S S S S A A A ||| NbrShifts: 2	[9, 10, 17/12] (choice	awards)	[7, 7, 9/5] (tv)
+Score: 63.1579 ( 12 / 19 )
+
+(id_TEST_WMT_541)
+REF:            	colóquelo en un recipiente de estilo esclusa ( véase la introducción de la receta para obtener más información ) , o en una basija de barro con una placa a medida en la parte superior para crear un ambiente anaeróbico ( sin oxígeno ) .
+HYP:            	coloque en un estilo esclusa de recipiente ( véase la introducción receta para obtener más información ) , o el lugar en el barro con una placa equipada en la parte superior para crear un ambiente anaeróbico ( uno sin oxígeno ) .
+HYP AFTER SHIFT:	coloque en un recipiente de estilo esclusa ( véase la introducción receta para obtener más información ) , o en el lugar el barro con una placa equipada en la parte superior para crear un ambiente anaeróbico ( uno sin oxígeno ) .
+ALIG:	S A A A A A A A A A A D D A A A A A A A A A S S S A A A A D S A A A A A A A A A A I A A A A ||| NbrShifts: 3	[3, 4, 4/4] (estilo	esclusa)	[6, 6, 3/3] (recipiente)	[21, 21, 21/19] (en)
+Score: 26.6667 ( 12 / 45 )
+
+(id_TEST_WMT_697)
+REF:            	pantallas de preregistro ( incluyendo marketing de app store )
+HYP:            	pantallas de preregistro ( incluyendo app store de marketing )
+HYP AFTER SHIFT:	pantallas de preregistro ( incluyendo marketing de app store )
+ALIG:	A A A A A A A A A A ||| NbrShifts: 2	[5, 6, 6/6] (app	store)	[8, 8, 5/5] (marketing)
+Score: 20 ( 2 / 10 )

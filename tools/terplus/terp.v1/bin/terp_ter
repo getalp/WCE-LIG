@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#####################################################################
+###
+### EDIT THESE TWO LINES APPROPRIATELLY
+###
+#####################################################################
+PATH_TO_JAVA="/usr/bin/java"
+PATH_TO_TER="/home/lent/Develops/Solution/tool/terplus/terp.v1"
+
+#####################################################################
+###
+### DO NOT EDIT BELOW HERE
+###
+#####################################################################
+
+${PATH_TO_JAVA} -jar ${PATH_TO_TER}/dist/lib/terp.jar ${PATH_TO_TER}/data/ter.param $@
+
+exit $?

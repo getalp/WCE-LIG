@@ -2,7 +2,7 @@
 # Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole (GETALP)
 # Homepage: http://getalp.imag.fr
 #
-# Author: Tien LE & Christophe Servan (ngoc-tien.le@imag.fr,christophe.servan@imag.fr)
+# Author: Tien LE & Christophe Servan (ngoc-tien.le@imag.fr, christophe.servan@imag.fr)
 # Supervisors: Laurent Besacier & Benjamin Lecouteux
 # URL: tienhuong.weebly.com
 #####################################################################################################
