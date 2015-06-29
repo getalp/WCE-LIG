@@ -1,0 +1,144 @@
+## YAML Template.
+---
+#####################################################################################################
+# Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole (GETALP)
+# Homepage: http:/getalp.imag.fr
+#
+# Author: Tien LE (ngoc-tien.le@imag.fr)
+# Advisors: Laurent Besacier & Benjamin Lecouteux
+# URL: tienhuong.weebly.com
+#####################################################################################################
+
+# Purpose: User should change the configuration of our Confidence Estimation System (CE System) before installing
+input_data:
+    ## Language pair
+    source_language: fr
+    target_language: en
+    language_pair: fr_en
+
+    ###################################################################################################
+    ## Corpus Names, if NOT CONFIG then we use DEFAULT CONFIG.
+    #note: no need tokenizer & lowercasing
+    lowercase: True
+    tokenizer: True
+    
+    ###################################################################################################
+    #WCE_System - corpus
+    raw_corpus_source_language: /input_data/src-ref-all.fr
+    raw_corpus_target_language: /input_data/tgt-mt-all.en
+    post_edition_of_machine_translation_sentences_target_language: /input_data/tgt-pe-all.en
+    tags_file_path: None
+    
+    ###################################################################################################
+    ## Language Models, if NOT CONFIG then we use DEFAULT CONFIG.
+    #french - english
+    language_model_source_language: /input_data/lm_5gram.fr
+    language_model_target_language: /input_data/lm_5gram.en
+
+    ###################################################################################################
+    ## Output from Google & Bing Translator
+    google_translator: /input_data/output_Google_Translator.en
+    bing_translator: /input_data/output_Bing_Translator.en
+    
+    ###################################################################################################
+    ## n best list using MOSES
+    one_best_list_included_alignment: /input_data/src-ref-all.fr.translated_output10881
+    n_best_list_included_alignment: /input_data/src-ref-all.fr.translated_1000_output10881
+        
+    ## It means that there is a result that is got from MOSES with hypothesis and alignment.
+    ## is_has_a file that included alignment. 1: True ~ Existed; 0: False ~ not existed
+    ## if not existed, we would not have some features that uses alignment file such as: Longest Source gram length, 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming); WPP any; Max; Min; Nodes; WPP Exact
+    #ce_agent
+    is_has_a_file_included_alignment: 1
+    
+    #wmt
+    #is_has_a_file_included_alignment: 2
+    
+    ##tool_moses
+    #tool_moses: ../../tool/moses/bin/moses
+    #tool_moses: /tools/moses/bin/moses    
+    tool_train_model: /tools/moses/scripts/training/train-model.perl
+    
+    ## version moses 
+    #ce_agent
+    ## output version 2009: 
+    #0 ||| Encore a crucial step for the Balkans .  ||| d: 0 -1.16766 0 0 -0.731304 0 0 lm: -230.634 tm: -2.46672 -8.64038 -1.53706 -4.09358 2.99969 w: -8 ||| -310.634 ||| 0=0 1-4=1-4 5=5 6=6 7=7 ||| 0=0 1=1 2=3 3=2 4=4 5=5 6=6 7=7 ||| 0=0 1=1 2=3 3=2 4=4 5=5 6=6 7=7
+    version_moses: 2009
+        
+    ## output version 2013, 2014
+    # 0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , said m camus .  ||| LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15  
+    #version_moses: 2014
+    
+    ## Path to moses.ini, in directory "input_data"
+    #moses_ini: output_moses2009/moses.ini
+    
+    ###################################################################################################
+    ## Berkeley Parser            
+    ## for FR
+    #tool_get_constituent_fr: ../../tool/bonsai_v3.2/bin/get_constituent_tree.sh
+    tool_get_constituent_fr: /tools/bonsai_v3.2/bin
+    grammar_fr_for_berkeley_parser_path: /tools/berkeley_parser/fra_sm5.gr
+    
+    ## for EN
+    grammar_en_for_berkeley_parser_path: /tools/berkeley_parser/eng_sm6.gr
+    
+    ## for ES    
+    tool_berkeley_parser_path: /tools/berkeley_parser/berkeley_parser.sh
+    grammar_es_for_berkeley_parser_path: None
+    
+    ## for arabe    
+    grammar_ar_for_berkeley_parser_path: None
+    
+    ##SRILM tool
+    ## Paths to tools that user must install (You should install SRILM)    
+    srilm_bin_directory:  /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
+    tool_ngram: /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64/ngram
+    
+    ##Babel Net    
+    tool_babel_net_dir: /tools/BabelSenseCount_v25/BabelNet-2.5
+    tool_babel_net_en: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_english.sh
+    tool_babel_net_fr: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_french.sh
+    tool_babel_net_es: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_spanish.sh
+    
+    ###################################################################################################
+    ##TreeTagger
+    tree_tagger_path: /tools/treetagger
+
+    #ce_agent
+    treetagger_french: /tools/treetagger/cmd/tree-tagger-french
+    
+    ###################################################################################################
+    ##tool_fastnc
+    tool_fastnc: /tools/fastnc/bin/fastnc
+    tool_RefToCtm: /tools/fastnc/scripts/RefToCtm.pl
+    
+    ###################################################################################################
+    ##terpa
+    tool_terpa: /tools/terplus/terp.v1/bin/terpa_TienLE_TanLE    
+    tool_terpa_no_shift_cost: /tools/terplus/terp.v1/bin/terpa_TienLE_TanLE_no_shift_cost
+    tool_terp: /tools/terplus/terp.v1/bin/terp
+    tool_tercom: /tools/terplus/terp.v1/bin/tercom
+    tercom_jar: /tools/Evaluation_Script/tercom-0.7.25/tercom.7.25.jar
+    
+    #within Normalize = true --> tokenize
+    tool_terpa_within_tokenizing: /tools/terplus/terp.v1/bin/terpa
+    
+    #TERCPP
+    tool_tercpp: /tools/tercpp/./tercpp.0.7.1
+    
+    ###################################################################################################
+    ## CRF model
+    tool_wapiti: /tools/wapiti-1.5.0/./wapiti
+    
+    ###################################################################################################
+    ##Giza++ (After install Giza++ --> copy into new directory"bin")
+    #path_to_tool_giza: /tools/giza-pp/GIZA++-v2
+    #path_to_tool_mkcls: /tools/giza-pp/mkcls-v2
+    path_to_tool_giza: /tools/giza-pp/bin
+    path_to_tool_mkcls: /tools/giza-pp/bin
+    
+    ###################################################################################################
+    ##fast-align
+    tool_fast_align: /tools/fast_align/./fast_align
+    
+    
