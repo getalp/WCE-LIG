@@ -16,15 +16,17 @@ Finally, it outputs a good (G) or a bad (B) label foreach word in of the transla
 Actually, the internal features belongs to the translation system and the external features uses external toolkits to extract informations (linguistic or probabilistic)
 
 ## What are the features extracted?
-1 Proper Name		&  9  Left Source Word		& 17  Left Target POS	& 25 WPP Exact & 33 Punctuation \\
-2 Unknown Stemming	& 10  Left Source Stem		& 18 Left Target Word		& 26  WPP Any & 34  Stop Word \\
-3 Number of Word Occurrences & 11  Right Source POS & 19  Left Target Stem		& 27  Max   & 35  Occur in Google Translate \\
-4 Number of Stemming Occurrences & 12  Right Source Word		& 20 Right Target POS & 28  Min & 36 Occur in Bing Translator \\
-5 Source POS  		& 13  Right Source Stem		& 21  Right Target Word		& 29  Nodes &37  Polysemy Count -- Target\\
-6 Source Word			& 14  Target POS	& 22  Right Target Stem		& 30  Constituent Label  & 38  Backoff Behaviour -- Target\\
-7 Source Stem			& 15  Target Word 		& 23  Longest Target $N$-gram Length			& 31  Distance To Root  &&\\
-8 Left Source POS		& 16  Target Stem 		& 24  Longest Source $N$-gram Length			& 32  Numeric && \\
 
+<TABLE BORDER="1"> 
+<TR><TD>1 Proper Name           </TD><TD>  9  Left Source Word          </TD><TD> 17  Left Target POS   </TD><TD> 25 WPP Exact </TD><TD> 33 Punctuation </TD></TR>
+<TR><TD>2 Unknown Stemming      </TD><TD> 10  Left Source Stem          </TD><TD> 18 Left Target Word           </TD><TD> 26  WPP Any </TD><TD> 34  Stop Word </TD></TR>
+<TR><TD>3 Number of Word Occurrences </TD><TD> 11  Right Source POS </TD><TD> 19  Left Target Stem              </TD><TD> 27  Max   </TD><TD> 35  Occur in Google Translate </TD></TR>
+<TR><TD>4 Number of Stemming Occurrences </TD><TD> 12  Right Source Word                </TD><TD> 20 Right Target POS </TD><TD> 28  Min </TD><TD> 36 Occur in Bing Translator </TD></TR>
+<TR><TD>5 Source POS            </TD><TD> 13  Right Source Stem         </TD><TD> 21  Right Target Word         </TD><TD> 29  Nodes </TD><TD>37  Polysemy Count -- Target</TD></TR>
+<TR><TD>6 Source Word                   </TD><TD> 14  Target POS        </TD><TD> 22  Right Target Stem         </TD><TD> 30  Constituent Label  </TD><TD> 38  Backoff Behaviour -- Target</TD></TR>
+<TR><TD>7 Source Stem                   </TD><TD> 15  Target Word               </TD><TD> 23  Longest Target $N$-gram Length                    </TD><TD> 31  Distance To Root  </TD><TD></TD><TD></TD></TR>
+<TR><TD>8 Left Source POS               </TD><TD> 16  Target Stem               </TD><TD> 24  Longest Source $N$-gram Length                    </TD><TD> 32  Numeric </TD><TD></TD><TD> </TD></TR>
+</TABLE> 
  
 This toolkit enables you to estimate the quality of an automatic translation.
 
@@ -48,21 +50,7 @@ G        Pr=0.8417       Rc=0.8978       F1=0.8688
 
 ## Repository description
 
-<TABLE BORDER="1"> 
-  <CAPTION> Voici le titre du tableau </CAPTION> 
-  <TR> 
- <TH> Titre A1 </TH> 
- <TH> Titre A2 </TH> 
- <TH> Titre A3 </TH> 
- <TH> Titre A4 </TH> 
-  </TR> 
-  <TR> 
- <TH> Titre B1 </TH> 
- <TD> Valeur B2 </TD> 
- <TD> Valeur B3 </TD> 
- <TD> Valeur B4 </TD> 
-  </TR> 
-</TABLE> 
+
 
 ## Acknoledgement
 
