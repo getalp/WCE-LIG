@@ -48,7 +48,21 @@ G        Pr=0.8417       Rc=0.8978       F1=0.8688
 
 ## Repository description
 
-
+<TABLE BORDER="1"> 
+  <CAPTION> Voici le titre du tableau </CAPTION> 
+  <TR> 
+ <TH> Titre A1 </TH> 
+ <TH> Titre A2 </TH> 
+ <TH> Titre A3 </TH> 
+ <TH> Titre A4 </TH> 
+  </TR> 
+  <TR> 
+ <TH> Titre B1 </TH> 
+ <TD> Valeur B2 </TD> 
+ <TD> Valeur B3 </TD> 
+ <TD> Valeur B4 </TD> 
+  </TR> 
+</TABLE> 
 
 ## Acknoledgement
 
