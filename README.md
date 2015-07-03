@@ -16,6 +16,8 @@ Finally, it outputs a good (G) or a bad (B) label foreach word in of the transla
 Actually, the internal features belongs to the translation system and the external features uses external toolkits to extract informations (linguistic or probabilistic)
 
 ## What are the features extracted?
+Here is the list of all the features which are used in the toolkit.
+
 
 <TABLE BORDER="1"> 
 <TR><TD>1 Proper Name                           </TD><TD> 17  Left Target POS                   </TD><TD> 25 WPP Exact                          </TD></TR>
@@ -36,8 +38,8 @@ Actually, the internal features belongs to the translation system and the extern
 <TR><TD> 16  Target Stem                        </TD><TD> 24  Longest Source $N$-gram Length    </TD><TD>                                       </TD></TR>
 </TABLE> 
  
-This toolkit enables you to estimate the quality of an automatic translation.
-
+ 
+Detailed description can be founded if the paper directory.
 ## How far can we go?
 You can achieve State-of-the-Art WCE results in the WMT shared task (http://www.statmt.org/wmt14/quality-estimation-task.html) 
 For English-French quality estimation task:
@@ -58,7 +60,9 @@ G        Pr=0.8417       Rc=0.8978       F1=0.8688
 
 ## Repository description
 
-
++ wce_system: contains the core of the system 
++ input_data: contains the data used to train your WCE system
++ tools: contains all the tools needed to use fully the toolkit
 
 ## Acknoledgement
 
