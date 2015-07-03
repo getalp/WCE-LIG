@@ -1,48 +1,56 @@
-#####################################################################################################
-# Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues et de la Parole (GETALP)
-# Homepage: http://getalp.imag.fr
-#
-# Author: Tien LE & Christophe Servan (ngoc-tien.le@imag.fr, christophe.servan@imag.fr)
-# Supervisors: Laurent Besacier & Benjamin Lecouteux
-# URL: tienhuong.weebly.com
-#####################################################################################################
+# WCE LIG: an open-source toolkit for Word Confidence Estimation
+This toolkit, written in python (python3), enables you to estimate the quality of an automatic translation at word level.
+It outputs a good (G) or a bad (B) label foreach word in of the translation hypothesis.
 
-Our solution contains three main-steps:
-Step 1: Preprocessing
-Step 2: Extracting features
-Step 3: Estimating confidences in Word-level
+For instance:
+```
+Source: give me some pills
+Translation hypothesis: me donner des pilules
+WCE: B B G G
+Reference: donnes moi des pilules
+```
 
-- input corpus (French-English)
-    + source language
-    + target language
-    + post-edition
-    + output from Google Translator
-    + output from Bing Translator
-    + output from tool MOSES: n-best-list & 1-best-list
+## What the toolkit do?
+First, the toolkit pre-process the data, then, it extract some internal and external features.
+Finally, it outputs a good (G) or a bad (B) label foreach word in of the translation hypothesis based on those features.
+Actually, the internal features belongs to the translation system and the external features uses external toolkits to extract informations (linguistic or probabilistic)
 
-- output: After using our WCE system, we have result file that contains label of each word in given input corpus target language. Note: B (Insert label), Other labels are G
+## What are the features extracted?
+1 Proper Name		&  9  Left Source Word		& 17  Left Target POS	& 25 WPP Exact & 33 Punctuation \\
+2 Unknown Stemming	& 10  Left Source Stem		& 18 Left Target Word		& 26  WPP Any & 34  Stop Word \\
+3 Number of Word Occurrences & 11  Right Source POS & 19  Left Target Stem		& 27  Max   & 35  Occur in Google Translate \\
+4 Number of Stemming Occurrences & 12  Right Source Word		& 20 Right Target POS & 28  Min & 36 Occur in Bing Translator \\
+5 Source POS  		& 13  Right Source Stem		& 21  Right Target Word		& 29  Nodes &37  Polysemy Count -- Target\\
+6 Source Word			& 14  Target POS	& 22  Right Target Stem		& 30  Constituent Label  & 38  Backoff Behaviour -- Target\\
+7 Source Stem			& 15  Target Word 		& 23  Longest Target $N$-gram Length			& 31  Distance To Root  &&\\
+8 Left Source POS		& 16  Target Stem 		& 24  Longest Source $N$-gram Length			& 32  Numeric && \\
 
-- Tutorial:
-+ Set the WCE_ROOT environment variable to the place where is this Readme file.
+ 
+This toolkit enables you to estimate the quality of an automatic translation.
 
-+ Running three Phases (Preprocessing, Extracting Features and Measuring Confidence):
-$ python3  $WCE_ROOT/wce_system/solution/lauching_solution.py
+## How far can we go?
+You can achieve State-of-the-Art WCE results in the WMT shared task (http://www.statmt.org/wmt14/quality-estimation-task.html) 
+For English-French quality estimation task:
 
-+ Processing Phase:
-$ python3 $WCE_ROOT/wce_system/preprocessing/pre_processing.py
+X-Bad = 1640     Y-Bad = 3395    Z-Bad = 4537
+X-Good = 15409   Y-Good = 18306          Z-Good = 17164
+B        Pr=0.4831       Rc=0.3615       F1=0.4135
+G        Pr=0.8417       Rc=0.8978       F1=0.8688
 
-+ Extracting Feature Phase:
-$ python3 $WCE_ROOT/wce_system/feature/extract_all_features.py
+## What is needed?
 
-+ Measuring Confidence Phase:
-$ python3 $WCE_ROOT/wce_system/metrics/demo_metrics.py
++ Set the WCE_ROOT environment variable (see Readme file)
++ python3
++ PyYAML-3.11
++ NLTK for python 3
++ tools: see tools directory
++ 7zip to decompress data in the input_data directory
 
-*** For example:
-- Input: Using FR-EN within 10881 sentences in source language, target language and post-edition.
+## Repository description
 
-- Output: file "$WCE_ROOT/wce_system/var/data/CRF_model_testing_log_file1_System_WCE_manual.txt"
-*** Template_1_System_WCE classifier Good/Bad:
-X-Bad = 1640 	 Y-Bad = 3395 	 Z-Bad = 4537
-X-Good = 15409 	 Y-Good = 18306 	 Z-Good = 17164
-B 	 Pr=0.4831 	 Rc=0.3615 	 F1=0.4135
-G 	 Pr=0.8417 	 Rc=0.8978 	 F1=0.8688
+
+
+## Acknoledgement
+
+This toolkit is part of the French National Research Agency project KEHATH (https://kehath.imag.fr/)
+
