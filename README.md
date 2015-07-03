@@ -64,6 +64,7 @@ Metrics used are Precision (Pr), Recall (Rc) and F-Measure F1.
 + wce_system: contains the core of the system 
 + input_data: contains the data used to train your WCE system
 + tools: contains all the tools needed to use fully the toolkit
++ docs: contains the documentation and the scientific papers related to this toolkit
 
 ## Acknoledgement
 
