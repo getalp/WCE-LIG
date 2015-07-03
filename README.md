@@ -44,11 +44,14 @@ Detailed description can be founded if the paper directory.
 You can achieve State-of-the-Art WCE results in the WMT shared task (http://www.statmt.org/wmt14/quality-estimation-task.html) 
 For English-French quality estimation task:
 
-X-Bad = 1640     Y-Bad = 3395    Z-Bad = 4537
-X-Good = 15409   Y-Good = 18306          Z-Good = 17164
-B        Pr=0.4831       Rc=0.3615       F1=0.4135
-G        Pr=0.8417       Rc=0.8978       F1=0.8688
+<TABLE BORDER="0"> 
+<TR><TD> X-Bad = 1640   </TD><TD>  Y-Bad = 3395         </TD><TD> Z-Bad = 4537 </TD></TR>
+<TR><TD> X-Good = 15409 </TD><TD>  Y-Good = 18306       </TD><TD> Z-Good = 17164 </TD></TR>
+<TR><TD> B              </TD><TD>  Pr=0.4831            </TD><TD> Rc=0.3615  </TD><TD> F1=0.4135 </TD></TR>
+<TR><TD> G              </TD><TD>  Pr=0.8417            </TD><TD> Rc=0.8978  </TD><TD> F1=0.8688 </TD></TR>
+</TABLE> 
 
+Metrics used are Precision (Pr), Recall (Rc) and F-Measure F1.
 ## What is needed?
 
 + Set the WCE_ROOT environment variable (see Readme file)
