@@ -18,14 +18,22 @@ Actually, the internal features belongs to the translation system and the extern
 ## What are the features extracted?
 
 <TABLE BORDER="1"> 
-<TR><TD>1 Proper Name           </TD><TD>  9  Left Source Word          </TD><TD> 17  Left Target POS   </TD><TD> 25 WPP Exact </TD><TD> 33 Punctuation </TD></TR>
-<TR><TD>2 Unknown Stemming      </TD><TD> 10  Left Source Stem          </TD><TD> 18 Left Target Word           </TD><TD> 26  WPP Any </TD><TD> 34  Stop Word </TD></TR>
-<TR><TD>3 Number of Word Occurrences </TD><TD> 11  Right Source POS </TD><TD> 19  Left Target Stem              </TD><TD> 27  Max   </TD><TD> 35  Occur in Google Translate </TD></TR>
-<TR><TD>4 Number of Stemming Occurrences </TD><TD> 12  Right Source Word                </TD><TD> 20 Right Target POS </TD><TD> 28  Min </TD><TD> 36 Occur in Bing Translator </TD></TR>
-<TR><TD>5 Source POS            </TD><TD> 13  Right Source Stem         </TD><TD> 21  Right Target Word         </TD><TD> 29  Nodes </TD><TD>37  Polysemy Count -- Target</TD></TR>
-<TR><TD>6 Source Word                   </TD><TD> 14  Target POS        </TD><TD> 22  Right Target Stem         </TD><TD> 30  Constituent Label  </TD><TD> 38  Backoff Behaviour -- Target</TD></TR>
-<TR><TD>7 Source Stem                   </TD><TD> 15  Target Word               </TD><TD> 23  Longest Target $N$-gram Length                    </TD><TD> 31  Distance To Root  </TD><TD></TD><TD></TD></TR>
-<TR><TD>8 Left Source POS               </TD><TD> 16  Target Stem               </TD><TD> 24  Longest Source $N$-gram Length                    </TD><TD> 32  Numeric </TD><TD></TD><TD> </TD></TR>
+<TR><TD>1 Proper Name                           </TD><TD> 17  Left Target POS                   </TD><TD> 25 WPP Exact                          </TD></TR>
+<TR><TD>2 Unknown Stemming                      </TD><TD> 18 Left Target Word                   </TD><TD> 26  WPP Any                           </TD></TR>
+<TR><TD>3 Number of Word Occurrences            </TD><TD> 19  Left Target Stem                  </TD><TD> 27  Max                               </TD></TR>
+<TR><TD>4 Number of Stemming Occurrences        </TD><TD> 20 Right Target POS                   </TD><TD> 28  Min                               </TD></TR>
+<TR><TD>5 Source POS                            </TD><TD> 21  Right Target Word                 </TD><TD> 29  Nodes                             </TD></TR>
+<TR><TD>6 Source Word                           </TD><TD> 22  Right Target Stem                 </TD><TD> 30  Constituent Label                 </TD></TR>
+<TR><TD>7 Source Stem                           </TD><TD> 15  Target Word                       </TD><TD> 31  Distance To Root                  </TD></TR>
+<TR><TD>8 Left Source POS                       </TD><TD> 16  Target Stem                       </TD><TD> 32  Numeric                           </TD></TR>
+<TR><TD>  9  Left Source Word                   </TD><TD> 17  Left Target POS                   </TD><TD> 33 Punctuation                        </TD></TR>
+<TR><TD> 10  Left Source Stem                   </TD><TD> 18 Left Target Word                   </TD><TD> 34  Stop Word                         </TD></TR>
+<TR><TD> 11  Right Source POS                   </TD><TD> 19  Left Target Stem                  </TD><TD> 35  Occur in Google Translate         </TD></TR>
+<TR><TD> 12  Right Source Word                  </TD><TD> 20 Right Target POS                   </TD><TD> 36 Occur in Bing Translator           </TD></TR>
+<TR><TD> 13  Right Source Stem                  </TD><TD> 21  Right Target Word                 </TD><TD> 37  Polysemy Count -- Target          </TD></TR>
+<TR><TD> 14  Target POS                         </TD><TD> 22  Right Target Stem                 </TD><TD> 38  Backoff Behaviour -- Target       </TD></TR>
+<TR><TD> 15  Target Word                        </TD><TD> 23  Longest Target $N$-gram Length    </TD><TD>                                       </TD></TR>
+<TR><TD> 16  Target Stem                        </TD><TD> 24  Longest Source $N$-gram Length    </TD><TD>                                       </TD></TR>
 </TABLE> 
  
 This toolkit enables you to estimate the quality of an automatic translation.
