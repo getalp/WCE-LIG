@@ -45,8 +45,6 @@ You can achieve State-of-the-Art WCE results in the WMT shared task (http://www.
 For English-French quality estimation task:
 
 <TABLE BORDER="0"> 
-<TR><TD> X-Bad = 1640   </TD><TD>  Y-Bad = 3395         </TD><TD> Z-Bad = 4537 </TD></TR>
-<TR><TD> X-Good = 15409 </TD><TD>  Y-Good = 18306       </TD><TD> Z-Good = 17164 </TD></TR>
 <TR><TD> B              </TD><TD>  Pr=0.4831            </TD><TD> Rc=0.3615  </TD><TD> F1=0.4135 </TD></TR>
 <TR><TD> G              </TD><TD>  Pr=0.8417            </TD><TD> Rc=0.8978  </TD><TD> F1=0.8688 </TD></TR>
 </TABLE> 
