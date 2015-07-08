@@ -68,5 +68,5 @@ Metrics used are Precision (Pr), Recall (Rc) and F-Measure F1.
 
 ## Acknowledgement
 
-This toolkit is part of the French National Research Agency project KEHATH (https://kehath.imag.fr/)
+This toolkit is part of the project KEHATH (https://kehath.imag.fr/) funded by the French National Research Agency.
 
