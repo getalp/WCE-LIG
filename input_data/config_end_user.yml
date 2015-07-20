@@ -91,8 +91,8 @@ input_data:
     
     ##SRILM tool
     ## Paths to tools that user must install (You should install SRILM)    
-    srilm_bin_directory:  /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
-    tool_ngram: /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64/ngram
+    srilm_bin_directory:  /tools/srilm-1.7.1/bin/i686-m64
+    tool_ngram: /tools/srilm-1.7.1/bin/i686-m64/ngram
     
     ##Babel Net    
     tool_babel_net_dir: /tools/BabelSenseCount_v25/BabelNet-2.5
