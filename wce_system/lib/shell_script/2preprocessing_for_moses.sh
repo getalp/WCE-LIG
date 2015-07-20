@@ -1,16 +1,5 @@
 #! /bin/bash
 
-#Demo on lent@hestia.imag.fr
-#Created by: Tien Ngoc LE
-#Date Created: 2014.Dec.14
-#Date Updated: .... by ....s
-
-#note: file nay chi copy vao "/home/lent/Develops/Experiments/EMS_FREN_v2"
-
-#path Demo: /home/lent/Develops/Solution/eval_agent/eval_agent/preprocessing
-#command line: 
-#command demo: 
-
 #Purpose: Preprocessing for MOSES EMS, contains the following functions: 
 
 #Lay phan du lieu de test (EVALUATE)

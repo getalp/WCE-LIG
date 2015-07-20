@@ -20,84 +20,14 @@ import random
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test with line by line on the server
 
-"""
-from metrics.common_function_metrics import *
-from config.configuration import *
-from feature.common_functions import *
-"""
 
 from common_module.cm_config import load_configuration
 from common_module.cm_file import is_existed_file, get_file_oracle_label_given_all_features_file, get_result_testing_CRF_models_within_given_list_of_models
 from common_module.cm_util import get_number_of_words_with_label_good_and_bad_in_list_label, get_precision_recall_fscore_within_list
 #**************************************************************************#
 
-"""
-ref: NLTK
-http://www.nltk.org/_modules/nltk/metrics/scores.html
 
-def demo():
-    print('-'*75)
-    reference = 'DET NN VB DET JJ NN NN IN DET NN'.split()
-    test    = 'DET VB VB DET NN NN NN IN DET NN'.split()
-    print('Reference =', reference)
-    print('Test    =', test)
-    print('Accuracy:', accuracy(reference, test))
-
-    print('-'*75)
-    reference_set = set(reference)
-    test_set = set(test)
-    print('Reference =', reference_set)
-    print('Test =   ', test_set)
-    print('Precision:', precision(reference_set, test_set))
-    print('   Recall:', recall(reference_set, test_set))
-    print('F-Measure:', f_measure(reference_set, test_set))
-    print('-'*75)
-
-****output**** Not using NLTK, because the algorithm for Pr, Rc, F are different.
-
->>> import nltk
->>> import nltk.metrics.scores
->>> nltk.metrics.scores.demo()
----------------------------------------------------------------------------
-Reference = ['DET', 'NN', 'VB', 'DET', 'JJ', 'NN', 'NN', 'IN', 'DET', 'NN']
-Test    = ['DET', 'VB', 'VB', 'DET', 'NN', 'NN', 'NN', 'IN', 'DET', 'NN']
-Accuracy: 0.8
----------------------------------------------------------------------------
-Reference = {'VB', 'DET', 'JJ', 'NN', 'IN'}
-Test =    {'VB', 'DET', 'NN', 'IN'}
-Precision: 1.0
-   Recall: 0.8
-F-Measure: 0.8888888888888888
----------------------------------------------------------------------------
-"""
-
-"""
-Precision (Pr)
-Recall (Rc)
-F-score (F)
-
-Let X be the number of words whose true label is B and have been tagged with this label by the classifier (So tu duoc classifier gan nhan dung la B, vi co khi nhan oracle label cua no la G nhung classifier gan la B)
-Let Y be the total number of words classified as B (Tong so tu duoc gan nhan la B)
-Let Z be the total number of words which true label is B (oracle label)
-
-Pr = X/Y
-
-Rc = X/Z
-
- F = (2*Pr*Rc)/(Pr+Rc)
-
-Pr of a specific label characterizes the ability of system to predict correctly (for it) over all classified words.
-Rc reflects how efficient the system is in retrieving the accurate labels from DB.
-F is the harmonic mean of Precision and Recall
-"""
 #**************************************************************************#
-#Bc 1: Dua label_word vao list of labels
-#Bc 2:
-#Demo baseline 1: always predicts "Good"
-#Demo baseline 2: always predicts "Bad"
-#--> tim cach su dung NLTK de tinh vu nay --> Khong dung duoc vi khac ham tinh F-score va ham tinh Pr & Rc
-#**************************************************************************#
-#Bc 1: Du label_word vao list of labels
 def get_list_of_oracle_label(file_input_path):
     """
     Getting list of words' labels after extracting label.
@@ -431,11 +361,6 @@ def demo_baselines_and_systems_within_given_model_wmt15( demo_name, test_file_pa
     """
     current_config = load_configuration()
 
-    #B0: copy cac model cua wmt15 "CRF_model_with_templateN_System_1.txt" vao thu muc "/home/lent/Develops/Solution/ce_system/ce_system/var/data" N=8,12,18,20
-
-    #B1: Khoi tao cac bien; vi du:
-    #danh sach cac model tot nhat cua wmt15. Model co dang:
-    #phan test cua wmt14 & wmt13
 
     #wmt14_test
     #test_file_path = current_config.FEATURES_TEST_WMT14
@@ -463,97 +388,9 @@ if __name__ == "__main__":
 
     current_config = load_configuration()
 
-    """
-    #for wmt 14
-    file_input_path = current_config.FEATURES_WMT14
-    file_output_path = current_config.LABEL_OUTPUT_FROM_EXTRACTED_FEATURES
-    get_file_oracle_label_given_all_features_file(file_input_path, file_output_path)
 
-    file_result_path = "/home/lent/Develops/Solution/task2_wmt14_wmt13/task2_wmt14_wmt13/preprocessing/kiem_tra_thieu_dong/bl_result_wmt14.txt"
-    get_baseline(file_output_path, file_result_path)
 
-    #for wmt 13
-    file_input_path = current_config.FEATURES_WMT13
-    file_output_path = current_config.LABEL_OUTPUT_FROM_EXTRACTED_FEATURES
-    get_file_oracle_label_given_all_features_file(file_input_path, file_output_path)
-
-    file_result_path = "/home/lent/Develops/Solution/task2_wmt14_wmt13/task2_wmt14_wmt13/preprocessing/kiem_tra_thieu_dong/bl_result_wmt13.txt"
-    get_baseline(file_output_path, file_result_path)
-    """
-
-    #splitting_corpus_for_bl(file_input_path, num_of_sentences_skip, file_output_path)
-    #file_input_path = current_config.LABEL_OUTPUT
-    #num_of_sentences_skip = 11500
-    #file_output_path = "/home/lent/Develops/Solution/task2_wmt15/task2_wmt15/preprocessing/kiem_tra_thieu_dong/label_for_bl.txt"
-    #splitting_corpus_for_bl(file_input_path, num_of_sentences_skip, file_output_path)
-
-    #get_baseline(file_oracle_label_path, file_output_path)
     get_baseline(current_config.LABEL_OUTPUT, current_config.F_MEASURE_RESULT_BASELINE)
 
     print ('OK')
 
-"""it depends on the result of Tool Terpa
----------------------------------------------------------------
----------------------------------------------------------------
-*** Statistics of Oracle label:
-Bad Oracle = 108526      Good Oracle = 173337
-Bad = 0.3850
-Good = 0.6150
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 1 - all of words predict "Good":
-X-Bad = 0        Y-Bad = 0       Z-Bad = 108526
-X-Good = 173337          Y-Good = 281863         Z-Good = 173337
-B        Pr=-1.0000      Rc=0.0000       F1=-1.0000
-G        Pr=0.6150       Rc=1.0000       F1=0.7616
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 2 - all of words predict "Bad":
-X-Bad = 108526   Y-Bad = 281863          Z-Bad = 108526
-X-Good = 0       Y-Good = 0      Z-Good = 173337
-B        Pr=0.3850       Rc=1.0000       F1=0.5560
-G        Pr=-1.0000      Rc=0.0000       F1=-1.0000
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 3 - Random classifier Good/Bad:
-X-Bad = 54479    Y-Bad = 140919          Z-Bad = 108526
-X-Good = 86897   Y-Good = 140944         Z-Good = 173337
-B        Pr=0.3866       Rc=0.5020       F1=0.4368
-G        Pr=0.6165       Rc=0.5013       F1=0.5530
----------------------------------------------------------------
----------------------------------------------------------------
-"""
-
-"""output of 'Labels-MT' in 'WCE-SLT-LIG-master'
----------------------------------------------------------------
----------------------------------------------------------------
-*** Statistics of Oracle label:
-Bad Oracle = 13041       Good Oracle = 51759
-Bad = 0.2013
-Good = 0.7987
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 1 - all of words predict "Good":
-X-Bad = 0        Y-Bad = 0       Z-Bad = 13041
-X-Good = 51759   Y-Good = 64800          Z-Good = 51759
-B        Pr=-1.0000      Rc=0.0000       F1=-1.0000
-G        Pr=0.7987       Rc=1.0000       F1=0.8881
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 2 - all of words predict "Bad":
-X-Bad = 13041    Y-Bad = 64800   Z-Bad = 13041
-X-Good = 0       Y-Good = 0      Z-Good = 51759
-B        Pr=0.2013       Rc=1.0000       F1=0.3351
-G        Pr=-1.0000      Rc=0.0000       F1=-1.0000
----------------------------------------------------------------
----------------------------------------------------------------
-*** Baseline 3 - Random classifier Good/Bad:
-X-Bad = 6539     Y-Bad = 32545   Z-Bad = 13041
-X-Good = 25753   Y-Good = 32255          Z-Good = 51759
-B        Pr=0.2009       Rc=0.5014       F1=0.2869
-G        Pr=0.7984       Rc=0.4976       F1=0.6131
----------------------------------------------------------------
----------------------------------------------------------------
-OK
-
-"""

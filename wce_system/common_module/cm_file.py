@@ -3726,40 +3726,6 @@ def get_n_fold_cross_validation_index_of_sentences_for_train_dev_test(order_n_fo
     for item in my_set:
         list_index_training.append(item)
     #end for
-    """
-    while len(my_set) > 0:
-        random_choice = random.choice(list(my_set))
-
-        if num_for_developing > 0:
-            list_index_developing.append(random_choice)
-            num_for_developing = num_for_developing - 1
-        elif num_for_training > 0:
-            list_index_training.append(random_choice)
-            num_for_training = num_for_training - 1
-        #end if
-
-        my_set.remove(random_choice)
-    #end while
-    """
-    """random_choice
-    while len(my_set) > 0:
-        random_choice = random.choice(list(my_set))
-        #print("random choice : %d" %random_choice)
-
-        if num_for_training > 0:#training
-            list_index_training.append(random_choice)
-            num_for_training = num_for_training - 1
-        elif num_for_developing > 0: #developing
-            list_index_developing.append(random_choice)
-            num_for_developing = num_for_developing - 1
-        elif num_for_testing > 0:#testing
-            list_index_testing.append(random_choice)
-            num_for_testing = num_for_testing - 1
-        #end if
-
-        my_set.remove(random_choice)
-    #end while
-    """
 
     print("So luong cac phan tu trong corpus de training, developing va testing la: %d, %d va %d" %(len(list_index_training), len(list_index_developing), len(list_index_testing)))
 
@@ -3773,7 +3739,6 @@ def is_existed_file(file_input_path, str_message_if_not_existed):
 #**************************************************************************#
 #**************************************************************************#
 #**************************************************************************#
-#/home/lent/Develops/Solution/tool/moses/scripts/training/train-model.perl -corpus /home/lent/Develops/Solution/tool/moses_test/corpus/output_preprocessing -f src -e tgt -alignment grow-diag-final-and --first-step 1 --last-step 3 --external-bin-dir=/home/lent/Develops/Solution/tool/giza-pp/bin --model-dir=/home/lent/Develops/Solution/tool/moses_test/word_alignment
 def get_file_alignments_target_to_source_word_alignment_using_moses(pattern_file_path, extension_source, extension_target, path_to_tool_giza, output_directory_path, file_output_path):
     """
     Creating file of alignment word to word from Target To Source. Output has the format like n-best-list of tool MOSES
@@ -4161,7 +4126,6 @@ def tokenizer_raw_corpus(file_input_path, target_language, file_output_path):
 
     call_script(command_line, script_path)
 #**************************************************************************#
-#B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
 def get_output_treetagger_format_row(file_input_path, target_language, file_output_path):
     """
     Getting output from TreeTagger with format row
@@ -4206,12 +4170,6 @@ def get_output_treetagger_format_row(file_input_path, target_language, file_outp
 
     customize_output_treetagger_format_row(file_output_path, file_output_path)
 #**************************************************************************#
-#B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from TreeTagger dong
-#for raw_corpus fr
-#python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.fr
-#convert_format_row_to_format_column(file_input_path, file_output_path)
-#replace "<UNK>||||||" --> "<unk>|||<unk>|||<unk>" trong format dong
-#sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < file_format_row > file_format_row_after_customizing
 def customize_output_treetagger_format_row(file_input_path, file_output_path):
     """
     Getting output from TreeTagger with format row
@@ -4477,15 +4435,6 @@ def generating_CRF_models_original(demo_name, number_of_template, is_has_dev_cor
         call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
     #end for
 #**************************************************************************#
-#test model CRF
-#./wapiti label -m ./model_NBESTRESCORING  -c -s -p /home/nluong/FEATURE_EXTRACTION_NBEST/FEATURES/881.NBEST.CRF   /home/nluong/FEATURE_EXTRACTION_NBEST/FEATURES/881.NBEST.rs
-#./wapiti label -m DO_FOR_LUCIA/model  -c -s -p DO_FOR_LUCIA/test_9000  DO_FOR_LUCIA/rs
-
-#./wapiti label -m model_path -c -s -p test_file_path result_file_path
-
-#/home/lent/Develops/Solution/eval_agent/eval_agent/config/../../tool/wapiti-1.5.0/./wapiti label -c -s -p /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/en.column.CRF_model_test_file.txt -m /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_with_template2 /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_result_testing_with_model2 2>&1 | tee /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_result_testing_with_model_log_file2
-
-#./wapiti-1.5.0/./wapiti label -c -s -p test_file.txt -m CRF_model CRF_result 2>&1 | tee CRF_result_log_file
 def get_result_testing_CRF_models(demo_name, order_of_template = 1):
     """
     Testing phase of labeling within CRF model with K number of model.

@@ -3,29 +3,16 @@
 #Updated by Tien Ngoc LE updated 2014.Dec.23
 
 export LC_ALL=C
-#for i in Phrase*; do nbest-lattice -nbest $i -write ${i}.wlat; done
-#for i in *.wlat;  do wlat-to-pfsg $i > ${i}.pfsg; done
-#rename 's/\.wlat\.pfsg/\.pfsg/' *
-#for i in *.pfsg; do lattice-tool  -in-lattice $i -write-htk -out-lattice ${i}.htk; done
-#for i in *.htk; do lattice-tool -read-htk -in-lattice $i -use-server 6666@localhost -order 5 -write-htk -out-lattice ${i}.ext; done
 
 dem=0
 SRILM_BIN=/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
-#SRILM_BIN=/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/
 ML=../../corpus/language_model/lm_5gram.en
-#/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/language_model/lm_5gram.en
 ORDER=5
 
 while [ "$dem" -lt $1 ] ;
 do
 	i=Phrase$dem
 
-    #/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/nbest-lattice -nbest $i -write ${i}.wlat
-	#/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/wlat-to-pfsg ${i}.wlat > ${i}.wlat.pfsg
-	#/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/lattice-tool  -in-lattice ${i}.wlat.pfsg -write-htk -out-lattice ${i}.wlat.pfsg.htk
-        
-    #/home/tienle/Documents/Develops/DevTools/srilm/bin/i686-m64/
-    #/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
     
     LM_ACCESS="-lm $ML"
         
