@@ -57,7 +57,7 @@ Metrics used are Precision (Pr), Recall (Rc) and F-Measure F1.
 + PyYAML-3.11
 + NLTK for python 3
 + tools: see tools directory
-+ 7zip to decompress data in the input_data directory
++ 7zip to decompress data in the input_data directory (see README.md in the directories "tools" and "input_data")
 
 ## Repository description
 
