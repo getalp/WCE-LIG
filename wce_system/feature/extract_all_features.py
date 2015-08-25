@@ -50,12 +50,12 @@ from feature.label_word import extracting_label_for_word_format_column, extracti
 from feature.polysemy_count_within_given_target_language import get_polysemy_count_within_given_target_language, get_polysemy_count_within_given_target_language_threads
 
 #*****************************************************************************#
-def extracting_all_features(result_output_path):
+def extracting_all_features(log_path):
     """
     Extracting all features
 
-    :type result_output_path: string
-    :param result_output_path: path of log-file that contains results of DEMO
+    :type log_path: string
+    :param log_path: path of log-file that contains results of DEMO
     """
     current_config = load_configuration()
     config_end_user = load_config_end_user()
@@ -68,93 +68,93 @@ def extracting_all_features(result_output_path):
     #target_language = current_config.LANGUAGE_FRENCH # French
 
     #introduction of this solution
-    #print_introduction(result_output_path)
+    #print_introduction(log_path)
 
     feature_name = "BEGIN Task - Extracting Features"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Punctuation
     ##########################################################################
     if current_config.punctuation:
       feature_name = "Punctuation"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_punctuation(current_config.TARGET_REF_TEST_FORMAT_COL, current_config.LIST_PUNCTUATIONS, current_config.PUNCTUATION)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Stop Word
     ##########################################################################
-    if current_config.stop_word:
+    if current_config.stop_words:
       feature_name = "Stop Word" #List of stop word phu thuoc vao ngon ngu dich
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       get_feature_stop_word( current_config.TARGET_REF_TEST_FORMAT_COL, target_language, current_config.STOP_WORD)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Numeric
     ##########################################################################
     if current_config.numeric:
       feature_name = "Numeric"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_numeric( current_config.TARGET_REF_TEST_FORMAT_COL, current_config.NUMERIC)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Proper Name
     ##########################################################################
     if current_config.proper_name:
       feature_name = "Proper Name" #List of POS-Proper name phu thuoc vao ngon ngu dich
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_proper_name( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL, target_language, current_config.PROPER_NAME)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Unknown Lemma
     ##########################################################################
     if current_config.unknown_lemma:
       feature_name = "Unknown Lemma"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_unknown_lemma( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL, current_config.UNKNOWN_LEMMA)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Number Of Occurrences word
     ##########################################################################
     if current_config.occurence_words:
       feature_name = "Number Of Occurrences word"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_number_of_occurrences_word( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL,  current_config.NUMBER_OF_OCCURRENCES_WORD)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Number Of Occurrences stem (frequency of stemmed word)
     ##########################################################################
     if current_config.occurence_stems:
       feature_name = "Number Of Occurrences stemmed word"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_number_of_occurrences_stem( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL,  current_config.NUMBER_OF_OCCURRENCES_STEM)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Occur in Google Translatator
     ##########################################################################
     if current_config.google_translator:
       feature_name = "Occur in Google Translatator"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       #feature_occur_in_google_translate( current_config.TARGET_REF_TEST_FORMAT_COL, current_config.GOOGLE_TRANSLATE_CORPUS, current_config.OCCUR_IN_GOOGLE_TRANSLATE)
       feature_occur_in_translators( current_config.TARGET_REF_TEST_FORMAT_COL, current_config.GOOGLE_TRANSLATE_CORPUS, current_config.OCCUR_IN_GOOGLE_TRANSLATE)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Occur in Bing Translatator
     ##########################################################################
     if current_config.bing_translator:
       feature_name = "Occur in Bing Translatator"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       #feature_occur_in_bing_translate( current_config.TARGET_REF_TEST_FORMAT_COL, current_config.BING_TRANSLATE_CORPUS, current_config.OCCUR_IN_BING_TRANSLATE)
       feature_occur_in_translators( current_config.TARGET_REF_TEST_FORMAT_COL, current_config.BING_TRANSLATE_CORPUS, current_config.OCCUR_IN_BING_TRANSLATE)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     #143-270
     ##########################################################################
@@ -162,7 +162,7 @@ def extracting_all_features(result_output_path):
     ##########################################################################
     if current_config.longest_ngram_length_tgt:
       feature_name = "Longest Target gram length"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       #da fix loi SRILM vi file trong /srilm/bin/i686-m64 -> chmod +x *
       #Buoc 1: Tao file chua xac suat theo tung gram (Language Model)
@@ -176,7 +176,7 @@ def extracting_all_features(result_output_path):
       #create_longest_target_gram_length(file_input_path, file_output_path)
       create_longest_target_gram_length( current_config.PROBABILITY_HYPOTHESIS_ROW_CORPUS, current_config.LONGEST_TARGET_GRAM_LENGTH)
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
 
     ##########################################################################
@@ -186,7 +186,7 @@ def extracting_all_features(result_output_path):
     if current_config.longest_ngram_length_src:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "Longest Source gram length"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
 
           #Buoc 1: File Source-ngram giong nhu cach lam Target-ngram
           get_temp_longest_source_gram_length_not_aligned_target( current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_MODEL_SRC, current_config.N_GRAM, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET)
@@ -203,16 +203,16 @@ def extracting_all_features(result_output_path):
           #TYPE_LONGEST_SOURCE_GRAM_LENGTH_FIRST = 4
           feature_longest_gram_source_length( current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET_ROW, current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_ALL, current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET)
 
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Backoff Behaviour
     ##########################################################################
     if current_config.backoff:
       feature_name = "Backoff Behaviour"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       feature_backoff_behaviour( current_config.LONGEST_TARGET_GRAM_LENGTH, current_config.BACKOFF_BEHAVIOUR)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Alignment Features = 6 * 3 = 18 features
@@ -222,11 +222,11 @@ def extracting_all_features(result_output_path):
     if current_config.alignments:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "Alignment Features"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
 
           get_alignment_features( current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT, current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config.ALIGNMENT_FEATURES)
 
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature:  WPP Exact
@@ -234,44 +234,44 @@ def extracting_all_features(result_output_path):
     if current_config.wpp:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "WPP Exact"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
           feature_wpp_exact( current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT,  current_config.WPP_EXACT)
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
     ##########################################################################
     ## Feature: Constituent Label & Distance to Root
     ##########################################################################
     if current_config.distance_to_root:
       feature_name = "Constituent Label & Distance to Root using NLTK 3.0 within supporting python3"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       #Doc lap ngon ngu
       feature_constituent_label_get_list_distance_to_root_null_link( current_config.TARGET_REF_TEST_FORMAT_ROW, target_language, current_config.CONSTITUENT_TREE_TEMP, current_config.DISTANCE_TO_ROOT, current_config.CONSTITUENT_LABEL)
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Polysemy Count - Target (Support English, French and Spanish)
     ##########################################################################
     if current_config.polysemy_count_target:
       feature_name = "Polysemy Count - Target"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       file_input_path = current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL
       file_output_path = current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST
 
       get_polysemy_count_within_given_target_language(target_language, file_input_path, file_output_path)
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
     ##########################################################################
     ## Feature:  WPP any, Max, Min, Nodes
     ##########################################################################
     if current_config.wpp_any:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "WPP any, Max, Min, Nodes"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
 
           feature_wpp_nodes_min_max(current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT,  current_config.TOOL_N_BEST_TO_LATTICE, current_config.WPP_NODES_MIN_MAX_TEMP, current_config.WPP_NODES_MIN_MAX)
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
 
     ##########################################################################
@@ -279,23 +279,23 @@ def extracting_all_features(result_output_path):
     ##########################################################################
     if current_config.label:
       feature_name = "Label - Word (Given Label)"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       extracting_label_for_word_format_column(current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     feature_name = "END Task - Extracting Features"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_path)
 
 #*****************************************************************************#
-def extracting_all_features_threads(result_output_path):
+def extracting_all_features_threads(log_path):
     """
     Extracting all features
 
-    :type result_output_path: string
-    :param result_output_path: path of log-file that contains results of DEMO
+    :type log_path: string
+    :param log_path: path of log-file that contains results of DEMO
     """
     current_config = load_configuration()
     config_end_user = load_config_end_user()
@@ -308,100 +308,100 @@ def extracting_all_features_threads(result_output_path):
     #target_language = current_config.LANGUAGE_FRENCH # French
 
     #introduction of this solution
-    #print_introduction(result_output_path)
+    #print_introduction(log_path)
 
     feature_name = "BEGIN Task - Extracting Features"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Punctuation
     ##########################################################################
     if current_config.punctuation:
       feature_name = "Punctuation"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_punctuation(current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc), current_config.LIST_PUNCTUATIONS, current_config.PUNCTUATION+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Stop Word
     ##########################################################################
-    if current_config.stop_word:
+    if current_config.stop_words:
       feature_name = "Stop Word" #List of stop word phu thuoc vao ngon ngu dich
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         get_feature_stop_word( current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc), target_language, current_config.STOP_WORD+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Numeric
     ##########################################################################
     if current_config.numeric:
       feature_name = "Numeric"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_numeric( current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc), current_config.NUMERIC+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Proper Name
     ##########################################################################
     if current_config.proper_name:
       feature_name = "Proper Name" #List of POS-Proper name phu thuoc vao ngon ngu dich
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_proper_name_threads( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc), target_language, current_config.PROPER_NAME+"."+str(l_inc), current_config)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Unknown Lemma
     ##########################################################################
     if current_config.unknown_lemma:
       feature_name = "Unknown Lemma"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_unknown_lemma( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc), current_config.UNKNOWN_LEMMA+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Number Of Occurrences word
     ##########################################################################
     if current_config.occurence_words:
       feature_name = "Number Of Occurrences word"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_number_of_occurrences_word( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc),  current_config.NUMBER_OF_OCCURRENCES_WORD+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Number Of Occurrences stem (frequency of stemmed word)
     ##########################################################################
     if current_config.occurence_stems:
       feature_name = "Number Of Occurrences stemmed word"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_number_of_occurrences_stem( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc),  current_config.NUMBER_OF_OCCURRENCES_STEM+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Occur in Google Translatator
     ##########################################################################
     if current_config.google_translator:
       feature_name = "Occur in Google Translatator"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_occur_in_translators( current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc), current_config.GOOGLE_TRANSLATE_CORPUS+"."+str(l_inc), current_config.OCCUR_IN_GOOGLE_TRANSLATE+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Occur in Bing Translatator
     ##########################################################################
     if current_config.bing_translator:
       feature_name = "Occur in Bing Translatator"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_occur_in_translators( current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc), current_config.BING_TRANSLATE_CORPUS+"."+str(l_inc), current_config.OCCUR_IN_BING_TRANSLATE+"."+str(l_inc))
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     #143-270
     ##########################################################################
@@ -409,13 +409,13 @@ def extracting_all_features_threads(result_output_path):
     ##########################################################################
     if current_config.longest_ngram_length_tgt:
       feature_name = "Longest Target gram length"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       get_probability_from_language_model_threads( current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_MODEL_TGT, 5, current_config.PROBABILITY_HYPOTHESIS_ROW_CORPUS, current_config, config_end_user)
 
       create_longest_target_gram_length_threads( current_config.PROBABILITY_HYPOTHESIS_ROW_CORPUS, current_config.LONGEST_TARGET_GRAM_LENGTH, current_config)
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
 
     ##########################################################################
@@ -425,7 +425,7 @@ def extracting_all_features_threads(result_output_path):
     if current_config.longest_ngram_length_src:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "Longest Source gram length"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
 
           #Buoc 1: File Source-ngram giong nhu cach lam Target-ngram
           get_temp_longest_source_gram_length_not_aligned_target_threads( current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_MODEL_SRC, current_config.N_GRAM, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET, current_config, config_end_user)
@@ -459,18 +459,18 @@ def extracting_all_features_threads(result_output_path):
           #feature_longest_gram_source_length_threads (current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET_ROW, current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_ALL, current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET, current_config, config_end_user)
   #        feature_longest_gram_source_length( current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET_ROW, current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_ALL, current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET)
 
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Backoff Behaviour
     ##########################################################################
     if current_config.backoff:
       feature_name = "Backoff Behaviour"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       for l_inc in range(1,current_config.THREADS+1):
         feature_backoff_behaviour( current_config.LONGEST_TARGET_GRAM_LENGTH+"."+str(l_inc), current_config.BACKOFF_BEHAVIOUR+"."+str(l_inc))
   #    feature_backoff_behaviour( current_config.LONGEST_TARGET_GRAM_LENGTH, current_config.BACKOFF_BEHAVIOUR)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Alignment Features = 6 * 3 = 18 features
@@ -480,11 +480,11 @@ def extracting_all_features_threads(result_output_path):
     if current_config.alignments:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "Alignment Features"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
           for l_inc in range(1,current_config.THREADS+1):
             get_alignment_features_threads( current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT+"."+str(l_inc), current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW+"."+str(l_inc), current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW+"."+str(l_inc), current_config.ALIGNMENT_FEATURES+"."+str(l_inc), config_end_user)
   #        get_alignment_features( current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT, current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config.ALIGNMENT_FEATURES)
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature:  WPP Exact
@@ -492,7 +492,7 @@ def extracting_all_features_threads(result_output_path):
     if current_config.wpp:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "WPP Exact"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
           #for l_inc in range(1,current_config.THREADS+1):
           #for l_inc in range(2,4):
             #feature_wpp_exact_threads( current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT+"."+str(l_inc), current_config.WPP_EXACT+"."+str(l_inc), l_inc , current_config)
@@ -506,18 +506,18 @@ def extracting_all_features_threads(result_output_path):
             
           #delete_all_files_temporary_threads(current_config)
           #delete_all_files_temporary_threads(current_config)
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
     ##########################################################################
     ## Feature: Constituent Label & Distance to Root
     ##########################################################################
     if current_config.distance_to_root:
       feature_name = "Constituent Label & Distance to Root using NLTK 3.0 within supporting python3"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       #Doc lap ngon ngu
       #l_threads = []
       feature_constituent_label_get_list_distance_to_root_null_link_threads( current_config.TARGET_REF_TEST_FORMAT_ROW, target_language, current_config.CONSTITUENT_TREE_TEMP, current_config.DISTANCE_TO_ROOT, current_config.CONSTITUENT_LABEL, current_config, config_end_user)
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
       
 
     ##########################################################################
@@ -525,21 +525,23 @@ def extracting_all_features_threads(result_output_path):
     ##########################################################################
     if current_config.polysemy_count_target:
       feature_name = "Polysemy Count - Target"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
 
       file_input_path = current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL
       file_output_path = current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST
 
       l_threads = []
       for l_inc in range(1,current_config.THREADS+1):
+      #for l_inc in range(5,7):
         ts = threading.Thread(target=get_polysemy_count_within_given_target_language_threads , args=(current_config, config_end_user, target_language, file_input_path+"."+str(l_inc), file_output_path+"."+str(l_inc), l_inc))
         #current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT+"."+str(l_inc), current_config.WPP_EXACT+"."+str(l_inc), l_inc , current_config))
         l_threads.append(ts)
         ts.start()
+        time.sleep(1)
       for myT in l_threads:
         myT.join()   
 
-      print_result(feature_name, result_output_path)
+      print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature:  WPP any, Max, Min, Nodes
@@ -547,17 +549,17 @@ def extracting_all_features_threads(result_output_path):
     if current_config.wpp_any:
       if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == config_end_user.NUM_IS_HAS_A_FILE_INCLUDED_ALIGNMENT:
           feature_name = "WPP any, Max, Min, Nodes"
-          print_time(feature_name, result_output_path)
+          print_time(feature_name, log_path)
 
           feature_wpp_nodes_min_max_threads(current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT,  current_config.TOOL_N_BEST_TO_LATTICE_THREADS, current_config.WPP_NODES_MIN_MAX_TEMP, current_config.WPP_NODES_MIN_MAX, current_config, config_end_user)
-          print_result(feature_name, result_output_path)
+          print_result(feature_name, log_path)
 
     ##########################################################################
     ## Feature: Label - Word (Using Terpa)
     ##########################################################################
     if current_config.label:
       feature_name = "Label - Word (Given Label)"
-      print_time(feature_name, result_output_path)
+      print_time(feature_name, log_path)
       #extracting_label_for_word_format_column_threads(current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT, current_config, config_end_user)
 
       l_threads = []
@@ -574,7 +576,7 @@ def extracting_all_features_threads(result_output_path):
 
     ##########################################################################
     feature_name = "END Task - Extracting Features"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_path)
 
 
 
@@ -585,14 +587,14 @@ if __name__ == "__main__":
 
     config_end_user = load_config_end_user()
 
-    result_output_path = current_config.RESULT_MESSAGE_OUTPUT
+    log_path = current_config.RESULT_MESSAGE_OUTPUT
     
     if current_config.THREADS > 1:
-      extracting_all_features_threads(result_output_path)
+      extracting_all_features_threads(log_path)
     else:
-      extracting_all_features(result_output_path)
+      extracting_all_features(log_path)
 
-    #extracting_all_features_threads(result_output_path)
-    #extracting_all_features_test(result_output_path)
+    #extracting_all_features_threads(log_path)
+    #extracting_all_features_test(log_path)
 
     print ('OK')

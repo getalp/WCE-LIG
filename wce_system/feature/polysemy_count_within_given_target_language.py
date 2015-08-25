@@ -120,7 +120,9 @@ def get_polysemy_count_within_given_target_language_threads(current_config, conf
     #Buoc 1 : Tao file phu hop voi BabelNet, input: /home/lent/Develops/Solution/ce_system/ce_system/config/../var/data/output_preprocessing.treetagger.format.col.tgt_pattern_bach0
     #convert_format_treetagger_to_format_babelnet(current_config.BABEL_NET_INPUT_CORPUS_ES,dict_tagset_spanish,current_config.BABEL_NET_CORPUS_ES)
     #convert_format_treetagger_to_format_babelnet( current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL, dict_tagset_spanish, current_config.BABEL_NET_CORPUS_ES + "_" + server_name)
-    file_babel_net_corpus_temp_path = current_config.BABEL_NET_CORPUS + extension
+    
+    file_babel_net_corpus_temp_path = current_config.BABEL_NET_CORPUS + "." + str(nthread) + extension
+    #print("temp file : " + file_babel_net_corpus_temp_path)
     convert_format_treetagger_to_format_babelnet( file_output_path_pattern_include_server_name, dict_tagset, file_babel_net_corpus_temp_path)
 
     #Buoc nay chay rat lau, phu thuoc vao Target-Language

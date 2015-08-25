@@ -128,6 +128,7 @@ Chu y: Neu file Results.txt rong thi xoa tat ca cac file da sinh ra va Goto B2
 import os
 import sys
 import threading
+import time
 
 #for call shell script
 #import shlex, subprocess
@@ -143,7 +144,8 @@ from config.configuration import *
 from common_module.cm_config import load_configuration, load_config_end_user
 from common_module.cm_file import is_existed_file, delete_all_files_temporary
 from common_module.cm_script import call_script, run_chmod
-from common_module.cm_util import  is_in_string, get_str_value_given_key
+from common_module.cm_util import  is_in_string, get_str_value_given_key, print_time
+
 #**************************************************************************#
 def preprocessing_for_extracting():
     """
@@ -493,7 +495,7 @@ def split_sentences_with_id_threads(file_input_path, output_path, n_thread, conf
         #str_output = str_weighted_overall_score + " " + str_score_lm + " " + hyp_sentence
 
         #lay thu muc hien tai
-        current_working_directory = os.getcwd()
+        #current_working_directory = os.getcwd()
 
         #chuyen den thu muc chua code script
         #print (output_path)
@@ -501,7 +503,7 @@ def split_sentences_with_id_threads(file_input_path, output_path, n_thread, conf
         os.chdir(os.path.dirname(tmp_dir))
 
         #xu ly du lieu dua vao PhraseN
-        current_path = os.path.realpath(tmp_dir)
+        #current_path = os.path.realpath(tmp_dir)
 
         int_index = int(str_index)
 
@@ -513,7 +515,7 @@ def split_sentences_with_id_threads(file_input_path, output_path, n_thread, conf
             ##just for checking
             ##doi voi nhung PhraseN co du so luong N-best-list
             if int_number_of_sentences_in_PhraseN != max_number_of_sentences_in_PhraseN:
-                print("%s co %d cau trong n-best-list." %(current_file_name, int_number_of_sentences_in_PhraseN))
+                print("WARNING: file %s with nbest size %d instead of %d" %(current_file_name, int_number_of_sentences_in_PhraseN, max_number_of_sentences_in_PhraseN))
 
             #update current_file_name = "PhraseN"
             #append information to file with new id
@@ -531,7 +533,7 @@ def split_sentences_with_id_threads(file_input_path, output_path, n_thread, conf
         file_writer.close()
 
         #chuyen lai thu muc hien tai
-        os.chdir(current_working_directory)
+        #os.chdir(current_working_directory)
 
     #end for
     
@@ -689,6 +691,162 @@ def extracting_corresponding_features(file_input_path, file_output_path):
     file_writer.close()
 #**************************************************************************#
 #Chinh trong code 'nbestToLattice.sh': voi so dong se xu ly (Chu y: khong lay phan nhan voi he so 1000BestList, ma chi lay so cau N khac nhau trong PhraseN); Ngoai ra, PHAI cap nhat PATH den SRILM va FASTNC trong file nBestToLattice.sh --> nen viet ham xu ly replace trong giai doan pre-processing
+
+#**************************************************************************#
+def extracting_corresponding_features_threads(file_input_path, file_output_path):
+    """
+    Extracting the corresponding features: word, WPP any, nodes, min, max
+
+    :type file_input_path: string
+    :param file_input_path: contains corpus with format output from FASTNC tool & SRILM
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format "word, WPP any, nodes, min, max" in each line; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file corpus input with format ')
+    """
+    str_message_if_not_existed = "Not Existed file corpus input"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    #open 2 files:
+    #for reading: file_input_path
+    file_reader = open(file_input_path, mode = 'r', encoding = 'utf-8')#, 'r')
+
+    #for writing: file_output_path
+    file_writer = open(file_output_path, mode = 'w', encoding = 'utf-8')#, 'w')
+
+    current_phrase = ""
+    first_phrase = "Phrase0"
+    string_phrase = "Phrase"
+    #test_end_phrase = "Phrase7071"
+
+    #TienNLe added 2015-02-09 BEGIN
+    is_extracted_phrase = False
+    #TienNLe added 2015-02-09 END
+
+    #read data in openned file
+    for line in file_reader:
+        #print("line: %s" %line)
+
+        list_item = line.split() # split with Default Delimiter
+
+        number_of_items = len(list_item)
+
+        #just for testing
+        """
+        if list_item[0].strip() == test_end_phrase:
+            print("Da duyet den %s" %test_end_phrase)
+            break
+        """
+
+        #xet truong hop co 2 items
+        #file_writer.write(str(number_of_items)+" ")
+        if (is_extracted_phrase == True and number_of_items == 6):
+            file_writer.write("\n");
+            is_extracted_phrase = False 
+        if number_of_items == 2:
+            #word, WPP any, nodes, min, max
+            #since      1.00000 ( time=0 nodes=1 min=1.00000 max=1.00000 mean=1.00000 var=0.00000 svar=0.00000 )
+            #yet        1.0
+            str_word = list_item[0].strip()
+            str_wpp_any = list_item[1].strip()
+            str_nodes = "1"
+            str_min = "1.00000"
+            str_max = "1.00000"
+            str_output = str_word + "\t" + str_wpp_any + "\t" + str_nodes + "\t" + str_min + "\t" + str_max + "\n"
+
+            file_writer.write(str_output)
+            is_extracted_phrase = True
+            continue
+
+        if number_of_items < 9: #neu dong chi co 6 item hay nho hon 9 thi dong do la dong gioi thieu
+            #kiem tra nhung dong cho chua tu "Phrase"
+            item1 = list_item[0].strip()
+
+            #neu khong chua thi continue
+            #if not is_in_string(string_phrase, item1):
+            #    continue
+            if not item1.startswith(string_phrase): #Tien Ngoc LE updated 2014.Dec.26
+                is_extracted_phrase = False 
+                continue
+
+            #Phrase0 1 0.00 1.00 yet 0.18901
+            #xuong dong hop ly
+            #if current_phrase != item1:
+                #current_phrase = item1 # update current_phrase
+                ##print("number of items: %d " %number_of_items)
+                ##print ("current phrase : %s " %current_phrase)
+
+                #if item1 != first_phrase:
+                    ##Neu Phrase chua xu ly thi cho mac dinh vao
+                    #if is_extracted_phrase == False:
+                        #str_word = "default"
+                        #str_wpp_any = "1.00000"
+                        #str_nodes = "1"
+                        #str_min = "1.00000"
+                        #str_max = "1.00000"
+                        #str_output = str_word + "\t" + str_wpp_any + "\t" + str_nodes + "\t" + str_min + "\t" + str_max + "\n"
+
+                        #file_writer.write(str_output)
+                    ##end if
+
+                    #file_writer.write("\n") # if not the first Phrase0 then add empty line
+            #end if
+                is_extracted_phrase = False #Gia su chua xu ly Phrase nay
+
+        else: #nguoc lai la dong thong tin can lay
+            #a  0.51267 ( time=0 nodes=5 min=0.03497 max=0.51267 mean=0.20000 var=0.13312 svar=0.36486 )
+            str_word = list_item[0].strip()
+            str_wpp_any = list_item[1].strip()
+
+            key_nodes = "nodes"
+            str_nodes = ""
+
+            key_min = "min"
+            str_min = ""
+
+            key_max = "max"
+            str_max = ""
+
+            #get_str_value_given_key(str_key_value)
+            for item in list_item:
+                item = item.strip()
+
+                #nodes
+                if is_in_string(key_nodes, item):
+                    str_nodes = get_str_value_given_key(item)
+
+                #min
+                if is_in_string(key_min, item):
+                    str_min = get_str_value_given_key(item)
+
+                #max
+                if is_in_string(key_max, item):
+                    str_max = get_str_value_given_key(item)
+
+            #end for
+
+            str_output = str_word + "\t" + str_wpp_any + "\t" + str_nodes + "\t" + str_min + "\t" + str_max + "\n"
+
+            file_writer.write(str_output)
+            is_extracted_phrase = True
+        #end if
+
+        #raise Exception("Just for test")
+    #end for
+
+    file_writer.write("\n") # if not the first Phrase0 then add empty line
+
+    #close 2 files
+    file_reader.close()
+    file_writer.close()
+#**************************************************************************#
+
 def generate_wpp_nodes_min_max(file_input_path, output_path):
     """
     :type file_input_path: string
@@ -735,7 +893,7 @@ def generate_wpp_nodes_min_max(file_input_path, output_path):
     #generate the result with FAST tool and SRILM 1.7.1
     call_script(command_line, output_path)
 #**************************************************************************#
-def generate_wpp_nodes_min_max_threads(file_input_path, output_path,n_thread, current_config, config_end_user):
+def generate_wpp_nodes_min_max_threads(file_input_path, output_path , n_thread, current_config, config_end_user):
     """
     :type file_input_path: string
     :param file_input_path: output of moses n-best-list
@@ -770,11 +928,11 @@ def generate_wpp_nodes_min_max_threads(file_input_path, output_path,n_thread, cu
     #$3: path to file "fastnc"
     #$4: path to file "RefToCtm.pl" in fastnc
     #$5: path to file output
-    print ("Here I am : " + output_path)
-    number_of_sentences = 907
-    command_line = output_path + " " + str(first_index) + " " + str(last_index) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + tmp_dir +" " + current_config.WPP_NODES_MIN_MAX_TEMP + "." + str(n_thread)
-
-    print(command_line)
+    #print ("Here I am : " + output_path)
+    #number_of_sentences = 907
+    command_line = output_path + " " + str(first_index) + " " + str(last_index) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + tmp_dir +" " + current_config.WPP_NODES_MIN_MAX_TEMP + "." + str(n_thread) + " " + current_config.LANGUAGE_MODEL_TGT
+    
+    #print("********************** generate_wpp_nodes_min_max_threads -> " + command_line)
 
     """
 /home/lent/Develops/Solution/ce_agent/ce_agent/config/../lib/shell_script/nbestToLattice.sh 2643 /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64 /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/bin/fastnc /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/scripts/RefToCtm.pl /home/lent/Develops/Solution/ce_agent/ce_agent/config/../extracted_features/en.column.feature_wpp_nodes_min_max_temp.txt
@@ -828,23 +986,30 @@ def feature_wpp_nodes_min_max_threads(file_input_path, tool_path, file_output_te
 
     #step 1: generate result temp --> file_output_temp_path
     #generate_wpp_nodes_min_max_threads(file_input_path, tool_path, current_config, config_end_user)
+    print_time("Launching fastnc processes", current_config.RESULT_MESSAGE_OUTPUT)
     l_threads = []
     for l_inc in range(1,current_config.THREADS+1):
       ts = threading.Thread(target=generate_wpp_nodes_min_max_threads , args=(file_input_path+"."+str(l_inc), tool_path, l_inc, current_config, config_end_user))
       l_threads.append(ts)
       ts.start()
+      time.sleep(1)
     for myT in l_threads:
       myT.join()
+      
+    print_time("fastnc processes finished", current_config.RESULT_MESSAGE_OUTPUT)
+    print_time("Collecting data", current_config.RESULT_MESSAGE_OUTPUT)
 
     #step 2: filter corresponding features in result temp
     #extracting_corresponding_features(file_output_temp_path, file_output_path)
     l_threads = []
     for l_inc in range(1,current_config.THREADS+1):
-      ts = threading.Thread(target=extracting_corresponding_features , args=(file_output_temp_path+"."+str(l_inc), file_output_path+"."+str(l_inc)))
+      ts = threading.Thread(target=extracting_corresponding_features_threads , args=(file_output_temp_path+"."+str(l_inc), file_output_path+"."+str(l_inc)))
       l_threads.append(ts)
       ts.start()
+      time.sleep(1)
     for myT in l_threads:
       myT.join()
+    print_time("Collecting data finished", current_config.RESULT_MESSAGE_OUTPUT)
 
 
     #Step 3: delete Phrase files

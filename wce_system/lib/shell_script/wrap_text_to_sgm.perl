@@ -13,8 +13,15 @@ use strict;
 open (FileRead, "$ARGV[3]");
 open (FileWrite, ">$ARGV[4]");
 
-print FileWrite "<$ARGV[0] setid=\"TienLe_TanLe\" srclang=\"$ARGV[1]\" trglang=\"$ARGV[2]\">\n";
-print FileWrite "<DOC sysid=\"Tien_Tan_system\" docid=\"TienNgocLe_TanNgocLe\">\n";
+print FileWrite "<$ARGV[0] setid=\"PostEdition\" srclang=\"$ARGV[1]\" trglang=\"$ARGV[2]\">\n";
+if (rindex($ARGV[0],"refset") == 0 )
+{
+    print FileWrite "<DOC sysid=\"PostEdition\" docid=\"Doc:0\">\n";
+}
+else
+{
+    print FileWrite "<DOC sysid=\"MT_Hypothesis\" docid=\"Doc:0\">\n";
+}
 
 my $lineNumber= 0;
 while (<FileRead>)

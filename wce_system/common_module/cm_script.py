@@ -36,8 +36,10 @@ def execute_script(command_line, path_to_script, current_working_directory):
     #print(command_line)
 
     args = shlex.split(command_line)
+    #command_line
     #print("args")
     #print(args)
+    #print(path_to_script)
 
     #y tuong:
     #luu thu muc hien tai vao bien tam

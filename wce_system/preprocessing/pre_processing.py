@@ -101,7 +101,7 @@ def copy_raw_files_threads():
     result_output_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
 
     feature_name_start = "BEGIN - Splitting files"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     
     ###########################################################################
     #corpus: 3 files
@@ -164,7 +164,7 @@ def copy_raw_files_threads():
     split_files(from_path, current_config.THREADS, to_path)
 
     feature_name_start = "END - Splitting files"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     """
     if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == 1:
         get_file_hypothethis_from_output_moses(config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT, current_config.TARGET_REF_TEST_FORMAT_ROW)
@@ -181,7 +181,7 @@ def copy_raw_files_threads():
     is_tokenizer = check_value_boolean(config_end_user.TOKENIZER)
     
     feature_name_start = "BEGIN - Tokenization"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     for l_inc in range(1,current_config.THREADS+1):
         if is_lowercase and not is_tokenizer:
@@ -231,12 +231,12 @@ def copy_raw_files_threads():
         #myT.join()
 
     feature_name_start = "END - Tokenization"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     ###########################################################################
 
     #language model: 2 files
     feature_name_start = "BEGIN - Transfert LM"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     from_path = config_end_user.LANGUAGE_MODEL_SOURCE_LANGUAGE
     to_path = current_config.LANGUAGE_MODEL_SRC
     #split_files(from_path, current_config.THREADS, to_path)
@@ -248,12 +248,12 @@ def copy_raw_files_threads():
     copy_file_from_path1_to_path2(from_path, to_path)
 
     feature_name_start = "END - Transfert LM"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     ###########################################################################
     #Output from Google & Bing Translator: 2 files
 
     feature_name_start = "BEGIN - Splitting translations outputs"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     from_path = config_end_user.GOOGLE_TRANSLATOR
     to_path = current_config.GOOGLE_TRANSLATE_CORPUS
     split_files(from_path, current_config.THREADS, to_path)
@@ -265,11 +265,11 @@ def copy_raw_files_threads():
     #copy_file_from_path1_to_path2(from_path, to_path)
 
     feature_name_start = "END - Splitting translations outputs"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     ###########################################################################
     #n best list using MOSES: 2 files
     feature_name_start = "BEGIN - Splitting translations alignement information"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     from_path = config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT
     to_path = current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT
     split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
@@ -280,7 +280,7 @@ def copy_raw_files_threads():
     split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
     #copy_file_from_path1_to_path2(from_path, to_path)
     feature_name_start = "END - Splitting translations alignement information"
-    print_time(feature_name_start, result_output_path)
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     ###########################################################################
     #version moses
     version_moses = config_end_user.VERSION_MOSES
@@ -564,7 +564,7 @@ def preprocessing_corpus(result_output_path):
     #print_introduction(result_output_path)
 
     feature_name = "BEGIN Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #just for testing MOSES 2009
     #input:  /corpus/raw_corpus/
@@ -578,7 +578,7 @@ def preprocessing_corpus(result_output_path):
     ##########################################################################
 
     feature_name = "Copy Raw Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     copy_raw_files()
     print_result(feature_name, result_output_path)
 
@@ -594,7 +594,7 @@ def preprocessing_corpus(result_output_path):
     ## Using TreeTagger for Source & Target Corpus
     ##########################################################################
     feature_name = "Using TreeTagger for Source & Target Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #ce_agent
     get_output_treetagger_format_row(current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_FRENCH,
@@ -620,7 +620,7 @@ def preprocessing_corpus(result_output_path):
     ## Converting raw text & POS text from format row to format column
     ##########################################################################
     feature_name = "Converting raw text & POS text from format row to format column"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #Corpus###########
     #Source Language
@@ -644,7 +644,7 @@ def preprocessing_corpus(result_output_path):
     ##########################################################################
     """
     feature_name = "Get alignment by Giza++"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     get_file_alignments_target_to_source_word_alignment_using_moses( current_config.PATTERN_REF_TEST_FORMAT_ROW, current_config.EXTENSION_SOURCE,
     current_config.EXTENSION_TARGET, config_end_user.PATH_TO_TOOL_GIZA, current_config.MODEL_DIR_PATH,
@@ -655,7 +655,7 @@ def preprocessing_corpus(result_output_path):
     ##########################################################################
 
     feature_name = "END Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 #**************************************************************************#
 
 def preprocessing_corpus_threads(result_output_path):
@@ -672,7 +672,7 @@ def preprocessing_corpus_threads(result_output_path):
     #print_introduction(result_output_path)
 
     feature_name = "BEGIN Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #just for testing MOSES 2009
     #input:  /corpus/raw_corpus/
@@ -686,7 +686,7 @@ def preprocessing_corpus_threads(result_output_path):
     ##########################################################################
 
     feature_name = "Copy Raw Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     copy_raw_files_threads()
     print_result(feature_name, result_output_path)
 
@@ -702,7 +702,7 @@ def preprocessing_corpus_threads(result_output_path):
     ## Using TreeTagger for Source & Target Corpus
     ##########################################################################
     feature_name = "Using TreeTagger for Source & Target Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #ce_agent
 
@@ -731,7 +731,7 @@ def preprocessing_corpus_threads(result_output_path):
     ## Converting raw text & POS text from format row to format column
     ##########################################################################
     feature_name = "Converting raw text & POS text from format row to format column"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #Corpus###########
     #Source Language
@@ -758,7 +758,7 @@ def preprocessing_corpus_threads(result_output_path):
     ##########################################################################
     """
     feature_name = "Get alignment by Giza++"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     get_file_alignments_target_to_source_word_alignment_using_moses( current_config.PATTERN_REF_TEST_FORMAT_ROW, current_config.EXTENSION_SOURCE,
     current_config.EXTENSION_TARGET, config_end_user.PATH_TO_TOOL_GIZA, current_config.MODEL_DIR_PATH,
@@ -769,7 +769,7 @@ def preprocessing_corpus_threads(result_output_path):
     ##########################################################################
 
     feature_name = "END Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 #**************************************************************************#
 
 

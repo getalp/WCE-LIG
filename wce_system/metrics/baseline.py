@@ -226,7 +226,8 @@ def get_baseline(file_oracle_label_path, file_output_path):
     if not os.path.exists(file_oracle_label_path):
         raise TypeError('Not Existed file that contains corpus oracle label with format each "label" in each line; there is a empty line among the sentences.')
     """
-    str_message_if_not_existed = "Not Existed file that contains corpus oracle label with format each label in each line; there is a empty line among the sentences"
+    print ("test this file "+file_oracle_label_path)
+    str_message_if_not_existed = "Not Existed file that contains corpus oracle label with format each label in each line; there is a empty line among the sentences: " + file_oracle_label_path
     is_existed_file(file_oracle_label_path, str_message_if_not_existed)
 
     #for writing: file_output_path

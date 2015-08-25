@@ -315,7 +315,7 @@ def feature_polysemy_count_language_threads( file_input_path, target_language, f
         path_script = config_end_user.TOOL_BABEL_NET_EN
 
     command_line = path_script + " " + file_input_path + " " + file_output_path
-
+    print(command_line)
     """
     #print("Command line:")
     #print(command_line)

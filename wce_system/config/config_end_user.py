@@ -78,6 +78,8 @@ class config_end_user(object):
         self.RAW_CORPUS_SOURCE_LANGUAGE = path + settingsMap[language_pair]['raw_corpus_source_language']
         self.RAW_CORPUS_TARGET_LANGUAGE = path + settingsMap[language_pair]['raw_corpus_target_language']
         self.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE = path + settingsMap[language_pair]['post_edition_of_machine_translation_sentences_target_language']
+        self.RAW_CORPUS_TRAINING_SIZE = settingsMap[language_pair]['raw_corpus_training_size']
+        self.RAW_CORPUS_TEST_SIZE = settingsMap[language_pair]['raw_corpus_test_size']
         #self.RAW_CORPUS_SOURCE_LANGUAGE = settingsMap[language_pair]['raw_corpus_source_language']
         #self.RAW_CORPUS_TARGET_LANGUAGE = settingsMap[language_pair]['raw_corpus_target_language']
         #self.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE = settingsMap[language_pair]['post_edition_of_machine_translation_sentences_target_language']

@@ -2052,54 +2052,70 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_within_our_labels():
 
     #Order of the files ~ Order of the features FOR Merging features
     # Punctuation
-    list_of_file_paths.append( current_config.PUNCTUATION)
+    if current_config.punctuation:
+      list_of_file_paths.append( current_config.PUNCTUATION)
 
     # Stop Word
-    list_of_file_paths.append( current_config.STOP_WORD)
+    if current_config.stop_words:
+      list_of_file_paths.append( current_config.STOP_WORD)
 
     # Numeric
-    list_of_file_paths.append( current_config.NUMERIC)
+    if current_config.numeric:
+      list_of_file_paths.append( current_config.NUMERIC)
 
     # Proper Name
-    list_of_file_paths.append( current_config.PROPER_NAME)
+    if current_config.proper_name:
+      list_of_file_paths.append( current_config.PROPER_NAME)
 
     # unknown lemma
-    list_of_file_paths.append( current_config.UNKNOWN_LEMMA)
+    if current_config.unknown_lemma:
+      list_of_file_paths.append( current_config.UNKNOWN_LEMMA)
 
     # Number Of Occurrences word
-    list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_WORD)
+    if current_config.occurence_words:
+      list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_WORD)
 
     # Number of occurrences stem (frequency of stemmed word)
-    list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_STEM)
+    if current_config.occurence_stems:
+      list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_STEM)
 
     # Occur in Google Translator
-    list_of_file_paths.append( current_config.OCCUR_IN_GOOGLE_TRANSLATE)
+    if current_config.google_translator:
+      list_of_file_paths.append( current_config.OCCUR_IN_GOOGLE_TRANSLATE)
 
     # Occur in Bing Translator
-    list_of_file_paths.append( current_config.OCCUR_IN_BING_TRANSLATE)
+    if current_config.bing_translator:
+      list_of_file_paths.append( current_config.OCCUR_IN_BING_TRANSLATE)
 
     # Constituent Label
-    list_of_file_paths.append( current_config.CONSTITUENT_LABEL)
+    if current_config.label:
+      list_of_file_paths.append( current_config.CONSTITUENT_LABEL)
 
     # Distance to Root
-    list_of_file_paths.append( current_config.DISTANCE_TO_ROOT)
+    if current_config.distance_to_root:
+      list_of_file_paths.append( current_config.DISTANCE_TO_ROOT)
 
     # Polysemy Count - Target POLYSEMY_COUNT_TARGET --> BABEL_NET_OUTPUT_CORPUS_EN_LAST
     #for spanish - target
     #list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_ES_LAST)
-    list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST)
+    if current_config.polysemy_count_target:
+      list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST)
 
     # Longest Target gram length
-    list_of_file_paths.append( current_config.LONGEST_TARGET_GRAM_LENGTH)
+    if current_config.longest_ngram_length_tgt:
+      list_of_file_paths.append( current_config.LONGEST_TARGET_GRAM_LENGTH)
 
     # Backoff Behaviour
-    list_of_file_paths.append( current_config.BACKOFF_BEHAVIOUR)
+    if current_config.backoff:
+      list_of_file_paths.append( current_config.BACKOFF_BEHAVIOUR)
 
     # Longest Source gram length
-    list_of_file_paths.append( current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET)
+    if current_config.longest_ngram_length_src:
+      list_of_file_paths.append( current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET)
 
     # alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
-    list_of_file_paths.append( current_config.ALIGNMENT_FEATURES)
+    if current_config.alignments:
+      list_of_file_paths.append( current_config.ALIGNMENT_FEATURES)
 
     # WPP Exact
     #list_of_file_paths.append( current_config.WPP_EXACT)
@@ -2125,6 +2141,8 @@ def get_list_of_file_paths_not_included_nbestlist_and_asr_within_our_labels():
     # label of word Good/Bad
     #list_of_file_paths.append( current_config.LABEL_OUTPUT)
     list_of_file_paths.append( current_config.LABEL_OUTPUT_TERCOM_WCE)
+
+
 
     return list_of_file_paths
 #**************************************************************************#
@@ -3797,6 +3815,20 @@ def is_existed_file(file_input_path, str_message_if_not_existed):
     #check existed paths
     if not os.path.exists(file_input_path):
         raise TypeError(str_message_if_not_existed)
+#**************************************************************************#
+def is_already_existed_file(file_input_path, str_message_if_existed):
+    #check existed paths
+    if os.path.exists(file_input_path):
+        raise TypeError(str_message_if_existed)
+def warning_already_existed_file(file_input_path, str_message_if_existed):
+    #check existed paths
+    if os.path.exists(file_input_path):
+        print (str_message_if_existed)
+def delete_already_existed_file(file_input_path, str_message_if_existed):
+    #check existed paths
+    if os.path.exists(file_input_path):
+        os.remove(file_input_path)
+        print (str_message_if_existed)
     #end if
 #**************************************************************************#
 #**************************************************************************#
@@ -4274,6 +4306,7 @@ def get_output_treetagger_format_row_threads(file_input_path, target_language, f
     #chmod +x for tree_tagger_path + "/bin/tree-tagger"
     path_to_tool_treetagger = tree_tagger_path + "/bin/tree-tagger"
     run_chmod(path_to_tool_treetagger)
+    #print(path_to_tool_treetagger)
 
     #command_line = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path + " " + file_output_path + " -wordtaglemma"
 
@@ -4406,7 +4439,7 @@ def merging_all_features(list_of_file_paths, file_output_path):
     :rtype: a file TEXT contains all features that is merged lines from ordered files
     """
     if len(list_of_file_paths) == 0:
-        raise Exception("You should check the list of file paths")
+        raise Exception("You should check the list of file paths: "+list_of_file_paths)
 
     current_config = load_configuration()
     list_of_commands = []
@@ -4420,7 +4453,7 @@ def merging_all_features(list_of_file_paths, file_output_path):
     #command_line += " > " + current_config.OUTPUT_MERGED_FEATURES
     command_line += " > " + file_output_path
 
-    #print(command_line)
+    print(command_line)
 
     #Generate Shell Script
     list_of_commands.append(command_line)
@@ -5569,7 +5602,8 @@ def split_files(inputFile,numParts,outputName):
         nbr_lines = int((tot_lines)/numParts) + 1
     else:
         nbr_lines = int((tot_lines)/numParts)
-    nbr_lines = int((tot_lines)/numParts) + 1
+    #nbr_lines = int((tot_lines)/numParts) + 1
+    print ("in "+str(numParts) + " into " + outputName)
     #fileSize=os.stat(inputFile).st_size
     #parts=FileSizeParts(fileSize,numParts)
     #print ("%d parties pour decouper %s et le mettre dans %s", numParts, inputFile,outputName)
@@ -5605,7 +5639,7 @@ def split_files_moses_alignment_output(inputFile,numParts,outputName):
         nbr_lines = int((tot_lines)/numParts) + 1
     else:
         nbr_lines = int((tot_lines)/numParts)
-    nbr_lines = int((tot_lines)/numParts) + 1
+    #nbr_lines = int((tot_lines)/numParts) + 1
     limit_lines = nbr_lines
     #fileSize=os.stat(inputFile).st_size
     #parts=FileSizeParts(fileSize,numParts)
@@ -5638,6 +5672,20 @@ def split_files_moses_alignment_output(inputFile,numParts,outputName):
     return outPart-1
 
 #**************************************************************************#
+def merge_files_threads(list_of_file_paths, current_config):
+    for l_file in list_of_file_paths:
+        message="WARNING: "+l_file+" already exists and will be deleted!\n"
+        delete_already_existed_file(l_file, message)
+    for l_file in list_of_file_paths:
+        message="ERROR: "+l_file+" already exists\n"
+        is_already_existed_file(l_file, message)
+        target_file = open(l_file, "w")
+        for l_inc in range(1,current_config.THREADS+1):
+            message="ERROR: "+l_file+"."+str(l_inc)+" does not exists\n"
+            is_existed_file(l_file+"."+str(l_inc), message)
+            shutil.copyfileobj(open(l_file+"."+str(l_inc), 'r'), target_file)
+        target_file.close()  
+            
 #**************************************************************************#
 
 
