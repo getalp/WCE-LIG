@@ -36,22 +36,22 @@ from metrics.baseline import get_baseline
 
 #template 4: same template 2, remove features: Occur in Google Translator -> remaining 23 features
 #**************************************************************************#
-def demo_baselines_and_systems(result_output_path):
+def demo_baselines_and_systems(log_output_path):
     """
     Demo all baselines and System 1 (10000 sentences for training; 881 sentences for testing)
 
-    :type result_output_path: string
-    :param result_output_path: path of log-file that contains results of DEMO
+    :type log_output_path: string
+    :param log_output_path: path of log-file that contains results of DEMO
     """
-    #result_output_path = current_config.CRF_MESSAGE_OUTPUT
-    #result_output_path = file_log_path
+    #log_output_path = current_config.CRF_MESSAGE_OUTPUT
+    #log_output_path = file_log_path
     current_config = load_configuration()
 
     #introduction of this solution
-    #print_introduction(result_output_path)
+    #print_introduction(log_output_path)
 
     feature_name = "BEGIN Task - Demo Baselines & System CRF"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     #B1: "paste" all of output from extracting phase --> one file
     #generating_merged_features()
@@ -105,10 +105,10 @@ def demo_baselines_and_systems(result_output_path):
     ## Demo: Baseline 1, 2 and 3
     ##########################################################################
     feature_name = "Baseline-Systems 1, 2 and 3"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     #demo_baseline(current_config.LABEL_OUTPUT, current_config.F_MEASURE_RESULT_BASELINE)
-    #demo_baseline(current_config.LABEL_OUTPUT, result_output_path)
+    #demo_baseline(current_config.LABEL_OUTPUT, log_output_path)
     file_input_path = current_config.TEST_FILE_PATH + "_" + demo_name + ".txt"
     file_output_path = current_config.LABEL_OUTPUT_FROM_EXTRACTED_FEATURES
 
@@ -117,43 +117,43 @@ def demo_baselines_and_systems(result_output_path):
     file_result_path = current_config.BASELINE_WMT15
     get_baseline(file_output_path, file_result_path)
 
-    print_result(feature_name, result_output_path)
+    print_result(feature_name, log_output_path)
 
     #B4: System1 doi voi phan test, co nghia la: Train va Dev; Roi Testing voi Splitted_Test_Corpus
     number_of_template = 6
     num_of_template_start = 0
     num_of_template_end = 6
     feature_name = "System WCE - Sequential Corpus - all="+ str(number_of_sentences_all) +" train="+  str(number_of_sentences_in_file_for_training) +"; dev=" + str(number_of_sentences_in_file_for_developing) + "; test=" + str(number_of_sentences_in_file_for_testing)
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     wce_system_after_dividing_corpus(demo_name, corpus_type, number_of_sentences_in_file_for_training, number_of_sentences_in_file_for_developing, number_of_template, num_of_template_start, num_of_template_end)
 
-    print_result(feature_name, result_output_path)
+    print_result(feature_name, log_output_path)
 
     ##########################################################################
     feature_name = "END Task - Demo Baselines & System CRF"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 #**************************************************************************#
       
       
   
-def demo_baselines_and_systems_threads(result_output_path):
+def demo_baselines_and_systems_threads(log_output_path):
     """
     Demo all baselines and System 1 (10000 sentences for training; 881 sentences for testing)
 
-    :type result_output_path: string
-    :param result_output_path: path of log-file that contains results of DEMO
+    :type log_output_path: string
+    :param log_output_path: path of log-file that contains results of DEMO
     """
-    #result_output_path = current_config.CRF_MESSAGE_OUTPUT
-    #result_output_path = file_log_path
+    #log_output_path = current_config.CRF_MESSAGE_OUTPUT
+    #log_output_path = file_log_path
     current_config = load_configuration()
     config_end_user = load_config_end_user()
 
     #introduction of this solution
-    #print_introduction(result_output_path)
+    #print_introduction(log_output_path)
 
     feature_name = "BEGIN Task - Demo Baselines & System CRF"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     #for WCE
     list_of_file_paths = get_list_of_file_paths_included_nbestlist_not_asr()
@@ -197,10 +197,10 @@ def demo_baselines_and_systems_threads(result_output_path):
     ## Demo: Baseline 1, 2 and 3
     ##########################################################################
     feature_name = "Baseline-Systems 1, 2 and 3"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     #demo_baseline(current_config.LABEL_OUTPUT, current_config.F_MEASURE_RESULT_BASELINE)
-    #demo_baseline(current_config.LABEL_OUTPUT, result_output_path)
+    #demo_baseline(current_config.LABEL_OUTPUT, log_output_path)
     file_input_path = current_config.TEST_FILE_PATH + "_" + demo_name + ".txt"
     file_output_path = current_config.LABEL_OUTPUT_FROM_EXTRACTED_FEATURES
     print("TEST "+file_input_path)
@@ -211,22 +211,22 @@ def demo_baselines_and_systems_threads(result_output_path):
     file_result_path = current_config.BASELINE_WMT15
     get_baseline(file_output_path, file_result_path)
 
-    print_result(feature_name, result_output_path)
+    print_result(feature_name, log_output_path)
 
     #B4: System1 doi voi phan test, co nghia la: Train va Dev; Roi Testing voi Splitted_Test_Corpus
     number_of_template = 6
     num_of_template_start = 0
     num_of_template_end = 6
     feature_name = "System WCE - Sequential Corpus - all="+ str(number_of_sentences_all) +" train="+  str(number_of_sentences_in_file_for_training) +"; dev=" + str(number_of_sentences_in_file_for_developing) + "; test=" + str(number_of_sentences_in_file_for_testing)
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 
     wce_system_after_dividing_corpus(demo_name, corpus_type, number_of_sentences_in_file_for_training, number_of_sentences_in_file_for_developing, number_of_template, num_of_template_start, num_of_template_end)
 
-    print_result(feature_name, result_output_path)
+    print_result(feature_name, log_output_path)
 
     ##########################################################################
     feature_name = "END Task - Demo Baselines & System CRF"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, log_output_path)
 #**************************************************************************#
 #**************************************************************************#
 if __name__ == "__main__":
