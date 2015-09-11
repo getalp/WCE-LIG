@@ -28,6 +28,8 @@ input_data:
     raw_corpus_target_language: /input_data/tgt-mt-all.en
     post_edition_of_machine_translation_sentences_target_language: /input_data/tgt-pe-all.en
     tags_file_path: None
+    raw_corpus_training_size: 10000
+    raw_corpus_test_size: 881
     
     ###################################################################################################
     ## Language Models, if NOT CONFIG then we use DEFAULT CONFIG.
@@ -110,11 +112,17 @@ input_data:
     ###################################################################################################
     ##tool_fastnc
     tool_fastnc: /tools/fastnc/bin/fastnc
-    tool_RefToCtm: /tools/fastnc/scripts/RefToCtm.pl
+    tool_RefToCtm: /wce_system/lib/shell_script/RefToCtmWCE.pl
     
     ###################################################################################################
     ##terpa
+    tool_java: /usr/bin/java
+    tool_java_mem_param: "-Xms1G -Xmx3G"
     tool_terpa: /tools/terplus/terp.v1/bin/terpa_TienLE_TanLE    
+    tool_terpa_param: /tools/terplus/terp.v1/data/terpa2.param
+    tool_terpa_param_loc: /tools/terplus/terp.v1/data/data_loc.param
+    tool_terpa_dir: /tools/terplus/terp.v1/
+    tool_terpa_jar: /tools/terplus/terp.v1/dist/lib/terp.jar
     tool_terpa_no_shift_cost: /tools/terplus/terp.v1/bin/terpa_TienLE_TanLE_no_shift_cost
     tool_terp: /tools/terplus/terp.v1/bin/terp
     tool_tercom: /tools/terplus/terp.v1/bin/tercom

@@ -63,7 +63,7 @@ def feature_backoff_behaviour(file_input_path, file_output_path):
     if not os.path.exists(file_input_path):
         raise TypeError('Not Existed file corpus input with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input with format - column"
+    str_message_if_not_existed = "Not Existed file corpus input with format - column for "+file_input_path
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #Them 1 dong trong trong file input

@@ -14,6 +14,29 @@ language_support:
     source_language: en, fr, es
     target_language: en, fr, es
 
+options:
+    ##Threading:
+    threads: 10
+    punctuation: 0
+    stop_words: 0
+    numeric: 0
+    proper_name: 0
+    unknown_lemma: 0
+    occurence_words: 0
+    occurence_stems: 0
+    google_translator: 0
+    bing_translator: 0
+    longest_ngram_length_tgt: 0
+    longest_ngram_length_src: 0
+    backoff: 0
+    alignments: 0
+    wpp: 0
+    wpp_any: 1
+    distance_to_root: 0
+    polysemy_count_target: 0
+    label: 0
+
+    
 language_pair:    
     ##input corpus            
     input_raw_corpus_source_language: /wce_system/var/data/raw_corpus.src
@@ -323,6 +346,7 @@ tools:
     tool_create_longest_target_gram_length: /wce_system/lib/shell_script/create_longest_target_gram_length.sh
     
     tool_n_best_to_lattice: /wce_system/lib/shell_script/nbestToLattice.sh
+    tool_n_best_to_lattice_threads: /wce_system/lib/shell_script/nbestToLattice_threads.sh
         
     ##script_temp
     script_temp: /wce_system/lib/shell_script/script_temp.sh

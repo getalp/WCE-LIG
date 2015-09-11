@@ -103,7 +103,7 @@ import sys
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test with line by line on the server
 
-from feature.longest_target_gram_length import get_probability_from_language_model, create_longest_target_gram_length
+from feature.longest_target_gram_length import get_probability_from_language_model, create_longest_target_gram_length, get_probability_from_language_model_threads, create_longest_target_gram_length_threads
 from common_module.cm_config import load_configuration, load_config_end_user
 from common_module.cm_file import is_existed_file, get_list_alignment_target_to_source_from_line_output_moses_TARGET_To_SOURCE, get_list_alignment_target_to_source_from_line_output_moses_SOURCE_To_TARGET, convert_format_column_to_format_row, get_line_given_number_of_sentence
 from common_module.cm_util import  is_in_string
@@ -126,6 +126,28 @@ def get_temp_longest_source_gram_length_not_aligned_target(file_input_path, lang
     #create_longest_target_gram_length(file_input_path, file_output_path)
     #create_longest_target_gram_length(current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET)
     create_longest_target_gram_length(current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE, file_output_path)
+
+#--------------------------------------------------------------------------#
+#in common_functions
+#convert_format_column_to_format_row(file_input_path, file_output_path)
+
+#**************************************************************************#
+def get_temp_longest_source_gram_length_not_aligned_target_threads(file_input_path, language_model_path,  n_gram, file_output_path, current_config, config_end_user):
+
+    #current_config = load_configuration()
+
+    #Buoc 1: Tao file chua xac suat theo tung gram (Language Model)
+    #Goi ham ngram tu SRILM
+    #Test case: checking the function
+    #get_probability_from_language_model(file_input_path, language_model_path,  n_gram, file_output_path)
+    get_probability_from_language_model_threads(file_input_path, language_model_path,  n_gram, current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE, current_config, config_end_user)
+
+    #get_probability_from_language_model(current_config.ROW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_MODEL_FR, 5, current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE)
+
+    #Buoc 2:
+    #create_longest_target_gram_length(file_input_path, file_output_path)
+    #create_longest_target_gram_length(current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE, current_config.TEMP_LONGEST_SOURCE_GRAM_LENGTH_NOT_ALIGNED_TARGET)
+    create_longest_target_gram_length_threads(current_config.PROBABILITY_ROW_CORPUS_SOURCE_LANGUAGE, file_output_path, current_config)
 
 #--------------------------------------------------------------------------#
 #in common_functions
@@ -876,10 +898,364 @@ def feature_longest_gram_source_length(file_output_from_moses_included_alignment
     #for writing: file_output_path
     file_writer.close()
 
-    print("So tu trong cac cau da duyet la: %d" %number_of_word)
+    print("Nb of words processed: %d" %number_of_word)
 
 #**************************************************************************#
 #HYPOTHESIS_ROW_CORPUS
+def feature_longest_gram_source_length_threads(file_output_from_moses_included_alignment_word_to_word_path,  file_temp_longest_source_gram_length_not_aligned_target_row_path, type_longest_gram_source_length, file_output_path, current_config, config_end_user):
+    """
+    Create longest gram source length
+    =============================================================
+    2 : means that "Tu DICH tai index 0 canh le voi tu NGUON co longest gram length la 2 trong Language Model cua ngon ngu NGUON "
+    3
+    4
+    2
+    3
+
+    :type file_output_from_moses_included_alignment_word_to_word_path: string
+    :param file_output_from_moses_included_alignment_word_to_word_path: the ouput included alignment word to word from target to source (MOSES format)
+
+    :type file_temp_longest_source_gram_length_not_aligned_target_row_path: string
+    :param file_temp_longest_source_gram_length_not_aligned_target_row_path: file longest source gram length not aligned target path
+
+    :type type_longest_gram_source_length: string
+    :param type_longest_gram_source_length: the type of longest gram source length of each target word in the following types {MIN, MAX, AVG, FIRST} ~ TYPE_LONGEST_SOURCE_GRAM_LENGTH_MAX
+
+    :type file_output_path: string
+    :param file_output_path: longest gram source length of each target word
+
+    :raise ValueError: if any path is not existed
+    """
+
+    # check existed paths
+    """
+    if not os.path.exists(file_output_from_moses_included_alignment_word_to_word_path):
+        raise TypeError('Not Existed file MOSES format in output-moses included alignment word to word path')
+
+    if not os.path.exists(file_temp_longest_source_gram_length_not_aligned_target_row_path):
+        raise TypeError('Not Existed file Temp Longest SOURCE gram length not aligned TARGET path')
+    """
+    str_message_if_not_existed = "Not Existed file MOSES format in output-moses included alignment word to word path"
+    is_existed_file(file_output_from_moses_included_alignment_word_to_word_path, str_message_if_not_existed)
+
+    str_message_if_not_existed = "Not Existed file Temp Longest SOURCE gram length not aligned TARGET path"
+    is_existed_file(file_temp_longest_source_gram_length_not_aligned_target_row_path, str_message_if_not_existed)
+
+    #for reading: file_output_from_moses_included_alignment_word_to_word_path
+    file_reader_output_from_moses = open(file_output_from_moses_included_alignment_word_to_word_path, mode = 'r', encoding = 'utf-8')#, 'r')
+
+    #for writing: file_output_path
+    file_writer = open(file_output_path, mode = 'w', encoding = 'utf-8')#, 'w')
+
+    # Duyet tung cau dich --> xem xet co bao nhieu "tu" & gan danh sach cac tu nguon duoc aligned la RONG (empty) nghia la list_of_words_alignment_target_to_source = []
+    number_of_sentence = 1
+    number_of_line = 0
+    number_of_word = 0
+
+    for line_in_output_moses in file_reader_output_from_moses:
+        """
+        #can kiem tra lai du lieu cau thu 881
+        #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
+        if number_of_sentence != 881:
+            number_of_sentence = number_of_sentence +1
+            continue
+        """
+        """
+        print("*******************************************")
+        print("Dang duyet cau thu: %d " %number_of_sentence)
+        print("*******************************************")
+        print(line_in_output_moses)
+        print("*******************************************")
+        """
+        #trim string
+        line_in_output_moses = line_in_output_moses.strip()
+
+        if len(line_in_output_moses) == 0:
+            print("Xuat hien dong trong - Empty line ... You should check corpus...")
+            print("Xem lai cau %d nha!!!???" %number_of_sentence)
+            continue
+
+        #Duyet Tung cau dich va cau moses va xet
+        #0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , said m. camus .  ||| LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15
+        #list_alignment_target_to_source = get_list_alignment_target_to_source_from_line_output_moses(line_in_output_moses) #version 1 - Target - Source _ nhom cuoi cua MOSES output
+        #config_end_user = load_config_end_user()
+        list_alignment_target_to_source = []
+
+        if config_end_user.VERSION_MOSES == 2009:
+            list_alignment_target_to_source = get_list_alignment_target_to_source_from_line_output_moses_TARGET_To_SOURCE(line_in_output_moses)
+        else:
+            list_alignment_target_to_source = get_list_alignment_target_to_source_from_line_output_moses_SOURCE_To_TARGET(line_in_output_moses)
+
+        #cong 1 co nghia la het 1 cau
+        number_of_word += len(list_alignment_target_to_source) + 1
+        """
+        print("*list_alignment_target_to_source*")
+        print(list_alignment_target_to_source)
+        print("*list_alignment_target_to_source*")
+        """
+
+        #get temp_longest_source_gram_length_not_aligned_target_row
+        line_longest_source_gram_length = get_line_given_number_of_sentence(file_temp_longest_source_gram_length_not_aligned_target_row_path, number_of_sentence)
+        list_longest_source_gram_length = line_longest_source_gram_length.split() #Delimiter default = " "
+        """
+        print("*number_of_sentence*")
+        print(number_of_sentence)
+        print("*number_of_sentence*")
+
+        print("*line_longest_source_gram_length*")
+        print(line_longest_source_gram_length)
+        print("*line_longest_source_gram_length*")
+
+        print("*list_longest_source_gram_length*")
+        print(list_longest_source_gram_length)
+        print("*list_longest_source_gram_length*")
+        """
+
+        #Danh sach cac tu dich voi moi phan tu la 1 object Word_Target_Language
+        #list_of_words_alignment_target_to_source = []
+
+        #target_sentence = get_target_sentence_from_output_moses(line_in_output_moses)
+
+        #number_of_words_in_target_sentence = len(target_sentence.split())
+
+        """
+        print("***************************************")
+        print("So tu trong target sentence la: %d " %number_of_words_in_target_sentence)
+        print("***************************************")
+        """
+
+        #range_sentence = range(number_of_words_in_target_sentence)
+
+        """
+        print("*range_sentence*")
+        print(range_sentence)
+        print("*range_sentence*")
+        """
+
+        #Khoi tao danh sach ket qua
+        #for i in range_sentence:
+        #    obj_word_target_language = Word_Target_Language() # create instance
+
+        #    list_of_words_alignment_target_to_source.append(obj_word_target_language)
+        #end for
+
+        #xu ly danh sach ket qua
+        #0  1  2    3  ... n-1
+        #0  1  2,3  '' ....    #'' co nghia la khong co phan tu nao lien ket, list_alignment_target_to_source
+        #1  2  3,2  0  ....   #list_longest_source_gram_length
+        comma_char = ","
+
+        """
+        print("*list_alignment_target_to_source**********************")
+        print(list_alignment_target_to_source)
+        print("*len**list_alignment_target_to_source*****************")
+        print(len(list_alignment_target_to_source))
+        print("*list_alignment_target_to_source**********************")
+        """
+
+        #raise Exception("Just for testing ... :) ")
+        #den day la ok doi voi version 2, co nghia la: hieu nhom cuoi cua MOSES output la Source to Target
+
+        for i in range(len(list_alignment_target_to_source)):
+            index_alignment_to_source = list_alignment_target_to_source[i]
+
+            """
+            print("*index_alignment_to_source**********************")
+            print(index_alignment_to_source)
+            print("*index_alignment_to_source**********************")
+            """
+
+            list_temp = [] # empty list
+
+            #lay chuoi ra, neu chua dau phay ,
+            if is_in_string(comma_char, index_alignment_to_source): #co tu 2 lien ket voi nguon tro len
+                list_temp = index_alignment_to_source.split(comma_char)
+
+            else: #neu chi la 1 so nguyen, khong chua dau phay , co nghia la: chi chua 1 phan tu
+                list_temp.append(str(index_alignment_to_source))
+            #end if
+
+            #Duyet cac phan tu trong list_temp de lay longest gram length cua source tuong thich
+            """
+            print("*list_temp**********************")
+            print(list_temp)
+            print("*list_temp**********************")
+            print(len(list_temp))
+            print("*list_temp**********************")
+            """
+
+            if len(list_temp) == 0:
+                #ghi ra file output voi format la column
+                #file_writer.write('0')
+                #vi lay 4 gia tri nen lam 4 so 0
+                file_writer.write('0\t0\t0\t0')
+                file_writer.write("\n") # new line
+                number_of_line += 1
+                """
+                print("*Gia tri la: 0 *")
+                print(0)
+                print("*Gia tri la: 0 *")
+                """
+                continue
+            else:
+                #neu trong list_temp co tu 2 tu nguon duoc noi voi tu dich thi phu thuoc vao type chung ta co ket qua tuong ung
+                #print("*Gia tri khac 0 *")
+
+                if list_temp[0] == "": #khong co lien ket
+                    #ghi ra file output voi format la column
+                    #file_writer.write("0")
+                    #vi lay 4 gia tri nen lam 4 so 0
+                    file_writer.write('0\t0\t0\t0')
+                    file_writer.write("\n") # new line
+                    number_of_line += 1
+                    continue
+
+                #Tim longest gram length tuong ung voi cac index nguon
+                #list_of_word_source = Word_Source[len(list_temp)]
+                list_of_word_source = [] # empty list
+                """
+                print("*list_longest_source_gram_length*")
+                print(list_longest_source_gram_length)
+                print("*list_longest_source_gram_length*")
+                """
+                for i_temp in range(len(list_temp)):
+                    int_index = int(list_temp[i_temp])
+                    """
+                    print("*i_temp*")
+                    print(i_temp)
+                    print(len(list_temp))
+                    print(list_temp)
+                    print("*i_temp*")
+
+                    print("*int_index* lan thu %d" %i_temp)
+                    print(int_index)
+                    print(list_longest_source_gram_length)
+                    print("*int_index* lan thu %d" %i_temp)
+                    """
+                    #kiem tra neu vuot qua index. co nghia la khong ket noi voi tu nao
+                    if int_index >= len(list_longest_source_gram_length):
+                        temp_longest_source_gram_length = "0"
+                        list_of_word_source.append(Word_Source(int_index, temp_longest_source_gram_length))
+                    else:
+                        list_of_word_source.append(Word_Source(int_index, list_longest_source_gram_length[int_index]))
+
+                    #list_of_word_source[i].set_index(int_index)
+                    #list_of_word_source[i].set_longest_gram_length(list_longest_source_gram_length[int_index])
+                #end for
+
+                #gan list_alignment_target_to_source da duoc tach (neu co) vao list_of_words_alignment_target_to_source
+                #list_of_words_alignment_target_to_source[i].set_list_words_aligned_to_source(list_of_word_source)
+                """
+                if len(list_of_word_source) ==0:
+                    print("Khong co gia tri nao duoc gan ?!?!?")
+                else:
+                    print("*list_of_word_source*")
+                    for i_temp1 in list_of_word_source:
+                        print(i_temp1.get_index())
+                        print(i_temp1.get_longest_gram_length())
+                    print("*list_of_word_source*")
+                """
+
+                #Dua danh sach cac tu nguon (index, longest gram length) vao tu dich tuong ung
+                list_of_words_alignment_target_to_source = Word_Target_Language(list_of_word_source)
+
+                """
+                list_2 = list_of_words_alignment_target_to_source.get_list_of_words_aligned_to_source()
+
+                print("*list_2*")
+                for i_temp1 in list_2:
+                    print(i_temp1.get_index())
+                    print(i_temp1.get_longest_gram_length())
+                print("*list_2*")
+
+                print("*TYPE_LONGEST_SOURCE_GRAM_LENGTH_MAX*")
+                print(list_of_words_alignment_target_to_source.get_max_longest_source_gram_length_aligned_target())
+                #print(list_of_words_alignment_target_to_source.get_max_longest_source_gram_length_aligned_target(list_of_word_source))
+                print("*TYPE_LONGEST_SOURCE_GRAM_LENGTH_MAX*")
+                """
+
+                #tuy tung loai type ma chung ta lay ket qua khac nhau
+                #type_longest_gram_source_length
+                #TYPE_LONGEST_SOURCE_GRAM_LENGTH_ALL = 0
+                #TYPE_LONGEST_SOURCE_GRAM_LENGTH_MAX = 1
+                #TYPE_LONGEST_SOURCE_GRAM_LENGTH_MIN = 2
+                #TYPE_LONGEST_SOURCE_GRAM_LENGTH_AVG = 3
+                #TYPE_LONGEST_SOURCE_GRAM_LENGTH_FIRST = 4
+
+                #current_config = load_configuration()
+
+                #init
+                int_max = 0
+                int_min = 0
+                int_avg = 0
+                int_first = 0
+
+                #max
+                int_max = list_of_words_alignment_target_to_source.get_max_longest_source_gram_length_aligned_target()
+                str_max = str(int_max)
+
+                #min
+                int_min = list_of_words_alignment_target_to_source.get_min_longest_source_gram_length_aligned_target()
+                str_min = str(int_min)
+
+                #avg
+                int_avg = list_of_words_alignment_target_to_source.get_avg_longest_source_gram_length_aligned_target()
+                str_avg = str(int_avg)
+
+                #first
+                int_first = list_of_words_alignment_target_to_source.get_first_longest_source_gram_length_aligned_target()
+                str_first = str(int_first)
+
+                #just for testing
+                """
+                if int_max != int_min:
+                    print("index cua tu co min khac max la: %d trong cau thu %d. " % (i,number_of_sentence))
+                    print("---> o dong thu %d " % (number_of_line + 1))
+                """
+
+                str_out = ""
+
+                if type_longest_gram_source_length == current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_ALL:
+                    str_out = str_max + "\t" + str_min + "\t" + str_avg + "\t" + str_first
+                elif type_longest_gram_source_length == current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_MAX:
+                    str_out = str_max
+                elif type_longest_gram_source_length == current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_MIN:
+                    str_out = str_min
+                elif type_longest_gram_source_length == current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_AVG:
+                    str_out = str_avg
+                elif type_longest_gram_source_length == current_config.TYPE_LONGEST_SOURCE_GRAM_LENGTH_FIRST:
+                    str_out = str_first
+
+                #ghi ra file output voi format la column
+                file_writer.write(str_out)
+
+                file_writer.write("\n") # new line
+                number_of_line += 1
+
+            #end if
+        #end for
+
+        #print("Da xu ly xong cau thu %d" %number_of_sentence)
+        number_of_sentence = number_of_sentence + 1
+        file_writer.write("\n") # new line for new sentence
+        number_of_line += 1
+
+        #file_writer.close()
+        #raise Exception("Just for testing ... :) Execute the first line....")
+    #end for
+
+    #close files
+    file_reader_output_from_moses.close()
+
+    #for writing: file_output_path
+    file_writer.close()
+
+    print("Nb of words processed: %d" %number_of_word)
+
+#**************************************************************************#
+#HYPOTHESIS_ROW_CORPUS
+
+
 if __name__ == "__main__":
 
     current_config = load_configuration()

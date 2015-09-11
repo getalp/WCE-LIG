@@ -78,6 +78,8 @@ class config_end_user(object):
         self.RAW_CORPUS_SOURCE_LANGUAGE = path + settingsMap[language_pair]['raw_corpus_source_language']
         self.RAW_CORPUS_TARGET_LANGUAGE = path + settingsMap[language_pair]['raw_corpus_target_language']
         self.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE = path + settingsMap[language_pair]['post_edition_of_machine_translation_sentences_target_language']
+        self.RAW_CORPUS_TRAINING_SIZE = settingsMap[language_pair]['raw_corpus_training_size']
+        self.RAW_CORPUS_TEST_SIZE = settingsMap[language_pair]['raw_corpus_test_size']
         #self.RAW_CORPUS_SOURCE_LANGUAGE = settingsMap[language_pair]['raw_corpus_source_language']
         #self.RAW_CORPUS_TARGET_LANGUAGE = settingsMap[language_pair]['raw_corpus_target_language']
         #self.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE = settingsMap[language_pair]['post_edition_of_machine_translation_sentences_target_language']
@@ -153,6 +155,12 @@ class config_end_user(object):
         self.TOOL_REFTOCTM = path + settingsMap[language_pair]['tool_RefToCtm']
 
         ##Terpa
+        self.TOOL_JAVA = settingsMap[language_pair]['tool_java']
+        self.TOOL_JAVA_MEM_PARAM = settingsMap[language_pair]['tool_java_mem_param']
+        self.TOOL_TERPA_DIR = path + settingsMap[language_pair]['tool_terpa_dir']
+        self.TOOL_TERPA_JAR = path + settingsMap[language_pair]['tool_terpa_jar']
+        self.TOOL_TERPA_PARAM = path + settingsMap[language_pair]['tool_terpa_param']
+        self.TOOL_TERPA_PARAM_LOC = path + settingsMap[language_pair]['tool_terpa_param_loc']
         self.TOOL_TERPA = path + settingsMap[language_pair]['tool_terpa']
         self.TOOL_TERPA_NO_SHIFT_COST = path + settingsMap[language_pair]['tool_terpa_no_shift_cost']
         self.TOOL_TERPA_WITHIN_TOKENIZING = path + settingsMap[language_pair]['tool_terpa_within_tokenizing']
@@ -168,6 +176,17 @@ class config_end_user(object):
 
         ##MOSES
         self.TOOL_TRAIN_MODEL = path + settingsMap[language_pair]['tool_train_model']
+        
+        terp_loc_file = open(self.TOOL_TERPA_PARAM_LOC,"w")
+        terp_loc_file.write("WordNet Database Directory (filename)    : "+ path + settingsMap[language_pair]['tool_terpa_dir'] + "/../WordNet-3.0/dict/\n")
+        terp_loc_file.write("Shift Stop Word List (string)            : "+ path + settingsMap[language_pair]['tool_terpa_dir'] + "/data/shift_word_stop_list.txt\n")
+        terp_loc_file.write("Phrase Database (filename)               : "+ path + settingsMap[language_pair]['tool_terpa_dir'] + "/data/phrases.db\n")
+        terp_loc_file.close()
+        #/tmp/tmpservan/wce_system///tools/terplus/terp.v1/data/data_loc.param
+        #WordNet Database Directory (filename)    : /home/lent/Develops/Solution/tool/terplus/WordNet-3.0/dict/
+        #Shift Stop Word List (string)            : /home/lent/Develops/Solution/tool/terplus/terp.v1/data/shift_word_stop_list.txt
+        #Phrase Database (filename)               : /home/lent/Develops/Solution/tool/terplus/terp.v1/data/phrases.db
+
 #**************************************************************************#
 if __name__ == "__main__":
     #Test case:

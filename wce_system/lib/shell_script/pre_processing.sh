@@ -16,29 +16,35 @@
 
 # Replace phrase "verbe-t-pronom" by "pronom verbe"
 # Example: "a-t-il" --> "il a"
-if [ $1 = "fr" ];
-then
-	sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" $2 > temp1
-else
-	cp $2 temp1
-fi
+#if [ $1 = "fr" ];
+#then
+#	sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" $2 > temp1
+#else
+#	cp $2 temp1
+#fi
 
 #normalize punctuation
-perl normalize-punctuation.perl $1 < temp1 > temp2
+#perl normalize-punctuation.perl $1 < temp1 > temp2
 
 #tokenizer
-perl tokenizer.perl -l $1 < temp2 > temp3
+#perl tokenizer.perl -l $1 < temp2 > temp3
 
 #lowercase
-perl lowercase.perl < temp3 > temp4
+#perl lowercase.perl < temp3 > temp4
 
 #replace special character
-perl deescape-special-chars.perl < temp4 > temp5
+#perl deescape-special-chars.perl < temp4 > temp5
 
 #convert corresponding name :)
-mv temp5 $3
+#mv temp5 $3
 
 #rm -rf temp1 temp2 temp3 temp4
 
 
+if [ $1 = "fr" ];
+then   
+        sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" $2 | perl normalize-punctuation.perl $1 | perl tokenizer.perl -l $1 | perl lowercase.perl | perl deescape-special-chars.perl > $3
+else
+        perl normalize-punctuation.perl $1 < $2 | perl tokenizer.perl -l $1 | perl lowercase.perl | perl deescape-special-chars.perl > $3
+fi
 

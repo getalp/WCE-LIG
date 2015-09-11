@@ -17,16 +17,28 @@ export LC_ALL=C
 #for i in *.htk; do lattice-tool -read-htk -in-lattice $i -use-server 6666@localhost -order 5 -write-htk -out-lattice ${i}.ext; done
 
 dem=0
+#SRILM_BIN=/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
 SRILM_BIN=$2
+#SRILM_BIN=/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/
+#ML=../../corpus/language_model/lm_5gram.en
+#ML=$3
+#/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/language_model/lm_5gram.en
 ORDER=5
 TOOL_FASTNC=$3
 TOOL_REF_TO_CTM=$4
 OUTPUT_FILE=$5
 
+rm -f $OUTPUT_FILE
 while [ "$dem" -lt $1 ] ;
 do
 	i=Phrase$dem
 
+    #/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/nbest-lattice -nbest $i -write ${i}.wlat
+	#/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/wlat-to-pfsg ${i}.wlat > ${i}.wlat.pfsg
+	#/home/lecouteu/DDA_TA/Scripts/sritoolkit/bin/i686-m64/lattice-tool  -in-lattice ${i}.wlat.pfsg -write-htk -out-lattice ${i}.wlat.pfsg.htk
+        
+    #/home/tienle/Documents/Develops/DevTools/srilm/bin/i686-m64/
+    #/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
     
     LM_ACCESS="-lm $ML"
         
@@ -48,7 +60,7 @@ do
 		#./fastnc --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw | tee -a ./Results.txt
 		#/home/tienle/Documents/Develops/GeTools/WPP-Nodes-Min-Max/fastnc/bin/fastnc --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw | tee -a ./Results.txt
 		#../../../tool/fastnc/bin/fastnc --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw | tee -a ../../extracted_features/en.column.feature_wpp_nodes_min_max_temp.txt
-		$TOOL_FASTNC --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw | tee -a $OUTPUT_FILE
+		$TOOL_FASTNC --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw >> $OUTPUT_FILE
 		#$TOOL_FASTNC --read-ctm $j  --read-lattice  ${i}.wlat.pfsg.htk --compute-posteriors --compute-mesh  --align-ctm-dtw | tee -a ../../extracted_features/en.column.feature_wpp_nodes_min_max_temp.txt
 	done
 	#rm -f *.ctm

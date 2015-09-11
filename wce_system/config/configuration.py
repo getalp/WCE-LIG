@@ -68,9 +68,29 @@ class config(object):
         #******************************************************#
         #Path of the tools
         TOOL_ROOT = "tools"
+        self.FEATURE_LIST={}
 
         #language_pair
         self.LANGUAGE_PAIR = language_pair
+        self.THREADS=settingsMap['options']['threads']
+        self.punctuation = settingsMap['options']["punctuation"]
+        self.stop_words = settingsMap['options']["stop_words"]
+        self.numeric = settingsMap['options']["numeric"]
+        self.proper_name = settingsMap['options']["proper_name"]
+        self.unknown_lemma = settingsMap['options']["unknown_lemma"]
+        self.occurence_words = settingsMap['options']["occurence_words"]
+        self.occurence_stems = settingsMap['options']["occurence_stems"]
+        self.google_translator = settingsMap['options']["google_translator"]
+        self.bing_translator = settingsMap['options']["bing_translator"]
+        self.longest_ngram_length_tgt = settingsMap['options']["longest_ngram_length_tgt"]
+        self.longest_ngram_length_src = settingsMap['options']["longest_ngram_length_src"]
+        self.backoff = settingsMap['options']["backoff"]
+        self.alignments = settingsMap['options']["alignments"]
+        self.wpp = settingsMap['options']["wpp"]
+        self.wpp_any = settingsMap['options']["wpp_any"]
+        self.distance_to_root = settingsMap['options']["distance_to_root"]
+        self.polysemy_count_target = settingsMap['options']["polysemy_count_target"]
+        self.label = settingsMap['options']["label"]
 
         #******************************************************#
         #language
@@ -366,6 +386,7 @@ class config(object):
         self.TOOL_CREATE_PROBABILITY_EACH_WORD_FROM_LANGUAGE_MODEL = path + settingsMap[TOOL_ROOT]['tool_create_probability_each_word_from_language_model']
         self.TOOL_CREATE_LONGEST_TARGET_GRAM_LENGTH = path + settingsMap[TOOL_ROOT]['tool_create_longest_target_gram_length']
         self.TOOL_N_BEST_TO_LATTICE = path + settingsMap[TOOL_ROOT]['tool_n_best_to_lattice']
+        self.TOOL_N_BEST_TO_LATTICE_THREADS = path + settingsMap[TOOL_ROOT]['tool_n_best_to_lattice_threads']
 
         ##Tool MOSES
         ###self.TOOL_MOSES = path + settingsMap[TOOL_ROOT]['tool_moses']
@@ -409,8 +430,8 @@ class config(object):
         ###self.TOOL_TERPA_WITHIN_TOKENIZING = path + settingsMap[TOOL_ROOT]['tool_terpa_within_tokenizing']
         ###self.TOOL_TERP = path + settingsMap[TOOL_ROOT]['tool_terp']
         ###self.TOOL_TERCOM = path + settingsMap[TOOL_ROOT]['tool_tercom']
-        self.HYPOTHESIS_SET = "refset"
-        self.POST_EDITION_SET = "tstset"
+        self.HYPOTHESIS_SET = "tstset"
+        self.POST_EDITION_SET = "refset"
         self.TOOL_WRAP_TEXT_TO_SGM = path + settingsMap[TOOL_ROOT]['wrap_text_to_sgm']
         self.HYPOTHESIS_SET_SGM = path + settingsMap[language_pair]['hypothesis_set_sgm']
         self.POST_EDITION_SGM = path + settingsMap[language_pair]['post_edition_sgm']
@@ -530,6 +551,38 @@ class config(object):
         self.UNKNOWN_LEMMA_PATH = path + settingsMap[TOOL_ROOT]['unknown_lemma']
         self.WPP_ANY_PATH = path + settingsMap[TOOL_ROOT]['wpp_any']
         self.WPP_EXACT_PATH = path + settingsMap[TOOL_ROOT]['wpp_exact']
+
+        self.FEATURE_LIST['APos'] = path + settingsMap[TOOL_ROOT]['alignment_context_pos']
+        self.FEATURE_LIST['SrcPos'] = path + settingsMap[TOOL_ROOT]['source_pos']
+        self.FEATURE_LIST['TgtPos'] = path + settingsMap[TOOL_ROOT]['target_pos']
+        self.FEATURE_LIST['TgtWrd'] = path + settingsMap[TOOL_ROOT]['target_word']
+        self.FEATURE_LIST['BACKOFF'] = path + settingsMap[TOOL_ROOT]['backoff_behaviour']
+        self.FEATURE_LIST['LngSrcNg'] = path + settingsMap[TOOL_ROOT]['longest_source_gram_length']
+        self.FEATURE_LIST['LngTgtNg'] = path + settingsMap[TOOL_ROOT]['longest_target_gram_length']
+        self.FEATURE_LIST['WPPMax'] = path + settingsMap[TOOL_ROOT]['max_en']
+        self.FEATURE_LIST['WPPMIN'] = path + settingsMap[TOOL_ROOT]['min_en']
+        self.FEATURE_LIST['Nd'] = path + settingsMap[TOOL_ROOT]['nodes']
+        self.FEATURE_LIST['NbrOcStem'] = path + settingsMap[TOOL_ROOT]['number_of_occurrences_stem']
+        self.FEATURE_LIST['NbrOcWrd'] = path + settingsMap[TOOL_ROOT]['number_of_occurrences_word']
+        self.FEATURE_LIST['Num'] = path + settingsMap[TOOL_ROOT]['numeric']
+        self.FEATURE_LIST['Punct'] = path + settingsMap[TOOL_ROOT]['punctuation']
+        self.FEATURE_LIST['StpWrd'] = path + settingsMap[TOOL_ROOT]['stop_word']
+        self.FEATURE_LIST['WPPAny'] = path + settingsMap[TOOL_ROOT]['wpp_any']
+        self.FEATURE_LIST['WPPEx'] = path + settingsMap[TOOL_ROOT]['wpp_exact']
+        self.FEATURE_LIST['OcGG'] = path + settingsMap[TOOL_ROOT]['occur_in_google_translator']
+
+        self.FEATURE_LIST['PNam'] = path + settingsMap[TOOL_ROOT]['proper_name']
+        self.FEATURE_LIST['SrcWrd'] = path + settingsMap[TOOL_ROOT]['source_word']
+        self.FEATURE_LIST['AWrd'] = path + settingsMap[TOOL_ROOT]['alignment_context_word']
+        self.FEATURE_LIST['ConsLab'] = path + settingsMap[TOOL_ROOT]['constituent_label']
+        self.FEATURE_LIST['DistRoot'] = path + settingsMap[TOOL_ROOT]['distance_to_root']
+        self.FEATURE_LIST['PolTtgt'] = path + settingsMap[TOOL_ROOT]['polysemycount_target']
+
+        self.FEATURE_LIST['UNKLem'] = path + settingsMap[TOOL_ROOT]['unknown_lemma']
+        self.FEATURE_LIST['SrcStm'] = path + settingsMap[TOOL_ROOT]['source_stem']
+        self.FEATURE_LIST['TgtStm'] = path + settingsMap[TOOL_ROOT]['target_stem']
+        self.FEATURE_LIST['AStm'] = path + settingsMap[TOOL_ROOT]['alignment_context_stem']
+        self.FEATURE_LIST['OcBing'] = path + settingsMap[TOOL_ROOT]['occur_in_bing_translator']
 
         self.ALPHA = 0.7 #bad - weight score
         self.BETA = 0.3 #good - weight score

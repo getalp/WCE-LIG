@@ -11,11 +11,11 @@
 #$4 --> output name within path
 
 #Create TreeTagger files for fr/en/de/it/es
-make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger $1 -l $2 $3 temp -wordtaglemma
+make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger $1 -l $2 $3 temp.$$ -wordtaglemma
 
 #replace "<UNK>||||||" --> "<unk>|||<unk>|||<unk>" trong format dong
-sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < temp > temp2
+sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < temp.$$ > $4
 
-mv temp2 $4
+#mv temp2 $4
 
-rm -rf temp
+rm -rf temp.$$

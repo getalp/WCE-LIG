@@ -15,17 +15,285 @@ Created on Fri Dec 19 17:17:00 2014
 # **************************************************************************#
 import os
 import sys
+import threading
 
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))  #in order to test with line by line on the server
 
 from preprocessing.alignment_giza import *
 from common_module.cm_config import load_configuration, load_config_end_user
-from common_module.cm_file import copy_file_from_path1_to_path2, lowercase_raw_corpus_not_tokenizer, get_output_treetagger_format_row, \
-    get_file_alignments_target_to_source_word_alignment_using_moses, convert_format_row_to_format_column, tokenizer_raw_corpus
+from common_module.cm_file import copy_file_from_path1_to_path2, lowercase_raw_corpus_not_tokenizer, get_output_treetagger_format_row, get_output_treetagger_format_row_threads, \
+    get_file_alignments_target_to_source_word_alignment_using_moses, convert_format_row_to_format_column, tokenizer_raw_corpus, split_files, split_files_moses_alignment_output
 from common_module.cm_util import print_time, print_result, check_value_boolean
 
 #**************************************************************************#
+#ref: lib/script_moses/server/moses.py
+
+"""
+#  Truecaser wrapper.
+def __init__(self,model):
+    truecase_cmd = moses_root+"/scripts/recaser/truecase.perl"
+    self.cmd = [truecase_cmd,"-b", "--model",model]
+    self.process = None
+    return
+"""
+"""
+!!! Moi buoc nen viet cac ham
+!!! Nen chuan hoa lai cac ten input va output cua preprocessing de khong phu thuoc vao ngon ngu dua vao --> chi nen dung src, tgt
+
+B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser
+
+B2: Generate word_pos_stem cho cac tu trong dong
+
+B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from TreeTagger dong
+
+#for raw_corpus fr
+python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py
+/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr
+/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.fr
+
+#for pos fr
+python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py
+/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr
+/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.pos.stem.fr
+
+B4: generate cac file lien quan den moses
+
+??? lam cach nao lay alignment cho inputs Source and Target
+"""
+#**************************************************************************#
+#B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
+"""
+language_pair=fr_en
+
+## Paths to tools that user must install (You should install SRILM)
+srilm_path=/home/lent/Develops/DevTools/srilm/
+
+## Path to moses.ini
+moses_ini=output_moses2009/moses.ini
+
+## Corpus Names, if NOT CONFIG then we use DEFAULT CONFIG.
+raw_corpus_source_language=./src-ref-all.fr
+raw_corpus_target_language=./tgt-mt-all.en
+post_edition_of_machine_translation_sentences_target_language=./tgt-pe-all.en
+
+## Language Models, if NOT CONFIG then we use DEFAULT CONFIG.
+language_model_source_language=./lm_5gram.fr
+language_model_target_language=./lm_5gram.en
+
+## Output from Google & Bing Translator
+google_translator=./output_Google_Translator.en
+bing_translator=./output_Bing_Translator.en
+
+## n best list using MOSES
+1_best_list-included-alignment=./tgt-mt-all-1_best_list-included-alignment.en
+n_best_list-included-alignment=./tgt-mt-all-1000_best_list-included-alignment.en
+"""
+
+
+def copy_raw_files_threads():
+    """
+    Copy files in config that is defined by user to corresponding paths
+    """
+    current_config = load_configuration()
+
+    config_end_user = load_config_end_user()
+    result_output_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
+
+    feature_name_start = "BEGIN - Splitting files"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    
+    ###########################################################################
+    #corpus: 3 files
+    #print("from: %s" %config_end_user.RAW_CORPUS_SOURCE_LANGUAGE)
+    #print("to: %s" %current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE)
+
+    #raw_corpus.src
+    from_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
+    to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
+    #copy_file_from_path1_to_path2(from_path, to_path)
+    split_files(from_path, current_config.THREADS, to_path)
+
+    #raw_corpus.tgt
+    from_path = config_end_user.RAW_CORPUS_TARGET_LANGUAGE
+    to_path = current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE
+    #copy_file_from_path1_to_path2(from_path, to_path)
+    split_files(from_path, current_config.THREADS, to_path)
+
+    #post_edition.tgt (neu co xu ly post-edition, vi du: wmt15)
+    if str(config_end_user.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE) != "None":
+        from_path = config_end_user.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE
+        to_path = current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE
+        split_files(from_path, current_config.THREADS, to_path)
+        #copy_file_from_path1_to_path2(from_path, to_path)
+    #end if
+
+    """
+    #LIST_OF_ID_SENTENCES_ASR
+    from_path = config_end_user.LIST_OF_ID_SENTENCES_ASR
+    to_path = current_config.LIST_OF_ID_SENTENCES_ASR
+    copy_file_from_path1_to_path2(from_path, to_path)
+
+    #hypothesis_asr_path
+    from_path = config_end_user.HYPOTHESIS_ASR_PATH
+    to_path = current_config.HYPOTHESIS_ASR_PATH
+    copy_file_from_path1_to_path2(from_path, to_path)
+
+    #reference_asr_path
+    from_path = config_end_user.REFERENCE_ASR_PATH
+    to_path = current_config.REFERENCE_ASR_PATH
+    copy_file_from_path1_to_path2(from_path, to_path)
+
+    #lowercasing & tokenizing post-edition
+    tokenizer_raw_corpus(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING)
+    """
+
+    """tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW)"""
+
+    """
+    from_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
+    to_path = current_config.SRC_REF_TEST_FORMAT_ROW
+    copy_file_from_path1_to_path2(from_path, to_path)
+    """
+
+    #if "is_has_a_file_included_alignment" in "config_end_user" = 1
+    #it should get the Target Source from file MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT with index = 1
+    from_path = config_end_user.RAW_CORPUS_TARGET_LANGUAGE
+    to_path = current_config.TARGET_REF_TEST_FORMAT_ROW
+    #copy_file_from_path1_to_path2(from_path, to_path)
+    split_files(from_path, current_config.THREADS, to_path)
+
+    feature_name_start = "END - Splitting files"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    """
+    if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == 1:
+        get_file_hypothethis_from_output_moses(config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT, current_config.TARGET_REF_TEST_FORMAT_ROW)
+    else:
+        #version - bo sung
+        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW)
+        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
+    """
+
+    #lowercase_raw_corpus_not_tokenizer
+    #LOWERCASE
+    #TOKENIZER
+    is_lowercase = check_value_boolean(config_end_user.LOWERCASE)
+    is_tokenizer = check_value_boolean(config_end_user.TOKENIZER)
+    
+    feature_name_start = "BEGIN - Tokenization"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    for l_inc in range(1,current_config.THREADS+1):
+        if is_lowercase and not is_tokenizer:
+            print("lowercase_raw_corpus_not_tokenizer")
+            if str(config_end_user.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE) != "None":
+                lowercase_raw_corpus_not_tokenizer(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_ENGLISH,                                        current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING+"."+str(l_inc), current_config)
+            #end ifpost_edition_of_machine_translation_sentences_target_language
+
+            lowercase_raw_corpus_not_tokenizer(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_ENGLISH, current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config)
+
+            #lowercase_raw_corpus_not_tokenizer(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_SPANISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
+        elif is_lowercase is True and is_tokenizer is True:
+            tokenizer_raw_corpus(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING+"."+str(l_inc), current_config)
+
+            tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config)
+            #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
+        #end if
+        
+        
+        
+    #for l_inc in range(1,current_config.THREADS+1):
+        #if is_lowercase and not is_tokenizer:
+            #print("lowercase_raw_corpus_not_tokenizer")
+            #if str(config_end_user.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE) != "None":
+                #tt = threading.Thread(target=lowercase_raw_corpus_not_tokenizer, args=(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_ENGLISH,                                        current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING+"."+str(l_inc)))
+                #l_threads.append(tt)
+                #tt.start()
+            ##end ifpost_edition_of_machine_translation_sentences_target_language
+
+            #ts = threading.Thread(target=lowercase_raw_corpus_not_tokenizer, args=(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc)))
+            #l_threads.append(ts)
+            #ts.start()
+
+            ##lowercase_raw_corpus_not_tokenizer(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_SPANISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
+        #elif is_lowercase is True and is_tokenizer is True:
+            #tt = threading.Thread(target=tokenizer_raw_corpus, args=(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING+"."+str(l_inc)))
+            #l_threads.append(tt)
+            #tt.start()
+
+            #ts = threading.Thread(target=tokenizer_raw_corpus, args=(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc)))
+            #l_threads.append(ts)
+            #ts.start()
+            ##tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
+        ##end if
+    #for myT in l_threads:
+        #print ("I wait for the end of the threads\n")
+        #myT.join()
+
+    feature_name_start = "END - Tokenization"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+
+    #language model: 2 files
+    feature_name_start = "BEGIN - Transfert LM"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    from_path = config_end_user.LANGUAGE_MODEL_SOURCE_LANGUAGE
+    to_path = current_config.LANGUAGE_MODEL_SRC
+    #split_files(from_path, current_config.THREADS, to_path)
+    copy_file_from_path1_to_path2(from_path, to_path)
+
+    from_path = config_end_user.LANGUAGE_MODEL_TARGET_LANGUAGE
+    to_path = current_config.LANGUAGE_MODEL_TGT
+    #split_files(from_path, current_config.THREADS, to_path)
+    copy_file_from_path1_to_path2(from_path, to_path)
+
+    feature_name_start = "END - Transfert LM"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #Output from Google & Bing Translator: 2 files
+
+    feature_name_start = "BEGIN - Splitting translations outputs"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    from_path = config_end_user.GOOGLE_TRANSLATOR
+    to_path = current_config.GOOGLE_TRANSLATE_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+    #copy_file_from_path1_to_path2(from_path, to_path)
+
+    from_path = config_end_user.BING_TRANSLATOR
+    to_path = current_config.BING_TRANSLATE_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+    #copy_file_from_path1_to_path2(from_path, to_path)
+
+    feature_name_start = "END - Splitting translations outputs"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #n best list using MOSES: 2 files
+    feature_name_start = "BEGIN - Splitting translations alignement information"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    from_path = config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT
+    to_path = current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT
+    split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
+    #copy_file_from_path1_to_path2(from_path, to_path)
+
+    from_path = config_end_user.N_BEST_LIST_INCLUDED_ALIGNMENT
+    to_path = current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT
+    split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
+    #copy_file_from_path1_to_path2(from_path, to_path)
+    feature_name_start = "END - Splitting translations alignement information"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #version moses
+    version_moses = config_end_user.VERSION_MOSES
+    print("\n Version of moses for this solution: %s" % version_moses)
+    ###########################################################################
+    ###########################################################################
+
+    print("Done-copy_raw_files")
+
+
+#**************************************************************************#
+
+
 
 def copy_raw_files():
     """
@@ -296,24 +564,37 @@ def preprocessing_corpus(result_output_path):
     #print_introduction(result_output_path)
 
     feature_name = "BEGIN Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
+    #just for testing MOSES 2009
+    #input:  /corpus/raw_corpus/
+    #output: /corpus/preprocessing/
+    #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_TESTING_MOSES2009, current_config.LANGUAGE_FRENCH,
+    # current_config.SRC_REF_TEST_FORMAT_ROW_TESTING_MOSES2009)
+
+    #B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
     ##########################################################################
     ## Copy Raw Corpus
     ##########################################################################
 
     feature_name = "Copy Raw Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
     copy_raw_files()
     print_result(feature_name, result_output_path)
 
 
+    #B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser   --> da chuyen qua ham cua buoc 0
+    #Khi dung pre-processing.sh se lam lech nhung j ma MT da alignment
+    #dung ham copy luon
 
+    #B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger
+    # /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing
+    # .fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
     ##########################################################################
     ## Using TreeTagger for Source & Target Corpus
     ##########################################################################
     feature_name = "Using TreeTagger for Source & Target Corpus"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #ce_agent
     get_output_treetagger_format_row(current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_FRENCH,
@@ -323,14 +604,23 @@ def preprocessing_corpus(result_output_path):
                                      current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW)
 
 
+    """
+    get_output_treetagger_format_row( current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_ENGLISH,
+    current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW)
 
-    print_result(feature_name,result_output_path)  
+    get_output_treetagger_format_row( current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_SPANISH,
+    current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW)
+    """
 
+    print_result(feature_name,
+             result_output_path)  #B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from
+             # TreeTagger dong
+    #convert_format_row_to_format_column(file_input_path, file_output_path)
     ##########################################################################
     ## Converting raw text & POS text from format row to format column
     ##########################################################################
     feature_name = "Converting raw text & POS text from format row to format column"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
     #Corpus###########
     #Source Language
@@ -352,15 +642,145 @@ def preprocessing_corpus(result_output_path):
     ##########################################################################
     ## Get alignment by using Giza++
     ##########################################################################
+    """
+    feature_name = "Get alignment by Giza++"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    get_file_alignments_target_to_source_word_alignment_using_moses( current_config.PATTERN_REF_TEST_FORMAT_ROW, current_config.EXTENSION_SOURCE,
+    current_config.EXTENSION_TARGET, config_end_user.PATH_TO_TOOL_GIZA, current_config.MODEL_DIR_PATH,
+    current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT)
+
+    print_result(feature_name, result_output_path)
+    """
     ##########################################################################
 
     feature_name = "END Task - Preprocessing"
-    print_time(feature_name, result_output_path)
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 #**************************************************************************#
+
+def preprocessing_corpus_threads(result_output_path):
+    """
+    Preprocessing corpus for our solution.
+
+    :type result_output_path: string
+    :param result_output_path: path of log-file that contains results of DEMO
+    """
+    current_config = load_configuration()
+    config_end_user = load_config_end_user()
+
+    #introduction of this solution
+    #print_introduction(result_output_path)
+
+    feature_name = "BEGIN Task - Preprocessing"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    #just for testing MOSES 2009
+    #input:  /corpus/raw_corpus/
+    #output: /corpus/preprocessing/
+    #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_TESTING_MOSES2009, current_config.LANGUAGE_FRENCH,
+    # current_config.SRC_REF_TEST_FORMAT_ROW_TESTING_MOSES2009)
+
+    #B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
+    ##########################################################################
+    ## Copy Raw Corpus
+    ##########################################################################
+
+    feature_name = "Copy Raw Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    copy_raw_files_threads()
+    print_result(feature_name, result_output_path)
+
+
+    #B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser   --> da chuyen qua ham cua buoc 0
+    #Khi dung pre-processing.sh se lam lech nhung j ma MT da alignment
+    #dung ham copy luon
+
+    #B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger
+    # /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing
+    # .fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
+    ##########################################################################
+    ## Using TreeTagger for Source & Target Corpus
+    ##########################################################################
+    feature_name = "Using TreeTagger for Source & Target Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    #ce_agent
+
+    
+    get_output_treetagger_format_row_threads(current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_FRENCH,
+                                     current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config, config_end_user)
+
+    get_output_treetagger_format_row_threads(current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_ENGLISH,
+                                     current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config, config_end_user)
+
+
+    """
+    get_output_treetagger_format_row( current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_ENGLISH,
+    current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW)
+
+    get_output_treetagger_format_row( current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_SPANISH,
+    current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW)
+    """
+    #return (0)
+
+    print_result(feature_name, result_output_path)  
+    #B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from
+    # TreeTagger dong
+    #convert_format_row_to_format_column(file_input_path, file_output_path)
+    ##########################################################################
+    ## Converting raw text & POS text from format row to format column
+    ##########################################################################
+    feature_name = "Converting raw text & POS text from format row to format column"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    #Corpus###########
+    #Source Language
+    
+    for l_inc in range(1,current_config.THREADS+1):
+        #command_line_thread = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path +"."+str(l_inc) + " " + file_output_path +"."+str(l_inc) + " -   
+        convert_format_row_to_format_column(current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config.SRC_REF_TEST_FORMAT_COL+"."+str(l_inc))
+
+    #Target Language
+        convert_format_row_to_format_column(current_config.TARGET_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config.TARGET_REF_TEST_FORMAT_COL+"."+str(l_inc))
+
+    #TreeTagger########
+    #Source Language
+        convert_format_row_to_format_column(current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW+"."+str(l_inc), current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc))
+
+    #Target Language
+        convert_format_row_to_format_column(current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW+"."+str(l_inc), current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL+"."+str(l_inc))
+
+    print_result(feature_name, result_output_path)
+    ##########################################################################
+
+    ##########################################################################
+    ## Get alignment by using Giza++
+    ##########################################################################
+    """
+    feature_name = "Get alignment by Giza++"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    get_file_alignments_target_to_source_word_alignment_using_moses( current_config.PATTERN_REF_TEST_FORMAT_ROW, current_config.EXTENSION_SOURCE,
+    current_config.EXTENSION_TARGET, config_end_user.PATH_TO_TOOL_GIZA, current_config.MODEL_DIR_PATH,
+    current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT)
+
+    print_result(feature_name, result_output_path)
+    """
+    ##########################################################################
+
+    feature_name = "END Task - Preprocessing"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+#**************************************************************************#
+
+
 if __name__ == "__main__":
     #Test case:
     current_config = load_configuration()
+    if current_config.THREADS > 1:
+      preprocessing_corpus_threads(current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    else:
+      preprocessing_corpus(current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
-    preprocessing_corpus(current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    
 
     print('OK')

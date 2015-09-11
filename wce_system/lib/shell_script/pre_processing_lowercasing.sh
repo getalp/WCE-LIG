@@ -16,12 +16,12 @@
 
 # Replace phrase "verbe-t-pronom" by "pronom verbe"
 # Example: "a-t-il" --> "il a"
-if [ $1 = "fr" ];
-then
-	sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" $2 > temp1
-else
-	cp $2 temp1
-fi
+#if [ $1 = "fr" ];
+#then
+#	sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" $2 > temp1
+#else
+#	cp $2 temp1
+#fi
 
 #normalize punctuation
 #perl normalize-punctuation.perl $1 < temp1 > temp2
@@ -31,15 +31,21 @@ fi
 
 #lowercase
 #perl lowercase.perl < temp3 > temp4
-perl lowercase.perl < temp1 > temp2
+#perl lowercase.perl < temp1 > temp2
 
 #replace special character
 #perl deescape-special-chars.perl < temp4 > temp5
 
 #convert corresponding name :)
-mv temp2 $3
+#mv temp2 $3
 
 #rm -rf temp1 temp2 temp3 temp4
 
 
+if [ $1 = "fr" ];
+then
+	sed -e "s/\([[:alpha:]]*\)\-t\-\([[:alpha:]]*\)/ \2 \1/g" < $2 | perl lowercase.perl > $3
+else
+	perl lowercase.perl < $2 > $3
+fi
 
