@@ -4549,7 +4549,7 @@ def generating_CRF_models(demo_name, is_has_dev_corpus, template_path, order_of_
     model_path = model_file_path_pattern + str(order_of_template)  + "_" + demo_name + ".txt"
     log_path = log_file_pattern + str(order_of_template) +  "_" + demo_name + ".txt"
 
-    command_line += template_path + " " + train_file_path + " " + model_path  + " 2>&1 | tee " + log_path
+    command_line += template_path + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) + " 2>&1 | tee " + log_path
 
     print("Demo: " + demo_name + " - Training with template " + str(order_of_template))
     print("Template path: %s" %template_path)
@@ -5688,6 +5688,242 @@ def merge_files_threads(list_of_file_paths, current_config):
             
 #**************************************************************************#
 
+def generate_template_for_CRF_and_test(list_of_template, current_config, config_end_user):
+    #new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + "+".join(list_of_template)
+    #if len(list_of_template) > 1 :
+    new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + "/feature_selection/" + "+".join(list_of_template)
+    #else:
+      #new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + list_of_template
+    print (new_template_file)
+    
+    for l_keys in list_of_template:
+      print (current_config.FEATURE_LIST[l_keys])
+      
+    with open(new_template_file, 'w') as outfile:
+      for l_keys in list_of_template:
+        with open(current_config.FEATURE_LIST[l_keys]) as infile:
+          outfile.write(infile.read())
+     
+    demo_name = "System_WCE"
+    script_path = config_end_user.TOOL_WAPITI
+    train_file_path = current_config.TRAIN_FILE_PATH  + "_" + demo_name + ".txt"
+    dev_file_path = current_config.DEV_FILE_PATH  + "_" + demo_name + ".txt"
+    #template_path_pattern = current_config.TEMPLATE_PATH
+    model_file_path_pattern = current_config.MODEL_PATH
+    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI 
+    log_path = log_file_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + ".txt"
+    model_path = model_file_path_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + ".txt"
+
+    test_file_path = current_config.TEST_FILE_PATH  + "_" + demo_name + ".txt"
+    
+    list_of_commands = []
+    # train the model
+
+    command_line = script_path + " train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p " + new_template_file + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) + " 2>&1 | tee " + log_path
+    print(command_line)
+    list_of_commands.append(command_line)
+    
+    # test the model
+    command_line = ""
+    
+    #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
+    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + ".result" 
+    log_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + ".log"
+
+    command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_path + " " + result_file_path + " 2>&1 | tee " + log_path
+
+    #For writing log file
+    #command_line += model_path 
+    #command_line += model_path + " " + result_file_path
+
+    #print("Demo: " + demo_name + " - Testing with template " + str(order_of_template))
+    print(command_line)
+
+    #khong chay duoc khi chay truc tiep --> ERROR: "error: too much input files on command line"
+    #call_script(command_line, script_path)
+
+    #list_of_commands = []
+
+    ##Generate Shell Script
+    list_of_commands.append(command_line)
+    create_script_temp(list_of_commands)
+
+    #Run Script
+    call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
+    list_of_oracle_label, list_of_wapiti_label = get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling(result_file_path)
+    
+    X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good = get_precision_recall_fscore_within_list(list_of_oracle_label, list_of_wapiti_label)
+    
+    
+    line_separate = "-"*63
+    file_writer = open(log_path, mode='a', encoding='utf-8')
+
+    #######################################################################
+    print(line_separate)
+    print(line_separate)
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    #######################################################################
+
+    str_baseline = "*** Template " + "+".join(list_of_template) + "_" + demo_name + " classifier Good/Bad:"
+    print(str_baseline)
+    file_writer.write(str_baseline)
+    file_writer.write("\n")
+
+    #B
+    str_B_baseline = "X-Bad = %d \t Y-Bad = %d \t Z-Bad = %d" %(X_bad, Y_bad, Z_bad)
+    print(str_B_baseline)
+    file_writer.write(str_B_baseline)
+    file_writer.write("\n")
+
+    #G
+    str_G_baseline = "X-Good = %d \t Y-Good = %d \t Z-Good = %d" %(X_good, Y_good, Z_good)
+    print(str_G_baseline)
+    file_writer.write(str_G_baseline)
+    file_writer.write("\n")
+
+    ##########################
+    #B
+    str_result = "B \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_bad, Rc_bad, F_bad)
+    print(str_result)
+    file_writer.write(str_result)
+    file_writer.write("\n")
+
+    #G
+    str_result = "G \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_good, Rc_good, F_good)
+    print(str_result)
+    file_writer.write(str_result)
+    file_writer.write("\n")
+
+    #######################################################################
+    print(line_separate)
+    print(line_separate)
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    
+    return Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good
+    #command_line += 
+
+#**************************************************************************#
+
+def get_result_testing_CRF_models_with_given_model_and_test(model_file_path, test_file_path, current_config, config_end_user):
+    """
+    Testing phase of labeling within CRF model with K number of model.
+
+    :type demo_name: string
+    :param demo_name: name of Demo. For example: System_1
+
+    :type order_of_template: int
+    :param order_of_template: order of template
+    """
+
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+
+    command_line = ""
+    #script_path = current_config.TOOL_WAPITI
+    script_path = config_end_user.TOOL_WAPITI
+    #model_file_path_pattern = current_config.MODEL_PATH
+    #result_testing_wapiti_pattern = current_config.RESULT_TESTING_WAPITI
+    log_file_pattern = current_config.LOG_FILE_TESTING_WAPITI
+    #test_file_path = current_config.TEST_FILE_PATH + "_" + demo_name + ".txt"
+
+    command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_file_path
+
+    #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
+    result_file_path = test_file_path + ".result" 
+    log_path = test_file_path + ".log"
+
+    #For writing log file
+    command_line += model_path + " " + result_file_path + " 2>&1 | tee " + log_path
+    #command_line += model_path + " " + result_file_path
+
+    #print("Demo: " + demo_name + " - Testing with template " + str(order_of_template))
+    print(command_line)
+
+    #khong chay duoc khi chay truc tiep --> ERROR: "error: too much input files on command line"
+    #call_script(command_line, script_path)
+
+    list_of_commands = []
+
+    ##Generate Shell Script
+    list_of_commands.append(command_line)
+    create_script_temp(list_of_commands)
+
+    #Run Script
+    call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
+
+
+    #######################################################################
+    #Tinh bang 'tay'
+    #Ket qua cua wapiti: result_file_path
+    #tinh bang tay: output path:
+    #log_path_manual = log_file_pattern + str(order_of_template) +  "_" + demo_name + "_manual.txt"
+    #file_writer = open(log_path_manual, mode = 'w', encoding = 'utf-8')
+
+    #lay danh sach oracle (list_of_oracle_label) va danh sach (list_of_wapiti_label)
+    list_of_oracle_label, list_of_wapiti_label = get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling(result_file_path)
+
+    line_separate = "-"*63
+
+    #######################################################################
+    #print(line_separate)
+    #print(line_separate)
+    #file_writer.write(line_separate)
+    #file_writer.write("\n")
+    #file_writer.write(line_separate)
+    #file_writer.write("\n")
+    #######################################################################
+
+    #* classifier Good/Bad.
+    X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good = get_precision_recall_fscore_within_list(list_of_oracle_label, list_of_wapiti_label)
+    return F_bad,F_good
+
+    #str_baseline = "*** Template_" + str(order_of_template) + "_" + demo_name + " classifier Good/Bad:"
+    #print(str_baseline)
+    #file_writer.write(str_baseline)
+    #file_writer.write("\n")
+
+    ##B
+    #str_B_baseline = "X-Bad = %d \t Y-Bad = %d \t Z-Bad = %d" %(X_bad, Y_bad, Z_bad)
+    #print(str_B_baseline)
+    #file_writer.write(str_B_baseline)
+    #file_writer.write("\n")
+
+    ##G
+    #str_G_baseline = "X-Good = %d \t Y-Good = %d \t Z-Good = %d" %(X_good, Y_good, Z_good)
+    #print(str_G_baseline)
+    #file_writer.write(str_G_baseline)
+    #file_writer.write("\n")
+
+    ###########################
+    ##B
+    #str_result = "B \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_bad, Rc_bad, F_bad)
+    #print(str_result)
+    #file_writer.write(str_result)
+    #file_writer.write("\n")
+
+    ##G
+    #str_result = "G \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_good, Rc_good, F_good)
+    #print(str_result)
+    #file_writer.write(str_result)
+    #file_writer.write("\n")
+
+    ########################################################################
+    #print(line_separate)
+    #print(line_separate)
+    #file_writer.write(line_separate)
+    #file_writer.write("\n")
+    #file_writer.write(line_separate)
+    #file_writer.write("\n")
+    ########################################################################
+
+    #file_writer.close()
+#**************************************************************************#
 
 if __name__ == "__main__":
     #Test case:
