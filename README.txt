@@ -23,7 +23,8 @@ Step 3: Estimating confidences in Word-level
 - output: After using our WCE system, we have result file that contains label of each word in given input corpus target language. Note: B (Insert label), Other labels are G
 
 - Tutorial:
-+ Set the WCE_ROOT environment variable to the place where is this Readme file.
++ Set the WCE_ROOT environment variable to the place where is this Readme file, for instance with bash:
+$ export WCE_ROOT=my/root/directory/
 
 + Running three Phases (Preprocessing, Extracting Features and Measuring Confidence):
 $ python3  $WCE_ROOT/wce_system/solution/lauching_solution.py
