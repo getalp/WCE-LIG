@@ -8,6 +8,7 @@
 
 #Command for config the environment variables: source ./config_runFile.sh
 
+#note: file nay chi copy vao "/home/lent/Develops/Experiments/EMS_FREN_v2"
 
 #This folder-names should be updated when you would like to do with other experiment!!! :)
 # Tuong ung voi file config co cac bien sau:

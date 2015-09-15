@@ -3,6 +3,11 @@
 #Updated by Tien Ngoc LE updated 2014.Dec.24
 
 export LC_ALL=C
+#for i in Phrase*; do nbest-lattice -nbest $i -write ${i}.wlat; done
+#for i in *.wlat;  do wlat-to-pfsg $i > ${i}.pfsg; done
+#rename 's/\.wlat\.pfsg/\.pfsg/' *
+#for i in *.pfsg; do lattice-tool  -in-lattice $i -write-htk -out-lattice ${i}.htk; done
+#for i in *.htk; do lattice-tool -read-htk -in-lattice $i -use-server 6666@localhost -order 5 -write-htk -out-lattice ${i}.ext; done
 
 dem=0
 SRILM_BIN=/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64
