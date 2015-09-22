@@ -384,9 +384,9 @@ def copy_raw_files():
 
         #lowercase_raw_corpus_not_tokenizer(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_SPANISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
     elif is_lowercase is True and is_tokenizer is True:
-        tokenizer_raw_corpus(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING)
+        tokenizer_raw_corpus(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING, current_config)
 
-        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW)
+        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW, current_config)
         #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
     #end if
 
