@@ -112,6 +112,7 @@ def copy_raw_files_threads():
     from_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
     to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
     #copy_file_from_path1_to_path2(from_path, to_path)
+    os.makedirs(os.path.dirname(to_path))
     split_files(from_path, current_config.THREADS, to_path)
 
     #raw_corpus.tgt
@@ -311,6 +312,7 @@ def copy_raw_files():
     #raw_corpus.src
     from_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
     to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
+    os.makedirs(os.path.dirname(to_path))
     copy_file_from_path1_to_path2(from_path, to_path)
 
     #raw_corpus.tgt

@@ -31,6 +31,11 @@ from common_module.cm_file import is_existed_file, get_list_alignment_target_to_
 from common_module.cm_script import create_script_temp, call_script, run_chmod
 from common_module.cm_util import is_match, is_in_string, split_string_to_list_delimeter_comma
 #**************************************************************************#
+"""
+diff -y A_S_R W_C_E > filediff.txt
+
+diff -y output_format_column_within_encoding.txt ../corpus/preprocessing/output_preprocessing.col.src > filediff.txt
+"""
 def get_diff_asr_and_wce(file_asr_path, file_ref_path, file_output_path):
     """
     Getting the differences between ASR format-column and WCE format-column.
@@ -75,6 +80,10 @@ def get_diff_asr_and_wce(file_asr_path, file_ref_path, file_output_path):
     #Run Script
     call_script(command_line, script_path)
 #**************************************************************************#
+"""
+Cach fix loi: Khi co loi lech dong, den file output_preprocessing.src xem thu noi dung cua dong; roi tim den cot trong
+file diff, output, value_col
+"""
 def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, file_features_asr_path, file_output_path):
     """
     Getting the differences between ASR format-column and WCE format-column.
@@ -125,6 +134,14 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
     #for writing: file_output_path
     file_writer = open(file_output_path, mode = 'w', encoding = 'utf-8')
 
+    """Thuat toan:
+    col1    col2    col3
+TH1 NULL    >       char : ghi output voi current_config.DEFAULT_FEATURES_VALUES_ASR, co the th.doi tuy thuoc vao s.lg g.tri features cua ASR
+
+TH2 char    |       char : luu vao list_string_temp; neu dong tiep theo khong thuoc TH3 thi ghi ra output (tam thoi ghi ra feature cua item dau tien, ve sau tinh trung binh); nguoc lai, neu thuoc TH3 thi them vao list_string_temp; quay tiep dong tiep theo va xet voi TH3.
+
+TH3 char    <       NULL
+    """
 
     #is_string_matching_pattern(pattern = '(.*?)\t+ +([|<>])[\t ]*(.*)', text)
     pattern = '(.*?)\t+ +([|<>])[\t ]*(.*)'
@@ -148,9 +165,19 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
     list_features_asr = get_list_from_file(file_features_asr_path)
 
     for line in file_reader:
+        """
+        if num_sent_break > 0:
+            num_sent_break -= 1
+        else:
+            break
+        """
         num_cur_sent += 1
 
         if len(line.strip()) == 0: #xuong dong
+            """
+            week	| week-end
+            end  |	.
+            """
             if len(list_temp) != 0:
                 str_output = list_temp[0]
                 #str_output = "|||".join(list_temp)
@@ -180,6 +207,10 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
         str_output = ""
         if result:
             if is_match(pattern_char_greater, line):#is_in_string(char_greater, line): #>
+                """
+                    maître	 |	,
+							     >	me
+                """
                 if len(list_temp) != 0:
                     str_output = list_temp[0]
                     #str_output = "|||".join(list_temp)
@@ -219,6 +250,13 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
                 #end if
 
             elif is_match(pattern_char_other, line):#is_in_string(char_other, line): #|
+                """
+                    venir       venir
+                    a    | a-t-il
+                    t    <
+                    il   <
+                    dix         dix
+                """
                 current_sign_char = char_other
                 print(current_sign_char + str(num_cur_sent))
 
@@ -236,6 +274,9 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
         else:
             current_sign_char = "Khong co"
             print(current_sign_char + str(num_cur_sent))
+            #neu len(list_temp) != 0 thi ghi phan tu do ra ngoai roi lam tiep; trong truong hop chi chua 1 dong co |
+            #tam thoi chi ghi output phan tu dau tien trong list_temp
+            #version 2: Nen tao lop chua cac features va Nen tinh trung binh tat ca cac thuoc tinh thuoc so thuc;
             if len(list_temp) != 0:
                 str_output = list_temp[0]
                 #str_output = "|||".join(list_temp)
@@ -261,6 +302,28 @@ def feature_asr_after_sorting_and_diff_with_ref(file_asr_path, file_ref_path, fi
     file_writer.close()
 
 #**************************************************************************#
+#B1: Tach cac gia tri cua features-ASR thanh list 2 chieu. Co nghia la: list_of_sentences; trong moi item cua cau chua list_of_word_features_values_asr
+"""features' values of ASR in SOURCE LANGUAGE
+L01P1_P1-0_01,0,les,0.509947,-4.38473,1,0,0,0.48,DET:ART,C.
+L01P1_P1-0_01,1,chirurgiens,0.509947,-10.6568,2,1,0,0.11,NOM,C.
+L01P1_P1-0_01,2,de,0.959214,-3.60662,2,2,-0.120692,0.22,PRP,C.
+L01P1_P1-0_01,3,los,0.99977,-8.16717,2,2,-0.0687971,0.12,NOM,C.
+L01P1_P1-0_01,4,angeles,1,-0.129242,3,2,0,0.24,NOM,C.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+L01P1_P1-0_01,5,on,0.509947,-5.21787,3,2,0,0.12,PRO:PER,E.
+L01P1_P1-0_01,6,dit,0.501642,-5.06882,2,2,-0.123516,0.17,VER:pres,C.
+L01P1_P1-0_01,7,qu',0.509947,-2.81294,3,2,0,0.42,VER:pper,C.
+L01P1_P1-0_01,8,ils,0.997299,-2.54621,3,2,0,0.11,PUN,C.
+L01P1_P1-0_01,9,étaient,1,-3.91892,3,2,0,0.22,PRO:PER,C.
+L01P1_P1-0_01,10,outre,1,-9.73318,1,2,-0.768761,0.22,VER:cond,E.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+L01P1_P1-0_01,11,a,0.509947,-5.2968,2,1,0,0.22,ADV,C.
+L01P1_P1-0_01,12,déclaré,0.99949,-3.51804,2,2,-0.194829,0.22,VER:pres,C.
+L01P1_P1-0_01,13,m,0.509947,-4.36005,3,2,0,0.22,NOM,E.
+L01P1_P1-0_01,14,se,0.701737,-5.8452,2,2,-0.15911,0.22,VER:simp,E.
+L01P1_P1-0_01,15,camus,0.509947,-12.7847,1,2,-1.06601,0.22,PRO:PER,C.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+"""
 def get_list_of_sentences_features_values_asr(file_input_path):
     """
     Getting the list of sentences whose items contains list of features' values of ASR.
@@ -309,6 +372,35 @@ def get_list_of_sentences_features_values_asr(file_input_path):
 
     return result
 #**************************************************************************#
+"""Phuong phap:
+B1: Tach cac gia tri cua features-ASR thanh list 2 chieu. Co nghia la: list_of_sentences; trong moi item cua cau chua list_of_word_features_values_asr
+
+B2: Dua vao alignment cua moses chung ta co the biet duoc cac yeu cau cua bai toan. Sau do, ghi ket qua vao file output
+"""
+"""output 1-best-list of MOSES 2009
+#0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , said m. camus .  ||| LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15
+"""
+"""features' values of ASR in SOURCE LANGUAGE
+L01P1_P1-0_01,0,les,0.509947,-4.38473,1,0,0,0.48,DET:ART,C.
+L01P1_P1-0_01,1,chirurgiens,0.509947,-10.6568,2,1,0,0.11,NOM,C.
+L01P1_P1-0_01,2,de,0.959214,-3.60662,2,2,-0.120692,0.22,PRP,C.
+L01P1_P1-0_01,3,los,0.99977,-8.16717,2,2,-0.0687971,0.12,NOM,C.
+L01P1_P1-0_01,4,angeles,1,-0.129242,3,2,0,0.24,NOM,C.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+L01P1_P1-0_01,5,on,0.509947,-5.21787,3,2,0,0.12,PRO:PER,E.
+L01P1_P1-0_01,6,dit,0.501642,-5.06882,2,2,-0.123516,0.17,VER:pres,C.
+L01P1_P1-0_01,7,qu',0.509947,-2.81294,3,2,0,0.42,VER:pper,C.
+L01P1_P1-0_01,8,ils,0.997299,-2.54621,3,2,0,0.11,PUN,C.
+L01P1_P1-0_01,9,étaient,1,-3.91892,3,2,0,0.22,PRO:PER,C.
+L01P1_P1-0_01,10,outre,1,-9.73318,1,2,-0.768761,0.22,VER:cond,E.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+L01P1_P1-0_01,11,a,0.509947,-5.2968,2,1,0,0.22,ADV,C.
+L01P1_P1-0_01,12,déclaré,0.99949,-3.51804,2,2,-0.194829,0.22,VER:pres,C.
+L01P1_P1-0_01,13,m,0.509947,-4.36005,3,2,0,0.22,NOM,E.
+L01P1_P1-0_01,14,se,0.701737,-5.8452,2,2,-0.15911,0.22,VER:simp,E.
+L01P1_P1-0_01,15,camus,0.509947,-12.7847,1,2,-1.06601,0.22,PRO:PER,C.
+id_sent,0,punct,1,0,1,0,0,1,PUN,K.
+"""
 #DEFAULT_FEATURES_VALUES_ASR_NOT_HAVE_ALIGNMENT
 def feature_asr_alignment_target_to_source(file_output_from_moses_included_alignment_word_to_word_path, file_feature_asr_after_sorting_and_diff_with_ref, default_value_not_have_alignment, file_output_path):
     """
@@ -358,6 +450,20 @@ def feature_asr_alignment_target_to_source(file_output_from_moses_included_align
     str_not_having_alignment = default_value_not_have_alignment
 
     for line_in_output_moses in file_reader_output_from_moses:
+        """
+        #can kiem tra lai du lieu cau thu 881
+        #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
+        if number_of_sentence != 881:
+            number_of_sentence = number_of_sentence +1
+            continue
+        """
+        """
+        print("*******************************************")
+        print("Dang duyet cau thu: %d " %number_of_sentence)
+        print("*******************************************")
+        print(line_in_output_moses)
+        print("*******************************************")
+        """
         #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source. Moi phan tu tren la mot doi tuong Word_POS_Stemming
         #trim string
         line_in_output_moses = line_in_output_moses.strip()
@@ -367,6 +473,8 @@ def feature_asr_alignment_target_to_source(file_output_from_moses_included_align
             print("Xem lai cau %d nha!!!???" %number_of_sentence)
             continue
 
+        #Duyet Tung cau dich va cau moses va xet
+        #0 ||| the chirurgiens of los angeles ont said qu' ils étaient outrés , said m. camus .  ||| LexicalReordering0= -1.81744 0 0 -1.64139 0 0 Distortion0= 0 LM0= -146.242 WordPenalty0= -16 PhrasePenalty0= 15 TranslationModel0= -7.20993 -7.62317 -2.93815 -4.42405 ||| -1014.93 ||| 0=0 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11-13=11-12 14=13 15=14 16=15 ||| 0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11 12-12 13-12 14-13 15-14 16-15
         #list_alignment_target_to_source = get_list_alignment_target_to_source_from_line_output_moses(line_in_output_moses) #version 1 - Target - Source _ nhom cuoi cua MOSES output
         #updated 2015.Jan.06 by Tien LE
 
@@ -379,6 +487,11 @@ def feature_asr_alignment_target_to_source(file_output_from_moses_included_align
         else:
             list_alignment_target_to_source = get_list_alignment_target_to_source_from_line_output_moses_SOURCE_To_TARGET(line_in_output_moses)
 
+        """
+        print("*list_alignment_target_to_source*")
+        print(list_alignment_target_to_source)
+        print("*list_alignment_target_to_source*")
+        """
 
         #source language
         #number_of_sentence = 1
@@ -399,40 +512,55 @@ def feature_asr_alignment_target_to_source(file_output_from_moses_included_align
         for i in range(len(list_alignment_target_to_source)):
             index_alignment_to_source = list_alignment_target_to_source[i]
 
+            """
+            print("*index_alignment_to_source**********************")
+            print(index_alignment_to_source)
+            print("*index_alignment_to_source**********************")
+            """
             #index cua tu nguon duoc giong den
             index_alignment_of_source_word = -1 #khong co tu nao giong den
 
             list_temp = [] # empty list
 
+            #lay chuoi ra, neu chua dau phay ,
             if is_in_string(comma_char, index_alignment_to_source): #co tu 2 lien ket voi nguon tro len
                 list_temp = index_alignment_to_source.split(comma_char)
                 index_alignment_of_source_word = int(list_temp[0]) #chi can xet tu dau tien duoc giong len Source
 
-            else: 
+            else: #neu chi la 1 so nguyen, khong chua dau phay , co nghia la: chi chua 1 phan tu
                 list_temp.append(str(index_alignment_to_source))
                 try:
                     index_alignment_of_source_word = int(index_alignment_to_source)
                 except ValueError:
-                    pass 
+                    pass #index_alignment_of_source_word = index_alignment_to_source #neu chua "" thi bi loi cho nay
                 #end try
             #end if
 
-            
+            #index_of_target_word = i #index cua tu dich
 
             if index_alignment_of_source_word == -1:
-           
+                #ghi gia tri mac dinh
                 line_output = str_not_having_alignment
             else:
                 line_output = list_of_words_source[index_alignment_of_source_word]
             #end if
 
+            #ghi ra file output voi format la column
             file_writer.write(line_output)
             file_writer.write("\n") # new line
+            """
+            print("*line_output*")
+            print(line_output)
+            print("*line_output*")
+            """
         #end for
 
+        #print("Da xu ly xong cau thu %d" %number_of_sentence)
         number_of_sentence = number_of_sentence + 1
         file_writer.write("\n") # new line for new sentence
 
+        #file_writer.close()
+        #raise Exception("Just for testing ... :) Execute the first line....")
     #end for
 
     #close files
@@ -511,14 +639,19 @@ def filter_feature_asr(file_input_path, file_output_path):
 def get_feature_asr():
     current_config = load_configuration()
 
+    #cac buoc sau can xem chi tiet o convert_character_utf8.py
+    #Buoc 1: Sort theo list of id-sentence
+    #AFTER_SORTING_FEATURES_VALUES_ASR_PATH
     #sort_result_of_features_values_asr_by_list_of_id_sentences_asr(file_input_path, file_list_of_id_sentences_asr, file_output_path)
     sort_result_of_features_values_asr_by_list_of_id_sentences_asr( current_config.FEATURES_VALUES_ASR_PATH, current_config.LIST_OF_ID_SENTENCES_ASR, current_config.AFTER_SORTING_FEATURES_VALUES_ASR_PATH)
 
+    #Buoc 2: generate_output_format_column_within_encoding
     #OUTPUT_FORMAT_COLUMN_WITHIN_ENCODING
     #generate_output_format_column_within_encoding(file_input_path, file_output_path)
     generate_output_format_column_within_encoding( current_config.AFTER_SORTING_FEATURES_VALUES_ASR_PATH, current_config.OUTPUT_FORMAT_COLUMN_WITHIN_ENCODING)
     #output: les
 
+    #Tao file chua gia tri cua cac features cua ASR
     #OUTPUT_FORMAT_ROW_WITHIN_ENCODING
     #generate_output_format_row_within_encoding(file_input_path, file_output_path)
     generate_output_format_row_within_encoding( current_config.AFTER_SORTING_FEATURES_VALUES_ASR_PATH, current_config.OUTPUT_FORMAT_ROW_WITHIN_ENCODING)
@@ -537,6 +670,107 @@ def get_feature_asr():
     #filter_feature_asr(file_input_path, file_output_path)
     filter_feature_asr( current_config.FEATURES_ASR_ALIGNED, current_config.FEATURES_ASR_ALIGNED_LAST)
 #**************************************************************************#
+"""
+Usage: sh run.sh <Hyp_File> <Ref_File> <Lattice_Dir> <Output_formate [table,csv]> [-cluster <Number_process>]
+Options: -cluster number_of_process: using cluster to run the script. !!!Note, log into cluster server is need.
+
+*** Buoc 1:
+# load variables
+# tools configuration
+#-------------------
+LATTICE_TOOL="/home/lecouteu/Srilm/bin/i686-m64/lattice-tool"
+GETPRO="/home/lecouteu/KALDI.V2/fst2slf/bentoolkit/lm/bin/getprob"
+TREETAGGER="/home/kaing/TreeTagger/cmd/tree-tagger-french"
+
+
+
+# models configuration
+#---------------------
+#lm="/home/lecouteu/KALDI.V2/exp/nnet5c/decode_dev_ant_2g/out_myconvert/"
+#base_name="BigLM4"
+lm="/home/lecouteu/KALDI.FR/exp_full_big/sgmm2_5b2_mixedubm_big/decode_bref/"
+base_name="nouveaumodele"
+lmscale="10"
+acscale="0"
+
+
+# label name
+#--------------------
+GOODLABEL="C"
+BADLABEL="E"
+
+
+# table formate configuration
+#---------------------
+print_template="{0:20}{1:12}{2:15}{3:12}{4:12}{5:15}{6:12}{7:12}{8:15}{9:12}{10:12}{11:12}"
+
+
+# the temporary file name, to avoid conflict with other file. !!not important
+#--------------------
+tmp_file_name="list"
+
+script_dir=$(dirname $0) #thu muc chinh
+libs=$script_dir/libs #thu muc chua cac lib can su dung
+sclite_files=$script_dir/sclite_files #thu muc chua ket qua "compute-sclite"
+
+Them vao script: path to sclite
+export PATH=/home/lent/Develops/Solution/ce_agent/tool/sctk-2.4.9/bin:$PATH
+
+*** Buoc 2: VD: sh run.sh 10.tramots test.refASR HTK_fr/ csv
+hyp_path=$1
+ref_path=$2
+lat_dir=$3
+format=$4
+compute-sclite -h $hyp_path -r $ref_path -o all -O $sclite_files
+
+*** Buoc 3: ??? y nghia
+#pra_path=$sclite_files/$(basename $hyp_path).pra
+pra_filename = get_filename(hyp_path) #chu y co doi la pra
+pra_path = $sclite_files/pra_filename
+
+
+*** Buoc 4: Neu dung cluster (mac dinh - Bo qua)
+if [ $# -gt 4 ];
+then
+	if [ $# -lt 6 ] || [ $5 != "-cluster" ];
+	then
+		echo "Usage: sh run.sh <Hyp_File> <Lattice_Dir> <PRA_File> [-cluster <Number_process>]" >&2
+        	echo >&2
+		echo "Options:" >&2
+       		echo "-cluster number_of_process: using cluster to run the script. !!!Note, log into cluster server is need." >&2
+		echo >&2
+        	exit 1
+	fi
+	echo "Cluster mode runing..." >&2
+	echo " -> $libs/cluster.sh $6 $hyp_path $lat_dir $pra_path $format"
+	sh $libs/cluster.sh $6 $hyp_path $lat_dir $pra_path $format
+	exit 1
+fi
+
+*** Buoc 5: Sequecial runing...
+sh $libs/extract_feature.sh $lat_dir $pra_path $hyp_path $format 1>> $script_dir/out.txt 2>> $script_dir/log.txt
+
+Usage: extract_feature <GRAPH_PATH> <PRA_FILE> <INPUT_FILE> <Output_formate [table,csv]>
+
+graph_path=$1 #duong dan den thu muc chua lattice
+pra_file=$2 #duong dan den file pra
+list_file=$3 #file hyp_path
+format=$4 #csv
+
+while IFS= read line; # read user pass uid gid full home shell
+do
+    trans_id=$(echo $line | cut -d" " -f1)
+    sentence=$(echo $line | cut -d" " -f2-)
+    graph_file=$(ls $graph_path | grep -i $trans_id".lat$")
+    if [ $format == "csv" ];
+    then
+        python $libs/boonzaiboostFormat.py $graph_path$graph_file $trans_id $pra_file $sentence
+    elif [ $format == "table" ];
+    then
+        python $libs/tableFeatureFormat.py $graph_path$graph_file $trans_id $pra_file $sentence
+    fi
+done < $list_file
+"""
 #**************************************************************************#
 def run_test_asr(hypothesis_asr_path, reference_asr_path, file_output_path):
     """
@@ -562,6 +796,7 @@ def run_test_asr(hypothesis_asr_path, reference_asr_path, file_output_path):
     run_chmod(script_path)
 
     #nen de duong dan o config_end_user roi cong vao day !!!
+    #command_line = "export PATH=/home/lent/Develops/Solution/ce_agent/tool/sctk-2.4.9/bin:/home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64:$PATH"
     command_line = "export " + config_end_user.PATH_TO_SENDID_TO_SCLITE
     list_of_commands.append(command_line)
 
@@ -597,6 +832,14 @@ def run_test_asr(hypothesis_asr_path, reference_asr_path, file_output_path):
     str_message_if_not_existed = "Not Existed file corpus input that is output of tool sclite"
     is_existed_file(pra_path, str_message_if_not_existed)
 
+    #Duyet tung cau trong hyp_file
+    #tach id_sentence va content_sentence
+    #kiem tra graph file co ton tai hay khong. Neu khong co thi warning: file_name = id_sentence.lat
+    #Goi ham: python $libs/boonzaiboostFormat.py $graph_path$graph_file $trans_id $pra_file $sentence
+    #         python boonzaiboostFormat.py graph_file_path id_sentence pra_file_path content_sentence
+    #echo "Sequecial runing..." >&2
+    #sh $libs/extract_feature.sh $lat_dir $pra_path $hyp_path $format 1>> $script_dir/out.txt 2>> $script_dir/log.txt
+    #for reading: file_input_path
     file_reader = open(hypothesis_asr_path, mode = 'r', encoding = 'utf-8')
 
     index_sentence_begin = 0
@@ -773,6 +1016,11 @@ def boonzaiboostFormat(graph_path, sentence_id, pra_path, sentence, file_output_
 
 
     sys.stderr.write("Calculating posterior probability for each words...\n")
+    #[graph, word_length_list] = functions.parseGraph(graph_path, sentence, lmscale)
+    #Sentence_id, so tu, starting time, duration, word, posterior probability
+    #hien tai:
+    #graph: [word, posterior probability] For example: ['chirurgiens', '?'] hay ['chirurgien', '0.959214']
+    #word_length_list: [duration] For example: 0.48
     [graph, word_length_list] = parseGraph(graph_path, sentence, lmscale)
 
     #raise Exception("Just for testing... End of task: Calculating posterior probability for each words...")
@@ -957,5 +1205,9 @@ if __name__=="__main__":
 
     #Buoc 2: loc lai cac feature va alignment
     get_feature_asr()
+    """word; posterior probability(postPr); log column; ngram column; used context(Ucon); back off probability; word length column; POS
+les	0.509947	-4.38473	1	0	0	0.48	DET:ART
+de	0.959214	-3.60662	2	2	-0.120692	0.22	PRP
+    """
 
     print("OK")

@@ -359,7 +359,7 @@ def get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labelin
     """
     #check existed paths
     if not os.path.exists(file_input_path):
-        raise TypeError('Not Existed file that contains result of tool wapiti (included oracle label)')
+        raise TypeError('(included oracle label) File does not exist: '+file_input_path)
 
     #open 2 files:
     #for reading: file_input_path
@@ -426,6 +426,44 @@ def get_number_of_words_with_label_good_and_bad_in_list_label(list_of_label):
     #label_good = "G"
     #label_bad = "B"
     current_config = load_configuration()
+    label_good = current_config.LABEL_GOOD
+    label_bad = current_config.LABEL_BAD
+
+    for item in list_of_label:
+        if item == label_good:
+            num_of_label_good += 1
+        elif item == label_bad:
+            num_of_label_bad += 1
+    #end for
+
+    #result.append(num_of_label_good)
+    #result.append(num_of_label_bad)
+
+    #return result
+    return num_of_label_good, num_of_label_bad
+#**************************************************************************#
+def get_number_of_words_with_label_good_and_bad_in_list_label_threads(list_of_label,current_config):
+    """
+    Getting list of words' labels that has the same length and ALL labels are Good/Bad
+
+    :type list_of_label: string
+    :param list_of_label: contains list of word label that is list of oracle label or list of classifier label.
+
+    :type label_all_word: string
+    :param label_all_word: "G"/"B"
+
+    :rtype: list that has two item: Number of label "Good" AND Number of label "Bad"
+
+    :raise ValueError: if len(list_of_oracle_label) = 0
+    """
+    if len(list_of_label) == 0:
+        raise Exception("You should check list of oracle label that must be existed.")
+
+    num_of_label_good = 0
+    num_of_label_bad = 0
+    #label_good = "G"
+    #label_bad = "B"
+    #current_config = load_configuration()
     label_good = current_config.LABEL_GOOD
     label_bad = current_config.LABEL_BAD
 
@@ -550,6 +588,58 @@ def get_precision_recall_fscore_within_list(reference, test):
 #Pr = X/Y
 #Rc = X/Z
 # F = (2*Pr*Rc)/(Pr+Rc)
+
+def get_precision_recall_fscore_within_list_threads(reference, test, current_config):
+    """
+    Getting the scores both X, Y, Z and Precision; Recall; F-score.
+    + Pr of a specific label characterizes the ability of system to predict correctly (for it) over all classified words.
+    + Rc reflects how efficient the system is in retrieving the accurate labels from DB.
+    + F is the harmonic mean of Precision and Recall
+    Pr = X/Y
+    Rc = X/Z
+     F = (2*Pr*Rc)/(Pr+Rc)
+
+    :type reference: list
+    :param reference: list of label G/B
+
+    :type test: list
+    :param test: list of label G/B
+
+    :rtype: the values of X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good
+    """
+
+    """
+    Let X be the number of words whose true label is B and have been tagged with this label by the classifier (So tu duoc classifier gan nhan dung la B, vi co khi nhan oracle label cua no la G nhung classifier gan la B)
+    Let Y be the total number of words classified as B (Tong so tu duoc gan nhan la B)
+    Let Z be the total number of words which true label is B (oracle label)
+    """
+    ############
+    #B-label
+    word_label_bad = "B"
+    word_label_good = "G"
+    #X?
+    X_bad = get_number_of_words_with_same_label_between_classifier_label_and_oracle_label(reference, test, word_label_bad)
+    X_good = get_number_of_words_with_same_label_between_classifier_label_and_oracle_label(reference, test, word_label_good)
+
+    #Y?
+    Y_good, Y_bad = get_number_of_words_with_label_good_and_bad_in_list_label_threads(test, current_config)
+
+    #Z?
+    Z_good, Z_bad = get_number_of_words_with_label_good_and_bad_in_list_label_threads(reference, current_config)
+
+
+    #Sau khi co X, Y, Z thi goi ham sau
+    #get_precision_recall_fscore(X, Y, Z)
+    Pr_bad, Rc_bad, F_bad = get_precision_recall_fscore( X_bad, Y_bad, Z_bad)
+    Pr_good, Rc_good, F_good = get_precision_recall_fscore( X_good, Y_good, Z_good)
+
+    return X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good
+#**************************************************************************#
+#Viet ham danh cho phan tinh Pr; Rc; F-score
+#Pr = X/Y
+#Rc = X/Z
+# F = (2*Pr*Rc)/(Pr+Rc)
+
 def get_precision_recall_fscore(X, Y, Z):
     """
     Getting the scores Precision; Recall and F-score with X, Y, Z given.

@@ -194,8 +194,39 @@ def create_script_temp(command_lines):
     file_writer.write("#!/bin/bash")
     file_writer.write("\n") #empty line
 
-    file_writer.write("#Authors: Tien Ngoc LE & Tan Ngoc LE \n")
+    #file_writer.write("#Authors: Tien Ngoc LE & Tan Ngoc LE \n")
+    #file_writer.write("\n") #empty line
+
+    if len(command_lines) == 0:
+        raise Exception("You should add command lines list...")
+
+    for item in command_lines:
+        file_writer.write(item)
+        file_writer.write("\n") #empty line
+
+    #close file
+    file_writer.close()
+#**************************************************************************#
+def create_script_temp_threads(command_lines, current_config, nthreads):
+    """
+    Creating script temp for generate shell script from program python
+
+    :type command_line: string
+    :param command_line: contains list of command lines
+    """
+    #current_config = load_configuration()
+
+    script_temp_path = current_config.SCRIPT_TEMP+"."+str(nthreads)+".sh"
+
+    #open file:
+    #for writing: file_output_path
+    file_writer = open(script_temp_path, mode = 'w', encoding = 'utf-8')#, 'w')
+
+    file_writer.write("#!/bin/bash")
     file_writer.write("\n") #empty line
+
+    #file_writer.write("#Authors: Tien Ngoc LE & Tan Ngoc LE \n")
+    #file_writer.write("\n") #empty line
 
     if len(command_lines) == 0:
         raise Exception("You should add command lines list...")

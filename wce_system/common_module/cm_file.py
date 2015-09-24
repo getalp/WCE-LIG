@@ -33,10 +33,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test 
 
 #from config.configuration import *
 #from config.config_end_user import *
+from copy import deepcopy
 
 from common_module.cm_config import load_configuration, load_config_end_user, get_absolute_path_current_module
-from common_module.cm_util import  is_in_string, split_string_to_list_delimeter_tab, get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling, get_precision_recall_fscore_within_list, replace_substring_in_string
-from common_module.cm_script import create_script_temp, call_script, run_chmod
+from common_module.cm_util import  is_in_string, split_string_to_list_delimeter_tab, get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling, get_precision_recall_fscore_within_list, replace_substring_in_string, get_precision_recall_fscore_within_list_threads
+from common_module.cm_script import create_script_temp, call_script, run_chmod, create_script_temp_threads
 #**************************************************************************#
 def get_list_from_file(file_list_path):
     """
@@ -4258,13 +4259,13 @@ def get_output_treetagger_format_row(file_input_path, target_language, file_outp
     path_to_tool_treetagger = tree_tagger_path + "/bin/tree-tagger"
     run_chmod(path_to_tool_treetagger)
 
-    command_line = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path + " " + file_output_path + " -wordtaglemma"
+    command_line = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path + " " + file_output_path + ".tmp -wordtaglemma"
 
     print(command_line)
 
     call_script(command_line, script_path)
 
-    customize_output_treetagger_format_row(file_output_path, file_output_path)
+    customize_output_treetagger_format_row(file_output_path + ".tmp", file_output_path)
 #**************************************************************************#
 #B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from TreeTagger dong
 #for raw_corpus fr
@@ -5810,6 +5811,130 @@ def generate_template_for_CRF_and_test(list_of_template, current_config, config_
 
 #**************************************************************************#
 
+def generate_template_for_CRF_and_test_threads(list_of_template, current_config, config_end_user, l_scores_returned, l_cpt_threads):
+    new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + "/feature_selection/" + "+".join(list_of_template)
+    #print ("************************************************************ "+ str(l_cpt_threads) + " ********* "+ "+".join(list_of_template))
+    #print (new_template_file)
+    
+    #for l_keys in list_of_template:
+      #print (current_config.FEATURE_LIST[l_keys])
+      
+    with open(new_template_file, 'w') as outfile:
+      for l_keys in list_of_template:
+        with open(current_config.FEATURE_LIST[l_keys]) as infile:
+          outfile.write(infile.read())
+     
+    demo_name = "System_WCE"
+    script_path = config_end_user.TOOL_WAPITI
+    train_file_path = current_config.TRAIN_FILE_PATH  + "_" + demo_name + ".txt"
+    dev_file_path = current_config.DEV_FILE_PATH  + "_" + demo_name + ".txt"
+    #template_path_pattern = current_config.TEMPLATE_PATH
+    model_file_path_pattern = current_config.MODEL_PATH
+    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI 
+    log_path = log_file_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".txt"
+    model_path = model_file_path_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".txt"
+
+    test_file_path = current_config.TEST_FILE_PATH  + "_" + demo_name + ".txt"
+    
+    list_of_commands = []
+    # train the model
+
+    command_line = script_path + " train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p " + new_template_file + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) 
+    #+ " 2>&1 | tee " + log_path
+    print(command_line)
+    call_script(command_line,script_path)
+    #list_of_commands.append(command_line)
+    
+    # test the model
+    command_line = ""
+    
+    #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
+    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".result" 
+    log_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".log"
+
+    command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_path + " " + result_file_path 
+    #+ " 2>&1 | tee " + log_path
+
+    #For writing log file
+    #command_line += model_path 
+    #command_line += model_path + " " + result_file_path
+
+    #print("Demo: " + demo_name + " - Testing with template " + str(order_of_template))
+    print(command_line)
+
+    #khong chay duoc khi chay truc tiep --> ERROR: "error: too much input files on command line"
+    #call_script(command_line, script_path)
+
+    #list_of_commands = []
+
+    ##Generate Shell Script
+    #list_of_commands.append(command_line)
+    call_script(command_line,script_path)
+    #create_script_temp_threads(list_of_commands, current_config, l_cpt_threads)
+
+    #Run Script
+    #call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
+    list_of_oracle_label, list_of_wapiti_label = get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling(result_file_path)
+    
+    X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good = get_precision_recall_fscore_within_list_threads(list_of_oracle_label, list_of_wapiti_label, current_config)
+    
+    
+    line_separate = "-"*63
+    file_writer = open(log_path, mode='a', encoding='utf-8')
+
+    #######################################################################
+    print(line_separate)
+    print(line_separate)
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    #######################################################################
+
+    str_baseline = "*** Template " + "+".join(list_of_template) + "_" + demo_name + " classifier Good/Bad:"
+    print(str_baseline)
+    file_writer.write(str_baseline)
+    file_writer.write("\n")
+
+    #B
+    str_B_baseline = "X-Bad = %d \t Y-Bad = %d \t Z-Bad = %d" %(X_bad, Y_bad, Z_bad)
+    print(str_B_baseline)
+    file_writer.write(str_B_baseline)
+    file_writer.write("\n")
+
+    #G
+    str_G_baseline = "X-Good = %d \t Y-Good = %d \t Z-Good = %d" %(X_good, Y_good, Z_good)
+    print(str_G_baseline)
+    file_writer.write(str_G_baseline)
+    file_writer.write("\n")
+
+    ##########################
+    #B
+    str_result = "B \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_bad, Rc_bad, F_bad)
+    print(str_result)
+    file_writer.write(str_result)
+    file_writer.write("\n")
+
+    #G
+    str_result = "G \t Pr=%.4f \t Rc=%.4f \t F1=%.4f \t" %(Pr_good, Rc_good, F_good)
+    print(str_result)
+    file_writer.write(str_result)
+    file_writer.write("\n")
+
+    #######################################################################
+    print(line_separate)
+    print(line_separate)
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    file_writer.write(line_separate)
+    file_writer.write("\n")
+    print ([Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]])
+    l_scores_returned[l_cpt_threads]=[Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]]
+    
+    #return Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]
+    #command_line += 
+
+#**************************************************************************#
 def get_result_testing_CRF_models_with_given_model_and_test(model_file_path, test_file_path, current_config, config_end_user):
     """
     Testing phase of labeling within CRF model with K number of model.
