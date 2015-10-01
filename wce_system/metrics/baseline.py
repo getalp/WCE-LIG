@@ -17,6 +17,9 @@ import os
 import sys
 import random
 import operator
+import threading
+import time
+from copy import deepcopy
 
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test with line by line on the server
@@ -28,7 +31,7 @@ from feature.common_functions import *
 """
 
 from common_module.cm_config import load_configuration, load_config_end_user
-from common_module.cm_file import is_existed_file, get_file_oracle_label_given_all_features_file, get_result_testing_CRF_models_within_given_list_of_models, generate_template_for_CRF_and_test
+from common_module.cm_file import is_existed_file, get_file_oracle_label_given_all_features_file, get_result_testing_CRF_models_within_given_list_of_models, generate_template_for_CRF_and_test, generate_template_for_CRF_and_test_threads
 from common_module.cm_util import get_number_of_words_with_label_good_and_bad_in_list_label, get_precision_recall_fscore_within_list
 #**************************************************************************#
 
@@ -493,33 +496,34 @@ def feature_selection_threads( current_config, config_end_user):
     #l_list_keys=list(current_config.FEATURE_LIST.keys())
     
     # remove the standart feature from the list list_keys but we keep them in the l_list_keys.
-    l_list_keys.append("APos")
-    l_list_keys.append("SrcPos")
-    l_list_keys.append("TgtPos")
-    l_list_keys.append("TgtWrd")
-    l_list_keys.append("BACKOFF")
-    l_list_keys.append("LngSrcNg")
-    l_list_keys.append("LngTgtNg")
-    l_list_keys.append("WPPMax")
-    l_list_keys.append("WPPMIN")
-    l_list_keys.append("Nd")
-    l_list_keys.append("NbrOcStem")
-    l_list_keys.append("NbrOcWrd")
-    l_list_keys.append("Num")
-    l_list_keys.append("Punct")
-    l_list_keys.append("StpWrd")
-    l_list_keys.append("WPPAny")
-    l_list_keys.append("WPPEx")
+    list_keys.append("SrcPos")
+    list_keys.append("TgtPos")
+    list_keys.append("TgtWrd")
+    list_keys.append("BACKOFF")
+    list_keys.append("LngSrcNg")
+    list_keys.append("LngTgtNg")
+    list_keys.append("WPPMax")
+    list_keys.append("WPPMIN")
+    list_keys.append("Nd")
+    list_keys.append("NbrOcWrd")
+    list_keys.append("Num")
+    list_keys.append("Punct")
+    list_keys.append("StpWrd")
+    list_keys.append("WPPAny")
+    list_keys.append("WPPEx")
     
     # remove the standart feature from the list l_list_keys but we keep them in the list_keys.
-    list_keys.append("PNam")
+    list_keys.append("AWrd")
+    list_keys.append("APos")
     list_keys.append("SrcWrd")
-    list_keys.append("ConsLab")
-    list_keys.append("DistRoot")
     list_keys.append("PolTtgt")
+    list_keys.append("DistRoot")
+    list_keys.append("PNam")
+    list_keys.append("ConsLab")
 
-    list_keys.append("UNKLem")
     list_keys.append("SrcStm")
+    list_keys.append("NbrOcStem")
+    list_keys.append("UNKLem")
     list_keys.append("TgtStm")
     list_keys.append("AStm")
     
@@ -540,28 +544,88 @@ def feature_selection_threads( current_config, config_end_user):
     l_Best_feature_id="";
     l_Best_score=0.0;
     l_dict_score_features={}
-    
     l_cpt=len(l_list_keys)-1;
+###########################################
+# Begin of the original part I want to keep    
+    #while len(list_keys) > 0:
+      #l_dict_score_features={}
+      #l_Best_feature=""
+      #l_Best_score=0.0
+      #l_Best_scores=[0 for x in range(7)]
+      #for l_key in list_keys:
+          #l_list_keys[l_cpt]=l_key
+          ##print(l_list_keys)
+          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G = generate_template_for_CRF_and_test(l_list_keys,current_config,config_end_user)
+          #l_dict_score_features[l_key]=(l_F1B+l_F1G)/2
+          #if (l_F1B+l_F1G)/2 > l_Best_score:
+            #l_Best_feature=l_key
+            #l_Best_score=(l_F1B+l_F1G)/2
+            #l_Best_scores[0] = l_Best_score
+            #l_Best_scores[1] = l_PrB
+            #l_Best_scores[2] = l_RcB
+            #l_Best_scores[3] = l_F1B
+            #l_Best_scores[4] = l_PrG
+            #l_Best_scores[5] = l_RcG
+            #l_Best_scores[6] = l_F1G
+# End of the original part I want to keep                
+###########################################
     while len(list_keys) > 0:
       l_dict_score_features={}
       l_Best_feature=""
       l_Best_score=0.0
       l_Best_scores=[0 for x in range(7)]
+      l_threads = []
+      l_scores_returned = []
+      l_cpt_threads=0;
+      l_max_threads=0;
       for l_key in list_keys:
-          l_list_keys[l_cpt]=l_key
-          #print(l_list_keys)
-          l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G = generate_template_for_CRF_and_test(l_list_keys,current_config,config_end_user)
-          l_dict_score_features[l_key]=(l_F1B+l_F1G)/2
-          if (l_F1B+l_F1G)/2 > l_Best_score:
-            l_Best_feature=l_key
-            l_Best_score=(l_F1B+l_F1G)/2
-            l_Best_scores[0] = l_Best_score
-            l_Best_scores[1] = l_PrB
-            l_Best_scores[2] = l_RcB
-            l_Best_scores[3] = l_F1B
-            l_Best_scores[4] = l_PrG
-            l_Best_scores[5] = l_RcG
-            l_Best_scores[6] = l_F1G
+        l_list_keys[l_cpt]=l_key
+        l_scores_returned.append([float,float,float,float,float,float,str])
+        #print ("***************************************************************** HERE WE ARE: "+str(l_cpt_threads))
+        #print(l_list_keys)
+        ts = threading.Thread(target=generate_template_for_CRF_and_test_threads, args=(deepcopy(l_list_keys),current_config,config_end_user, l_scores_returned, l_cpt_threads))
+        l_threads.append(ts)
+        l_cpt_threads=l_cpt_threads+1;
+        ts.start()
+        time.sleep(1)
+        if (l_cpt_threads % current_config.THREADS) == 0:
+          for myT in l_threads:
+            myT.join()    
+      l_max_threads=l_cpt_threads
+      l_cpt_threads=0;
+      for myT in l_threads:
+        myT.join()  
+      #print (l_scores_returned)
+      #return 1
+      #print(len(l_scores_returned))
+      for l_cpt_threads in range(0,len(l_scores_returned)):
+        if (l_scores_returned[l_cpt_threads][2]+l_scores_returned[l_cpt_threads][5])/2 > l_Best_score:
+          l_Best_feature=l_scores_returned[l_cpt_threads][6]
+          l_Best_score=(l_scores_returned[l_cpt_threads][2]+l_scores_returned[l_cpt_threads][5])/2
+          l_Best_scores[0] = l_Best_score
+          l_Best_scores[1] = l_scores_returned[l_cpt_threads][0] #l_PrB
+          l_Best_scores[2] = l_scores_returned[l_cpt_threads][1] #l_RcB
+          l_Best_scores[3] = l_scores_returned[l_cpt_threads][2] #l_F1B
+          l_Best_scores[4] = l_scores_returned[l_cpt_threads][3] #l_PrG
+          l_Best_scores[5] = l_scores_returned[l_cpt_threads][4] #l_RcG
+          l_Best_scores[6] = l_scores_returned[l_cpt_threads][5] #l_F1G
+          print (l_Best_feature)
+          print (l_Best_scores)
+          l_cpt_threads=l_cpt_threads+1;
+        
+                                
+          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G, l_returned_key = generate_template_for_CRF_and_test(l_list_keys,current_config,config_end_user)
+          #l_dict_score_features[l_key]=(l_F1B+l_F1G)/2
+          #if (l_F1B+l_F1G)/2 > l_Best_score:
+            #l_Best_feature=l_key
+            #l_Best_score=(l_F1B+l_F1G)/2
+            #l_Best_scores[0] = l_Best_score
+            #l_Best_scores[1] = l_PrB
+            #l_Best_scores[2] = l_RcB
+            #l_Best_scores[3] = l_F1B
+            #l_Best_scores[4] = l_PrG
+            #l_Best_scores[5] = l_RcG
+            #l_Best_scores[6] = l_F1G
           
       print("Best feature: " + l_Best_feature + "\nBest score: " + str(l_Best_score))
       l_list_score_features=sorted(l_dict_score_features.items(),key=operator.itemgetter(1), reverse=True)

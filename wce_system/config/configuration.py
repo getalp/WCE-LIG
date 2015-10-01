@@ -552,7 +552,6 @@ class config(object):
         self.WPP_ANY_PATH = path + settingsMap[TOOL_ROOT]['wpp_any']
         self.WPP_EXACT_PATH = path + settingsMap[TOOL_ROOT]['wpp_exact']
 
-        self.FEATURE_LIST['APos'] = path + settingsMap[TOOL_ROOT]['alignment_context_pos']
         self.FEATURE_LIST['SrcPos'] = path + settingsMap[TOOL_ROOT]['source_pos']
         self.FEATURE_LIST['TgtPos'] = path + settingsMap[TOOL_ROOT]['target_pos']
         self.FEATURE_LIST['TgtWrd'] = path + settingsMap[TOOL_ROOT]['target_word']
@@ -571,17 +570,18 @@ class config(object):
         self.FEATURE_LIST['WPPEx'] = path + settingsMap[TOOL_ROOT]['wpp_exact']
         self.FEATURE_LIST['OcGG'] = path + settingsMap[TOOL_ROOT]['occur_in_google_translator']
 
+        self.FEATURE_LIST['AWrd'] = path + settingsMap[TOOL_ROOT]['alignment_context_word']
+        self.FEATURE_LIST['APos'] = path + settingsMap[TOOL_ROOT]['alignment_context_pos']
         self.FEATURE_LIST['PNam'] = path + settingsMap[TOOL_ROOT]['proper_name']
         self.FEATURE_LIST['SrcWrd'] = path + settingsMap[TOOL_ROOT]['source_word']
-        self.FEATURE_LIST['AWrd'] = path + settingsMap[TOOL_ROOT]['alignment_context_word']
         self.FEATURE_LIST['ConsLab'] = path + settingsMap[TOOL_ROOT]['constituent_label']
         self.FEATURE_LIST['DistRoot'] = path + settingsMap[TOOL_ROOT]['distance_to_root']
         self.FEATURE_LIST['PolTtgt'] = path + settingsMap[TOOL_ROOT]['polysemycount_target']
 
+        self.FEATURE_LIST['AStm'] = path + settingsMap[TOOL_ROOT]['alignment_context_stem']
         self.FEATURE_LIST['UNKLem'] = path + settingsMap[TOOL_ROOT]['unknown_lemma']
         self.FEATURE_LIST['SrcStm'] = path + settingsMap[TOOL_ROOT]['source_stem']
         self.FEATURE_LIST['TgtStm'] = path + settingsMap[TOOL_ROOT]['target_stem']
-        self.FEATURE_LIST['AStm'] = path + settingsMap[TOOL_ROOT]['alignment_context_stem']
         self.FEATURE_LIST['OcBing'] = path + settingsMap[TOOL_ROOT]['occur_in_bing_translator']
 
         self.ALPHA = 0.7 #bad - weight score
