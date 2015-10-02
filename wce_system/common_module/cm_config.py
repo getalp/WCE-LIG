@@ -49,11 +49,12 @@ def load_configuration(filename_configuration = "configuration.yml"):
     :rtype: Object config
     """
     #get absolute path to current module
-    path = get_absolute_path_current_module()
+    #path = get_absolute_path_current_module()
 
     #print (path)
 
-    path_to_config_file = path + "/../config/" + filename_configuration
+    #path_to_config_file = path + "/../config/" + filename_configuration
+    path_to_config_file = os.getenv("WCE_ROOT")+ "/wce_system/config/" + filename_configuration
 
     #print(path_to_config_file)
 
@@ -69,11 +70,12 @@ def load_configuration_demo_solution(filename_configuration = "configuration.yml
     :rtype: Object config
     """
     #get absolute path to current module
-    path = get_absolute_path_current_module()
+    #path = get_absolute_path_current_module()
 
     #print (path)
 
-    path_to_config_file = path + "/config/" + filename_configuration
+    #path_to_config_file = path + "/config/" + filename_configuration
+    path_to_config_file = os.getenv("WCE_ROOT")+ "/wce_system/config/" + filename_configuration
 
     #print(path_to_config_file)
 
@@ -91,7 +93,8 @@ def load_config_end_user(filename_configuration = "config_end_user.yml"):
     #print (path)
 
     #path_to_config_file = path + "/../config/" + filename_configuration
-    path_to_config_file = path + "/../../input_data/" + filename_configuration
+    #path_to_config_file = path + "/../../input_data/" + filename_configuration
+    path_to_config_file = os.getenv("WCE_ROOT")+ "/input_data/" + filename_configuration
 
     #print(path_to_config_file)
 
