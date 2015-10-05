@@ -7,6 +7,8 @@
 # URL: tienhuong.weebly.com
 #####################################################################################################
 
+- Before using the toolkit, please install the tools needed form feature extraction and set them correctly (instructions in tools/README.md)
+
 Our solution contains three main-steps:
 Step 1: Preprocessing
 Step 2: Extracting features
