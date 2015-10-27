@@ -5,9 +5,9 @@ It outputs a good (G) or a bad (B) label foreach word in of the translation hypo
 For instance:
 ```
 Source: give me some pills
-Reference: donnes moi des pilules
 Translation hypothesis: me donner des pilules
 WCE: B B G G
+Human post-edition: donnes moi des pilules
 ```
 
 ## What the toolkit do?
