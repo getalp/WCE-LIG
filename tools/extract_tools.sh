@@ -6,5 +6,8 @@ pushd terplus
 popd
 
 pushd BabelSenseCount_v25
+bzip2 -d BabelNet-API-2.5.tar.bz2
+tar xvf BabelNet-API-2.5.tar
+tar xvfz WordNet-3.0.tar.gz
 7z e BabelNet-2.5.addons.tgz.7z.001
 popd
