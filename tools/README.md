@@ -1,5 +1,9 @@
 # Tools directory
 
+List of files to decompress before (you need tar, gzip and bzip2 before):
++ ./BabelSenseCount_v25/BabelNet-API-2.5.tar.bz2
++ ./BabelSenseCount_v25/WordNet-3.0.tar.gz
+
 List of files to decompress with 7zip (you need to install 7zip before):
 + ./terplus/terp.v1-2.tar.gz.7z.{001-014}
 + ./terplus/terp-pt.v1.tgz.7z.{001-002}
