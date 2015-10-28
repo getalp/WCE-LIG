@@ -76,7 +76,7 @@ def demo_solution_threads(result_output_path):
     extracting_all_features_threads(result_output_path)
 
     #demo metrics
-    demo_baselines_and_systems(result_output_path)
+    demo_baselines_and_systems_threads(result_output_path)
 
     ##########################################################################
 
