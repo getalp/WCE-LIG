@@ -70,3 +70,13 @@ Metrics used are Precision (Pr), Recall (Rc) and F-Measure F1.
 
 This toolkit is part of the project KEHATH (https://kehath.imag.fr/) funded by the French National Research Agency.
 
+## Citation
+When using this software, please cite:
+```
+Christophe Servan, Ngoc Tien Le, Ngoc Quang Luong, Benjamin Lecouteux and Laurent Besacier, 
+“An Open Source Toolkit for Word-level Confidence Estimation in Machine Translation”, 
+in The Proceedings of The 12th International Workshop on Spoken Language Translation (IWSLT 2015), 
+Da Nang, Vietnam, Dec. 2015.
+```
+
+ 
