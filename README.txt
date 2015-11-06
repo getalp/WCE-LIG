@@ -49,3 +49,8 @@ X-Bad = 1640 	 Y-Bad = 3395 	 Z-Bad = 4537
 X-Good = 15409 	 Y-Good = 18306 	 Z-Good = 17164
 B 	 Pr=0.4831 	 Rc=0.3615 	 F1=0.4135
 G 	 Pr=0.8417 	 Rc=0.8978 	 F1=0.8688
+
+*** When using this software, please cite:
+Christophe Servan, Ngoc Tien Le, Ngoc Quang Luong, Benjamin Lecouteux and Laurent Besacier, “An Open Source Toolkit for Word-level Confidence Estimation in Machine Translation”, in Proceedings of The 12th International Workshop on Spoken Language Translation (IWSLT 2015), Da Nang, Vietnam, Dec. 2015.
+
+ 
