@@ -23,11 +23,15 @@ input_data:
     tokenizer: True
     
     ###################################################################################################
-    #WCE_System - corpus
+    #WCE_System - corpus (concatenation of train+test)
+    # source side of the corpus:
     raw_corpus_source_language: /input_data/src-ref-all.fr
+    # target side of the corpus given by MT system:
     raw_corpus_target_language: /input_data/tgt-mt-all.en
+    # target side of the corpus post-edited:
     post_edition_of_machine_translation_sentences_target_language: /input_data/tgt-pe-all.en
     tags_file_path: None
+    # Size (# lines) of the corpora
     raw_corpus_training_size: 10000
     raw_corpus_test_size: 881
     
