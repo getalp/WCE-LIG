@@ -15,8 +15,9 @@ language_support:
     target_language: en, fr, es
 
 options:
-    ##Threading:
+    ## Multi-Threading:
     threads: 20
+    ## List of features activated (binary option)
     punctuation: 1
     stop_words: 1
     numeric: 1
