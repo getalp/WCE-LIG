@@ -1,0 +1,2 @@
+{"NOUN":["NC", "NMEA", "NP", "PPX", "PPC"],"ADJECTIVE":["ADJ"], "ADVERB":["ADV"], "VERB":["VCLIger","VCLIinf","VCLIfin","VEadj","VEfin", "VEger", "VEinf", "VHadj","VHfin","VHger","VHinf","VLadj","VLfin","VLger","VLinf","VMadj", "VMfin","VMger","VMinf","VSadj","VSfin","VSger","VSinf","VBfin","VBinf", "VBadj"]}
+{"sustantivo":"NOUN","sustantivo propio":"NOUN","adjetivo":"ADJECTIVE","adverbio":"ADVERB","verbo":"VERB"}
