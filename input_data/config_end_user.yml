@@ -102,9 +102,13 @@ input_data:
     
     ##Babel Net    
     tool_babel_net_dir: /tools/BabelSenseCount_v25/BabelNet-2.5
+    tool_babel_net: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses.sh
     tool_babel_net_en: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_english.sh
     tool_babel_net_fr: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_french.sh
     tool_babel_net_es: /tools/BabelSenseCount_v25/BabelNet-2.5/calculateSenses_spanish.sh
+    
+    ##DBnary dir 
+    tool_dbnary_dir: /tools/dbnary
     
     ###################################################################################################
     ##TreeTagger

@@ -134,10 +134,14 @@ class config_end_user(object):
         self.SRILM_BIN_DIRECTORY = path + settingsMap[language_pair]["srilm_bin_directory"]
 
         #shell script tools - BabelNet
+        self.TOOL_BABEL_NET = path + settingsMap[language_pair]["tool_babel_net"]
         self.TOOL_BABEL_NET_EN = path + settingsMap[language_pair]["tool_babel_net_en"]
         self.TOOL_BABEL_NET_FR = path + settingsMap[language_pair]["tool_babel_net_fr"]
         self.TOOL_BABEL_NET_ES = path + settingsMap[language_pair]["tool_babel_net_es"]
         self.TOOL_BABEL_NET_DIR = path + settingsMap[language_pair]["tool_babel_net_dir"]
+
+        #Directory to DBnary data
+        self.TOOL_DBNARY_DIR = path + settingsMap[language_pair]["tool_dbnary_dir"]
 
         ##tag-file-path
         self.TAGS_FILE_PATH = path + settingsMap[language_pair]["tags_file_path"]

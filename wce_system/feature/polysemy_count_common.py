@@ -30,6 +30,7 @@ Buoc 3: Xoa cac dong khong can thiet; Thay the cac doan khong dung; Loc cac dong
 #common module - for polysemy-counting
 import os
 import sys
+import ast
 
 #for call shell script
 #import shlex, subprocess
@@ -82,8 +83,8 @@ def convert_format_treetagger_to_format_babelnet( file_input_path, dict_tagset_l
     Converting from format of TreeTagger to format of BabelNet. The POS in TreeTagger is assigned to one of five main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
     =============================================================
     Example:
-    TreeTagger Format:  Pero	CCAD	pero
-    BabelNet Format:    pero	OTHER
+    TreeTagger Format:  Pero    CCAD    pero
+    BabelNet Format:    pero    OTHER
 
     :type file_input_path: string
     :param file_input_path: file output of TreeTagger whose each line has format 'word POS stemmed'. Among 'sentences' there is an empty line.
@@ -99,9 +100,9 @@ def convert_format_treetagger_to_format_babelnet( file_input_path, dict_tagset_l
     #check existed paths
     """
     if not os.path.exists(file_input_path):
-        raise TypeError('Not Existed file corpus input with format - column')
+        raise TypeError('Not Existed file input corpus with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input with format - column"
+    str_message_if_not_existed = "Not Existed file input corpus with format - column"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #get list of recognition Proper name
@@ -127,9 +128,9 @@ def convert_format_treetagger_to_format_babelnet( file_input_path, dict_tagset_l
             continue
 
         """Line 46755
-        florence	NN	<unknown>
+        florence        NN      <unknown>
         <UNK>
-        believes	VVZ	believe
+        believes        VVZ     believe
         """
         """
         #Truong hop dac biet: khi du lieu chi chua UNK
@@ -167,6 +168,110 @@ def convert_format_treetagger_to_format_babelnet( file_input_path, dict_tagset_l
     file_reader.close()
     file_writer.close()
 
+"""
+    input: file output from TreeTagger pPOS tags like (EN, FR, ES, VI ...)
+    output: file with POS tags compatibles with DBnary link
+        stemmed_word NOUN/VERB/ADJECTIVE/ADVERB/OTHER
+"""
+def convert_format_treetagger_to_format_dbnary( file_input_path, file_output_path, config_end_user):
+    """
+    Converting from format of TreeTagger to format of BabelNet. The POS in TreeTagger is assigned to one of five main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
+    =============================================================
+    Example:
+    TreeTagger Format:  Pero    CCAD    pero
+    BabelNet Format:    pero    OTHER
+
+    :type file_input_path: string
+    :param file_input_path: file output of TreeTagger whose each line has format 'word POS stemmed'. Among 'sentences' there is an empty line.
+
+    type dict_tagset_language: string
+    :param dict_tagset_language: Dictionary contains list of tagset of language.
+
+    :type file_output_path: string
+    :param file_output_path: each line contains format stemmed-word and POS converted; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file input corpus with format - column')
+    """
+    str_message_if_not_existed = "File with column format does not exist: " + file_input_path
+    is_existed_file(file_input_path, str_message_if_not_existed)
+    dict_tagset_language={}
+    #get list of recognition Proper name
+    list_of_proper_name = ['<UNK>','<unknown>']
+    
+    corresp_file=current_config.TOOL_DBNARY_DIR+"/corresp."+current_config.TARGET_LANGUAGE
+    
+    str_message_if_not_existed = "correspondance file does not exist: " + corresp_file
+    is_existed_file(corresp_file, str_message_if_not_existed)
+    
+    data_reader = open(corresp_file, mode = 'r', encoding = 'utf-8')#, 'r')
+    line = data_reader.readline().strip()
+    dict_tagset_language = ast.literal_eval(line)
+    #open 2 files:
+    #for reading: file_input_path
+    file_reader = open(file_input_path, mode = 'r', encoding = 'utf-8')#, 'r')
+
+    #for writing: file_output_path
+    file_writer = open(file_output_path, mode = 'w', encoding = 'utf-8')#, 'w')
+
+    #read data in openned file
+    
+    for line in file_reader:
+        #trim line
+        line = line.strip()
+
+        #if empty line then write empty line in result_file
+        #line in ('\n', '\r\n')
+        #if line in ['\n', '\r\n']:
+        if len(line)==0:
+            file_writer.write('\n')
+            continue
+
+        """Line 46755
+        florence        NN      <unknown>
+        <UNK>
+        believes        VVZ     believe
+        """
+        """
+        #Truong hop dac biet: khi du lieu chi chua UNK
+        str_UNK = "<UNK>"
+        if line == str_UNK:
+            result_line = str_UNK.lower() + '\tOTHER\n'
+
+            file_writer.write(result_line) #new line
+            continue
+        #end if
+        """
+
+        #Get column 2nd and 3rd (POS Stemmed_word)
+        #get value at 3rd column (column stem) -> index=2
+        #angeles NNS <unknown>
+        values_cols = split_string_to_list_delimeter_tab(line)
+
+        value_col_pos = values_cols[1] #POS, index=1
+        value_col_stem = values_cols[2] #Stemmed_word, index=2
+
+        #updating POS in BabelNet
+        #get_pos_in_format_babelnet(pos_treetager, dict_tagset_language)
+        value_col_pos_dbnary = get_pos_in_format_babelnet(value_col_pos, dict_tagset_language)
+
+        #updating stemmed_word = <unknown> to values_cols[0]
+        if is_in_list(value_col_stem, list_of_proper_name):
+            value_col_stem = values_cols[0]
+
+        #lowercasing the value in 'value_col_stem'
+        result_line = value_col_stem.lower() + '\t' + value_col_pos_dbnary + '\n'
+
+        file_writer.write(result_line) #new line
+
+    #close 2 files
+    file_reader.close()
+    file_writer.close()
+
 #**************************************************************************#
 """
 Buoc 2: Tinh so luong nghia cua tu (goi ham dem so luong nghia bang babelnet)
@@ -189,9 +294,9 @@ def feature_polysemy_count_language( file_input_path, target_language, file_outp
     #check existed paths
     """
     if not os.path.exists(file_input_path):
-        raise TypeError('Not Existed file corpus input with format - column')
+        raise TypeError('Not Existed file input corpus with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input with format - column"
+    str_message_if_not_existed = "Error: File does NOT Exist: "+file_input_path +" (file input corpus with column format)"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #~GeTools/BabelSenseCount_v25/BabelNet-2.5$ ./calculateSenses2.sh 328-result_Stemming.txt 328-result-senses.txt
@@ -205,21 +310,22 @@ def feature_polysemy_count_language( file_input_path, target_language, file_outp
     #print("Shell script name:")
     #print (current_config.TOOL_BABEL_NET_ES)
 
-    path_script = "" #Path to the shell script in BabelNet Tool
+    #path_script = "" 
+    path_script = config_end_user.TOOL_BABEL_NET #Path to the shell script in BabelNet Tool
 
-    if target_language == current_config.LANGUAGE_SPANISH:
-        #path_script = current_config.TOOL_BABEL_NET_ES
-        path_script = config_end_user.TOOL_BABEL_NET_ES
+    #if target_language == current_config.LANGUAGE_SPANISH:
+        ##path_script = current_config.TOOL_BABEL_NET_ES
+        #path_script = config_end_user.TOOL_BABEL_NET_ES
 
-    elif target_language == current_config.LANGUAGE_FRENCH:
-        #path_script = current_config.TOOL_BABEL_NET_FR
-        path_script = config_end_user.TOOL_BABEL_NET_FR
+    #elif target_language == current_config.LANGUAGE_FRENCH:
+        ##path_script = current_config.TOOL_BABEL_NET_FR
+        #path_script = config_end_user.TOOL_BABEL_NET_FR
 
-    elif target_language == current_config.LANGUAGE_ENGLISH:
-        #path_script = current_config.TOOL_BABEL_NET_EN
-        path_script = config_end_user.TOOL_BABEL_NET_EN
+    #elif target_language == current_config.LANGUAGE_ENGLISH:
+        ##path_script = current_config.TOOL_BABEL_NET_EN
+        #path_script = config_end_user.TOOL_BABEL_NET_EN
 
-    command_line = path_script + " " + file_input_path + " " + file_output_path
+    command_line = path_script + " " + file_input_path + " " + file_output_path + " " + target_language.upper()
 
     """
     #print("Command line:")
@@ -252,19 +358,166 @@ def feature_polysemy_count_language( file_input_path, target_language, file_outp
     """
 
     #call_script(command_line, path_to_script)
-    if target_language == current_config.LANGUAGE_SPANISH:
+    #if target_language == current_config.LANGUAGE_SPANISH:
         #path_script = current_config.TOOL_BABEL_NET_ES
-        call_script(command_line, config_end_user.TOOL_BABEL_NET_ES)
+        #call_script(command_line, config_end_user.TOOL_BABEL_NET)
 
-    elif target_language == current_config.LANGUAGE_FRENCH:
+    #elif target_language == current_config.LANGUAGE_FRENCH:
         #path_script = current_config.TOOL_BABEL_NET_FR
-        call_script(command_line, config_end_user.TOOL_BABEL_NET_FR)
+        #call_script(command_line, config_end_user.TOOL_BABEL_NET)
 
-    elif target_language == current_config.LANGUAGE_ENGLISH:
+    #elif target_language == current_config.LANGUAGE_ENGLISH:
         #path_script = current_config.TOOL_BABEL_NET_EN
-        call_script(command_line, config_end_user.TOOL_BABEL_NET_EN)
+        #call_script(command_line, config_end_user.TOOL_BABEL_NET)
         #print("command_line: %s" %command_line)
+    call_script(command_line, config_end_user.TOOL_BABEL_NET)
 
+#**************************************************************************#
+"""
+Calling DBnary informations extraction
+"""
+def feature_polysemy_count_language_dbnary( file_input_path, target_language, file_output_path):
+    """
+    Counting each stemmed - word (w) of each line (in file_input_path) and POS optimized by converting to 5 main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
+
+    :type file_input_path: string
+    :param file_input_path: file output after preprocessing whose each line has format 'stemmed_word POS_after_preprocessing_in_5_types'. Among 'sentences' there is an empty line.
+
+    :type target_language: string
+    :param target_language: Target Language (EN, ES, FR)
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format each "word" in each line is the number of polysemy count and -1 if POS is OTHER; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file input corpus with format - column')
+    """
+    str_message_if_not_existed = "Error: File does NOT Exist: "+file_input_path +" (file input corpus with column format)"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    
+
+    current_config = load_configuration()
+    config_end_user = load_config_end_user()
+    data_tab=[]
+    db_dictionary={}
+    l_info={}
+    file_dbnary=open(current_config.TOOL_DBNARY_DIR+"/dictionnary."+target_language,"r")
+    for line in file_dbnary:
+        data_tab=line.strip().split("\t")
+        if data_tab[0] in db_dictionary:
+            db_dictionary[data_tab[0]][data_tab[1]]=data_tab[2]
+        else:
+            l_info[data_tab[1]] = data_tab[2]
+            db_dictionary[data_tab[0]] = l_info.copy()
+    file_dbnary.close()
+    #print("Shell script name:")
+    #print (current_config.TOOL_BABEL_NET_ES)
+
+    #path_script = "" #Path to the shell script in BabelNet Tool
+
+    #if target_language == current_config.LANGUAGE_SPANISH:
+        ##path_script = current_config.TOOL_BABEL_NET_ES
+        #path_script = config_end_user.TOOL_BABEL_NET_ES
+
+    #elif target_language == current_config.LANGUAGE_FRENCH:
+        ##path_script = current_config.TOOL_BABEL_NET_FR
+        #path_script = config_end_user.TOOL_BABEL_NET_FR
+
+    #elif target_language == current_config.LANGUAGE_ENGLISH:
+        ##path_script = current_config.TOOL_BABEL_NET_EN
+        #path_script = config_end_user.TOOL_BABEL_NET_EN
+    file_dbnary_input=open(file_input_path,"r")
+    file_dbnary_output=open(file_output_path,"w")
+    for line in file_dbnary_input:
+        data_tab=line.strip().split("\t")
+        if data_tab[0] in db_dictionary:
+            if data_tab[1] in db_dictionary[data_tab[0]]:
+                file_dbnary_output.write(db_dictionary[data_tab[0]][data_tab[1]]+"\n")
+            else:
+                file_dbnary_output.write("-1")
+        else:
+            file_dbnary_output.write("-1")
+    file_dbnary_input.close()
+    file_dbnary_output.close()
+
+#**************************************************************************#
+"""
+Calling DBnary informations extraction
+"""
+def feature_polysemy_count_language_dbnary_threads( file_input_path, target_language, file_output_path, current_config, config_end_user):
+    """
+    Counting each stemmed - word (w) of each line (in file_input_path) and POS optimized by converting to 5 main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
+
+    :type file_input_path: string
+    :param file_input_path: file output after preprocessing whose each line has format 'stemmed_word POS_after_preprocessing_in_5_types'. Among 'sentences' there is an empty line.
+
+    :type target_language: string
+    :param target_language: Target Language (EN, ES, FR)
+
+    :type file_output_path: string
+    :param file_output_path: contains corpus with format each "word" in each line is the number of polysemy count and -1 if POS is OTHER; there is a empty line among the sentences.
+
+    :raise ValueError: if any path is not existed
+    """
+    #check existed paths
+    """
+    if not os.path.exists(file_input_path):
+        raise TypeError('Not Existed file input corpus with format - column')
+    """
+    str_message_if_not_existed = "Error: File does NOT Exist: "+file_input_path +" (file input corpus with column format)"
+    is_existed_file(file_input_path, str_message_if_not_existed)
+
+    
+
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+    data_tab=[]
+    db_dictionary={}
+    l_info={}
+    file_dbnary=open(current_config.TOOL_DBNARY_DIR+"/dictionnary."+target_language,"r")
+    for line in file_dbnary:
+        data_tab=line.strip().split("\t")
+        if data_tab[0] in db_dictionary:
+            db_dictionary[data_tab[0]][data_tab[1]]=data_tab[2]
+        else:
+            l_info[data_tab[1]] = data_tab[2]
+            db_dictionary[data_tab[0]] = l_info.copy()
+    file_dbnary.close()
+    #print("Shell script name:")
+    #print (current_config.TOOL_BABEL_NET_ES)
+
+    #path_script = "" #Path to the shell script in BabelNet Tool
+
+    #if target_language == current_config.LANGUAGE_SPANISH:
+        ##path_script = current_config.TOOL_BABEL_NET_ES
+        #path_script = config_end_user.TOOL_BABEL_NET_ES
+
+    #elif target_language == current_config.LANGUAGE_FRENCH:
+        ##path_script = current_config.TOOL_BABEL_NET_FR
+        #path_script = config_end_user.TOOL_BABEL_NET_FR
+
+    #elif target_language == current_config.LANGUAGE_ENGLISH:
+        ##path_script = current_config.TOOL_BABEL_NET_EN
+        #path_script = config_end_user.TOOL_BABEL_NET_EN
+    file_dbnary_input=open(file_input_path,"r")
+    file_dbnary_output=open(file_output_path,"w")
+    for line in file_dbnary_input:
+        data_tab=line.strip().split("\t")
+        if data_tab[0] in db_dictionary:
+            if data_tab[1] in db_dictionary[data_tab[0]]:
+                file_dbnary_output.write(db_dictionary[data_tab[0]][data_tab[1]]+"\n")
+            else:
+                file_dbnary_output.write("-1")
+        else:
+            file_dbnary_output.write("-1")
+    file_dbnary_input.close()
+    file_dbnary_output.close()
+        
 #**************************************************************************#
 def feature_polysemy_count_language_threads( file_input_path, target_language, file_output_path, current_config, config_end_user):
     """
@@ -284,9 +537,9 @@ def feature_polysemy_count_language_threads( file_input_path, target_language, f
     #check existed paths
     """
     if not os.path.exists(file_input_path):
-        raise TypeError('Not Existed file corpus input with format - column')
+        raise TypeError('Not Existed file input corpus with format - column')
     """
-    str_message_if_not_existed = "Not Existed file corpus input with format - column"
+    str_message_if_not_existed = "Error: File does NOT Exist: "+file_input_path +" (file input corpus with column format)"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
     #~GeTools/BabelSenseCount_v25/BabelNet-2.5$ ./calculateSenses2.sh 328-result_Stemming.txt 328-result-senses.txt
@@ -300,21 +553,21 @@ def feature_polysemy_count_language_threads( file_input_path, target_language, f
     #print("Shell script name:")
     #print (current_config.TOOL_BABEL_NET_ES)
 
-    path_script = "" #Path to the shell script in BabelNet Tool
+    path_script = config_end_user.TOOL_BABEL_NET #Path to the shell script in BabelNet Tool
 
-    if target_language == current_config.LANGUAGE_SPANISH:
-        #path_script = current_config.TOOL_BABEL_NET_ES
-        path_script = config_end_user.TOOL_BABEL_NET_ES
+    #if target_language == current_config.LANGUAGE_SPANISH:
+        ##path_script = current_config.TOOL_BABEL_NET_ES
+        #path_script = config_end_user.TOOL_BABEL_NET_ES
 
-    elif target_language == current_config.LANGUAGE_FRENCH:
-        #path_script = current_config.TOOL_BABEL_NET_FR
-        path_script = config_end_user.TOOL_BABEL_NET_FR
+    #elif target_language == current_config.LANGUAGE_FRENCH:
+        ##path_script = current_config.TOOL_BABEL_NET_FR
+        #path_script = config_end_user.TOOL_BABEL_NET_FR
 
-    elif target_language == current_config.LANGUAGE_ENGLISH:
-        #path_script = current_config.TOOL_BABEL_NET_EN
-        path_script = config_end_user.TOOL_BABEL_NET_EN
+    #elif target_language == current_config.LANGUAGE_ENGLISH:
+        ##path_script = current_config.TOOL_BABEL_NET_EN
+        #path_script = config_end_user.TOOL_BABEL_NET_EN
 
-    command_line = path_script + " " + file_input_path + " " + file_output_path
+    command_line = path_script + " " + file_input_path + " " + file_output_path + " " + target_language.upper()
     print(command_line)
     """
     #print("Command line:")

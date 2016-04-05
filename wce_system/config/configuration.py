@@ -101,8 +101,6 @@ class config(object):
         self.LANGUAGE_FRENCH = "fr"
         self.LANGUAGE_SPANISH = "es"
 
-        #Hien tai chuong trinh dang xet language-pair nao???
-        #Chu y: trong python chi lay tu v.tri I den (v.tri thu II - 1)
         self.CURRENT_SOURCE_LANGUAGE = language_pair[0:2]
         self.CURRENT_TARGET_LANGUAGE = language_pair[3:]
 
@@ -326,8 +324,12 @@ class config(object):
         self.CUSTOMIZE_OUTPUT_TREETAGGER = path + settingsMap[TOOL_ROOT]['customize_output_treetagger']
 
         #For common name
-        self.BABEL_NET_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_tgt_last']
+        #self.BABEL_NET_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_tgt_last']
         self.BABEL_NET_OUTPUT_CORPUS_TGT_PATTERN = path + settingsMap[language_pair]['babel_net_output_corpus_tgt_last_pattern']
+
+        #For common name DBnary
+        #self.DBNARY_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['dbnary_output_corpus_tgt_last']
+        self.DBNARY_OUTPUT_CORPUS_TGT_PATTERN = path + settingsMap[language_pair]['dbnary_output_corpus_tgt_last_pattern']
 
         ##for independent target language
         ##babel_net_corpus is the temp-file that uses for shell script - BalbelNet
@@ -335,6 +337,12 @@ class config(object):
         self.BABEL_NET_OUTPUT_CORPUS = path + settingsMap[language_pair]['babel_net_output_corpus']
         self.BABEL_NET_OUTPUT_CORPUS_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_last']
         self.BABEL_NET_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_target_last']
+
+        ##babel_net_corpus is the temp-file that uses for shell script - DBnary
+        self.DBNARY_CORPUS = path + settingsMap[language_pair]['dbnary_corpus']
+        self.DBNARY_OUTPUT_CORPUS = path + settingsMap[language_pair]['dbnary_output_corpus']
+        self.DBNARY_OUTPUT_CORPUS_LAST = path + settingsMap[language_pair]['dbnary_output_corpus_last']
+        self.DBNARY_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['dbnary_output_corpus_target_last']
 
         #For OAR
         ##babel_net_corpus is the temp-file that uses for shell script - BalbelNet

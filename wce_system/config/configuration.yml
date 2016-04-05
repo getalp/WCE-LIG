@@ -128,8 +128,10 @@ language_pair:
     features_asr_aligned_last: /wce_system/var/data/column.features_asr_aligned_last.txt
     alignment_src_tgt_format_row: /wce_system/var/data/alignment_src_tgt_format_row.txt
     alignment_tgt_src_format_row: /wce_system/var/data/alignment_tgt_src_format_row.txt
-    babel_net_output_corpus_tgt_last: /wce_system/var/data/tgt.column.feature_polysemy_last.txt
+    #babel_net_output_corpus_tgt_last: /wce_system/var/data/tgt.column.feature_polysemy_last.txt
     babel_net_output_corpus_tgt_last_pattern: /wce_system/var/data/tgt.column.feature_polysemy_pattern
+    #dbnary_output_corpus_tgt_last: /wce_system/var/data/tgt.column.feature_polysemy_dbnary.txt
+    dbnary_output_corpus_tgt_last_pattern: /wce_system/var/data/tgt.column.feature_polysemy_dbnary_pattern
     backoff_behaviour_after_converting_to_int: /wce_system/var/data/tgt.column.feature_backoff_behaviour_after_converting_to_int.txt    
     alignment_features_after_converting_to_int: /wce_system/var/data/tgt.column.feature_alignment_features_after_converting_to_int.txt
     
@@ -157,6 +159,12 @@ language_pair:
     babel_net_output_corpus: /wce_system/var/data/tgt.column.feature_polysemy_after_babelnet
     babel_net_output_corpus_last: /wce_system/var/data/tgt.column.feature_polysemy_after_filtering
     babel_net_output_corpus_target_last: /wce_system/var/data/tgt.column.feature_polysemy_after_filtering_last
+
+    ##for dbnary target language
+    dbnary_corpus: /wce_system/var/data/tgt.column.feature_pos.dbnary
+    dbnary_output_corpus: /wce_system/var/data/tgt.column.feature_polysemy_after_dbnary
+    dbnary_output_corpus_last: /wce_system/var/data/tgt.column.feature_polysemy_after_filtering_dbnary
+    dbnary_output_corpus_target_last: /wce_system/var/data/tgt.column.feature_polysemy_after_filtering_last_dbnary
     
     ##for OAR
     babel_net_corpus_oar: /wce_system/var/data/tgt.column.feature_pos.babelnet_oar
