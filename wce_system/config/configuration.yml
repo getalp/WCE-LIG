@@ -34,7 +34,8 @@ options:
     wpp: 1
     wpp_any: 1
     distance_to_root: 1
-    polysemy_count_target: 1
+    polysemy_count_target: 0
+    polysemy_count_target_dbnary: 1
     label: 1
 
     
@@ -420,6 +421,7 @@ tools:
     occur_in_bing_translator: /wce_system/lib/templates/occur_in_bing_translator
     occur_in_google_translator: /wce_system/lib/templates/occur_in_google_translator
     polysemycount_target: /wce_system/lib/templates/polysemycount_target
+    polysemycount_target_dbnary: /wce_system/lib/templates/polysemycount_target
     proper_name: /wce_system/lib/templates/proper_name
     punctuation: /wce_system/lib/templates/punctuation
     stop_word: /wce_system/lib/templates/stop_word

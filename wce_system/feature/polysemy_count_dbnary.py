@@ -24,7 +24,7 @@ import os
 #when import module/class in other directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))#in order to test with line by line on the server
 
-from feature.polysemy_count_common import convert_format_treetagger_to_format_babelnet, feature_polysemy_count_language, filter_number_of_polysemy, feature_polysemy_count_language_dbnary
+from feature.polysemy_count_common import convert_format_treetagger_to_format_babelnet, feature_polysemy_count_language, filter_number_of_polysemy, feature_polysemy_count_language_dbnary, convert_format_treetagger_to_format_dbnary
 from common_module.cm_config import load_configuration, load_config_end_user
 #**************************************************************************#
 #tagset for english
