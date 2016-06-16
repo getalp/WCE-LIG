@@ -90,6 +90,7 @@ class config(object):
         self.wpp_any = settingsMap['options']["wpp_any"]
         self.distance_to_root = settingsMap['options']["distance_to_root"]
         self.polysemy_count_target = settingsMap['options']["polysemy_count_target"]
+        self.polysemy_count_target_dbnary = settingsMap['options']["polysemy_count_target_dbnary"]
         self.label = settingsMap['options']["label"]
 
         #******************************************************#
@@ -338,7 +339,11 @@ class config(object):
         self.BABEL_NET_OUTPUT_CORPUS_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_last']
         self.BABEL_NET_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['babel_net_output_corpus_target_last']
 
-        ##babel_net_corpus is the temp-file that uses for shell script - DBnary
+        #For DBnary
+        self.DBNARY_OUTPUT_CORPUS_TGT_LAST = path + settingsMap[language_pair]['dbnary_output_corpus_tgt_last']
+        self.DBNARY_OUTPUT_CORPUS_TGT_PATTERN = path + settingsMap[language_pair]['dbnary_output_corpus_tgt_last_pattern']
+
+        ##for independent target language
         self.DBNARY_CORPUS = path + settingsMap[language_pair]['dbnary_corpus']
         self.DBNARY_OUTPUT_CORPUS = path + settingsMap[language_pair]['dbnary_output_corpus']
         self.DBNARY_OUTPUT_CORPUS_LAST = path + settingsMap[language_pair]['dbnary_output_corpus_last']
@@ -521,6 +526,7 @@ class config(object):
         self.OCCUR_IN_BING_TRANSLATOR_NAME = "occur in bing translator"
         self.OCCUR_IN_GOOGLE_TRANSLATOR_NAME = "occur in google translator"
         self.POLYSEMYCOUNT_TARGET_NAME = "polysemycount target"
+        self.POLYSEMYCOUNT_TARGET_NAME_WITH_DBNARY = "polysemycount target with DBnary"
         self.PROPER_NAME_NAME = "proper name"
         self.PUNCTUATION_NAME = "punctuation"
         self.STOP_WORD_NAME = "stop word"
@@ -585,6 +591,7 @@ class config(object):
         self.FEATURE_LIST['ConsLab'] = path + settingsMap[TOOL_ROOT]['constituent_label']
         self.FEATURE_LIST['DistRoot'] = path + settingsMap[TOOL_ROOT]['distance_to_root']
         self.FEATURE_LIST['PolTtgt'] = path + settingsMap[TOOL_ROOT]['polysemycount_target']
+        self.FEATURE_LIST['PolTtgtDBnary'] = path + settingsMap[TOOL_ROOT]['polysemycount_target_dbnary']
 
         self.FEATURE_LIST['AStm'] = path + settingsMap[TOOL_ROOT]['alignment_context_stem']
         self.FEATURE_LIST['UNKLem'] = path + settingsMap[TOOL_ROOT]['unknown_lemma']

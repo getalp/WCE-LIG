@@ -49,8 +49,8 @@ def get_pos_in_format_babelnet( pos_treetager, dict_tagset_language):
     Converting POS from format of TreeTagger to format of BabelNet. The POS in TreeTagger is assigned to one of five main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
     =============================================================
     Example:
-    TreeTagger Format:  Pero	CCAD	pero
-    BabelNet Format:    pero	OTHER
+    TreeTagger Format:  Pero        CCAD        pero
+    BabelNet Format:    pero        OTHER
 
     :type pos_treetager: string
     :param pos_treetager: POS of TreeTagger
@@ -203,7 +203,7 @@ def convert_format_treetagger_to_format_dbnary( file_input_path, file_output_pat
     #get list of recognition Proper name
     list_of_proper_name = ['<UNK>','<unknown>']
     
-    corresp_file=current_config.TOOL_DBNARY_DIR+"/corresp."+current_config.TARGET_LANGUAGE
+    corresp_file=config_end_user.TOOL_DBNARY_DIR+"/corresp."+config_end_user.TARGET_LANGUAGE
     
     str_message_if_not_existed = "correspondance file does not exist: " + corresp_file
     is_existed_file(corresp_file, str_message_if_not_existed)
@@ -376,7 +376,7 @@ def feature_polysemy_count_language( file_input_path, target_language, file_outp
 """
 Calling DBnary informations extraction
 """
-def feature_polysemy_count_language_dbnary( file_input_path, target_language, file_output_path):
+def feature_polysemy_count_language_dbnary( file_input_path, target_language, file_output_path, config_end_user):
     """
     Counting each stemmed - word (w) of each line (in file_input_path) and POS optimized by converting to 5 main types such as NOUN/VERB/ADJECTIVE/ADVERB/OTHER
 
@@ -401,12 +401,12 @@ def feature_polysemy_count_language_dbnary( file_input_path, target_language, fi
 
     
 
-    current_config = load_configuration()
-    config_end_user = load_config_end_user()
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
     data_tab=[]
     db_dictionary={}
     l_info={}
-    file_dbnary=open(current_config.TOOL_DBNARY_DIR+"/dictionnary."+target_language,"r")
+    file_dbnary=open(config_end_user.TOOL_DBNARY_DIR+"/dictionnary."+target_language,"r")
     for line in file_dbnary:
         data_tab=line.strip().split("\t")
         if data_tab[0] in db_dictionary:
@@ -435,13 +435,16 @@ def feature_polysemy_count_language_dbnary( file_input_path, target_language, fi
     file_dbnary_output=open(file_output_path,"w")
     for line in file_dbnary_input:
         data_tab=line.strip().split("\t")
-        if data_tab[0] in db_dictionary:
-            if data_tab[1] in db_dictionary[data_tab[0]]:
-                file_dbnary_output.write(db_dictionary[data_tab[0]][data_tab[1]]+"\n")
+        if len(data_tab) > 1:
+            if data_tab[0] in db_dictionary:
+                if data_tab[1] in db_dictionary[data_tab[0]]:
+                    file_dbnary_output.write(db_dictionary[data_tab[0]][data_tab[1]]+"\n")
+                else:
+                    file_dbnary_output.write("-1\n")
             else:
-                file_dbnary_output.write("-1")
+                file_dbnary_output.write("-1\n")
         else:
-            file_dbnary_output.write("-1")
+            file_dbnary_output.write("\n")
     file_dbnary_input.close()
     file_dbnary_output.close()
 

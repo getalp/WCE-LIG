@@ -47,7 +47,7 @@ from feature.polysemy_count_spanish import dict_tagset_spanish
 from feature.wpp_nodes_min_max import feature_wpp_nodes_min_max, feature_wpp_nodes_min_max_threads
 from feature.wpp_exact import feature_wpp_exact, feature_wpp_exact_threads
 from feature.label_word import extracting_label_for_word_format_column, extracting_given_label, extracting_label_for_word_format_column_threads
-from feature.polysemy_count_within_given_target_language import get_polysemy_count_within_given_target_language, get_polysemy_count_within_given_target_language_threads
+from feature.polysemy_count_within_given_target_language import get_polysemy_count_within_given_target_language, get_polysemy_count_within_given_target_language_threads, get_polysemy_count_within_given_target_language_with_dbnary, get_polysemy_count_within_given_target_language_with_dbnary_threads
 
 #*****************************************************************************#
 def extracting_all_features(log_path):
@@ -534,6 +534,29 @@ def extracting_all_features_threads(log_path):
       for l_inc in range(1,current_config.THREADS+1):
       #for l_inc in range(5,7):
         ts = threading.Thread(target=get_polysemy_count_within_given_target_language_threads , args=(current_config, config_end_user, target_language, file_input_path+"."+str(l_inc), file_output_path+"."+str(l_inc), l_inc))
+        #current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT+"."+str(l_inc), current_config.WPP_EXACT+"."+str(l_inc), l_inc , current_config))
+        l_threads.append(ts)
+        ts.start()
+        time.sleep(1)
+      for myT in l_threads:
+        myT.join()   
+
+      print_result(feature_name, log_path)
+
+    ##########################################################################
+    ## Feature: Polysemy Count - Target using DBnary (Support English, French and Spanish)
+    ##########################################################################
+    if current_config.polysemy_count_target_dbnary:
+      feature_name = "Polysemy Count - Target using DBnary"
+      print_time(feature_name, log_path)
+
+      file_input_path = current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL
+      file_output_path = current_config.DBNARY_OUTPUT_CORPUS_TGT_LAST
+
+      l_threads = []
+      for l_inc in range(1,current_config.THREADS+1):
+      #for l_inc in range(5,7):
+        ts = threading.Thread(target=get_polysemy_count_within_given_target_language_with_dbnary_threads , args=(current_config, config_end_user, target_language, file_input_path+"."+str(l_inc), file_output_path+"."+str(l_inc), l_inc))
         #current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT+"."+str(l_inc), current_config.WPP_EXACT+"."+str(l_inc), l_inc , current_config))
         l_threads.append(ts)
         ts.start()
