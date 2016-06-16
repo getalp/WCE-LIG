@@ -1,0 +1,211 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath,bm}
+\usepackage{textcomp}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{pmboxdraw}
+\usepackage{dirtree}
+
+\DeclareFontEncoding{pmboxdraw}{}{}
+
+\title{WCE-LIC: a Word Confidence Estimation toolkit for Machine Translation}
+
+
+\begin{document}
+
+  \maketitle
+
+  \abstract{This is a beta version of the documentation for WCE-LIG you will find some additional data to adapt the toolkit to your needs.}
+  
+  \section*{Document}
+  2016-04-04: Creation by Christophe Servan
+  \pagebreak
+\tableofcontents
+  \pagebreak
+
+
+\section{Introduction}
+
+This toolkit, written in python (python3), enables you to estimate the quality 
+of an automatic translation at word level. It outputs a good (G) or a bad (B) 
+label for each word in of the translation hypothesis.
+For instance:
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ll}
+\hline
+Source: & give me some pills \\
+Translation hypothesis: & me donner des pilules \\
+WCE: & B B G G \\
+Human post-edition: & donnes moi des pilules \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Features extracted}
+Here is the list of all the features which are used in the toolkit.
+\begin{table}[h!]
+\scriptsize
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+1 Proper Name & 17 Left Target POS & 25 WPP Exact \\
+2 Unknown Stemming & 18 Left Target Word & 26 WPP Any \\
+3 Number of Word Occurrences & 19 Left Target Stem & 27 Max \\
+4 Number of Stemming Occurrences & 20 Right Target POS & 28 Min \\
+5 Source POS & 21 Right Target Word & 29 Nodes \\
+6 Source Word & 22 Right Target Stem & 30 Constituent Label \\
+7 Source Stem & 15 Target Word & 31 Distance To Root \\
+8 Left Source POS & 16 Target Stem & 32 Numeric \\
+9 Left Source Word & 17 Left Target POS & 33 Punctuation \\
+10 Left Source Stem & 18 Left Target Word & 34 Stop Word \\
+11 Right Source POS & 19 Left Target Stem & 35 Occur in Google Translate \\
+12 Right Source Word & 20 Right Target POS & 36 Occur in Bing Translator \\
+13 Right Source Stem & 21 Right Target Word & 37 Polysemy Count -- Target \\
+14 Target POS & 22 Right Target Stem & 38 Backoff Behaviour -- Target \\
+15 Target Word & 23 Longest Target $N$-gram Length &  \\
+16 Target Stem & 24 Longest Source $N$-gram Length &  \\
+\hline
+\end{tabular}
+\end{table}
+Detailed description can be founded if the paper directory.
+
+
+This toolkit have been created to be released to the community and especially to reproduce experiments done in our publications.
+This toolkit can easily be addepted to another languages wince you can ma de some modifications in the code.
+
+\subsection{Requirements}
+
+\begin{itemize}
+ \item Set the WCE\_ROOT environment variable (see Readme file)
+ \item python3
+ \item PyYAML-3.11
+ \item NLTK for python 3
+ \item tools: see tools directory
+ \item 7zip to decompress data in the input\_data directory
+\end{itemize}
+
+\section{Directory organisation}  
+
+Here is the directory organisation of the toolkit:
+\begin{table}[h!]
+
+\dirtree{%
+% .1 Directory Tree.
+.1 .
+   .1 WGE-LIG/.
+        .2 docs/.
+        .2 input\_data/.
+	.3 tools/.
+		.4 BabelSenseCount\_v25/.
+		.4 berkeley\_parser/.
+		.4 fastnc/.
+		.4 giza-pp/.
+		.4 moses/.
+		.4 srilm-1.7.1/.
+		.4 tercpp/.
+		.4 terplus/.
+		.4 treetagger/.
+		.4 wapiti-1.5.0/.           
+	.3 wce\_system/.
+	      .4 common\_module/.
+	      .4 config/.
+	      .4 feature/.
+	      .4 lib/.
+	      .4 metrics/.
+	      .4 preprocessing/.
+	      .4 solution/.
+	      .4 var/.		
+%            .4 fontinst.log\DTcomment{Derniers changements}.
+%            .4 fontinst.pdf. 
+%            .4 fontinst.tex.
+%            .4 fontinst.toc.
+%            .4 intro98.tex.
+%            .4 ltxguide.cfg.
+%            .4 roadmap.eps.
+%         .3 encspecs.zip \ldots{} \begin{minipage}[t]{5cm}
+%                                                         Un fichier compressé\\
+%                                                         à décompresser.\\
+%                                                 \end{minipage}.
+%    .2 examples.zip.
+%    .2 inputs.zip.
+%    .2 latex.zip.
+%    .2 README.
+%    .2 source.zip.
+%    .2 test.zip.
+}
+ 
+\end{table}
+
+\section{Basic usage}
+
+There are three stages needed to use the toolkit as it is:
+\begin{enumerate}
+ \item Pre-processing
+ \item Feature extraction
+ \item Classification process
+\end{enumerate}
+
+the parameters in the configuration file 
+\texttt{input\_data/config\_end\_user.yml} must be set correctly. As parameters 
+are quite verbose, we do not detail them here (e.g.: \textit{source\_language} is 
+the code of the source language used, like ``fr'', ``en''...).
+
+
+\subsection{Pre-processing}
+
+The pre-processing is launch by using the script: preprocessing/pre\_processing.py
+
+\subsection{Feature Extraction}
+
+The feature extraction process is launch by using the script: feature/extract\_all\_features.py
+
+\subsection{Classification Process}
+
+The classification process is launch by using the script: metrics/demo\_metrics.py
+
+\subsection{all-in-One}
+
+all the processes can be launch with one single script: solution/lauching\_solution.py
+  
+\section{Advance usage}
+
+We present in this section some possibilities.
+
+\subsection{Language changing}
+Of course you cold be interested in changing the language you seek for. For instance, you want to target german.
+you have to modify the following configuration file \texttt{input\_data/config\_end\_user.yml}:
+\begin{itemize}
+ \item tool\_babel\_net\_de: /tools/BabelSenseCount\_v25/BabelNet-2.5/calculateSenses\_german.sh
+ \item treetagger\_german: /tools/treetagger/cmd/tree-tagger-german
+ \item grammar\_de\_for\_berkeley\_parser\_path: /tools/berkeley\_parser/$<$\textit{name of the grammar file}$>$
+\end{itemize}
+and of course set up correctly other parameters like:
+\begin{itemize}
+ \item source\_language: en
+ \item target\_language: de
+ \item language\_pair: en\_de
+ \item ...
+\end{itemize}
+Then, to use BabelNet, you have to create a script base on the following one : 
+\texttt{/tools/BabelSenseCount\_v25/BabelNet-2.5/calculateSenses\_french.sh}
+\footnote{this should change in next version}
+
+\subsection{Advance options}
+Some options are available only in \texttt{wce\_system/config/configuration.yml}~.
+For example, you can set the number of threads possible to use, or the features you want to use (binary option).
+ 
+
+\end{document}
+
+  
