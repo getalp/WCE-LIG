@@ -37,15 +37,11 @@ from metrics.baseline import get_baseline
 #template 4: same template 2, remove features: Occur in Google Translator -> remaining 23 features
 #**************************************************************************#
 def demo_baselines_and_systems(log_output_path):
-    """
-    Demo all baselines and System 1 (10000 sentences for training; 881 sentences for testing)
-
-    :type log_output_path: string
-    :param log_output_path: path of log-file that contains results of DEMO
-    """
     #log_output_path = current_config.CRF_MESSAGE_OUTPUT
     #log_output_path = file_log_path
     current_config = load_configuration()
+    config_end_user = load_config_end_user()
+    
 
     #introduction of this solution
     #print_introduction(log_output_path)
@@ -79,12 +75,13 @@ def demo_baselines_and_systems(log_output_path):
 
     #raise Exception("Just for testing...")
 
-    #B2: chuan bi du lieu de testing
     #number of sentences for training, developing and testing
-    number_of_sentences_all = 10881
-    number_of_sentences_in_file_for_training = 10000
+    number_of_sentences_all = int(config_end_user.RAW_CORPUS_TRAINING_SIZE) + int(config_end_user.RAW_CORPUS_TEST_SIZE)
+    number_of_sentences_in_file_for_training = int(config_end_user.RAW_CORPUS_TRAINING_SIZE)
     number_of_sentences_in_file_for_developing = 0
-    number_of_sentences_in_file_for_testing = number_of_sentences_all - number_of_sentences_in_file_for_training - number_of_sentences_in_file_for_developing
+    #number_of_sentences_in_file_for_testing = number_of_sentences_all - number_of_sentences_in_file_for_training - number_of_sentences_in_file_for_developing
+    number_of_sentences_in_file_for_testing = config_end_user.RAW_CORPUS_TEST_SIZE
+
 
     file_input_path = current_config.OUTPUT_MERGED_FEATURES
 
@@ -139,8 +136,6 @@ def demo_baselines_and_systems(log_output_path):
   
 def demo_baselines_and_systems_threads(log_output_path):
     """
-    Demo all baselines and System 1 (10000 sentences for training; 881 sentences for testing)
-
     :type log_output_path: string
     :param log_output_path: path of log-file that contains results of DEMO
     """

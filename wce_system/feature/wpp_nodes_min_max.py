@@ -9,122 +9,6 @@
 # URL: tienhuong.weebly.com
 #####################################################################################################
 
-"""
-Created on Tue Dec 23 14:30:00 2014
-
-*** can built lai SRILM vi bi loi roi
-/home/lent/Develops/Solution/eval_agent/eval_agent/feature/../lib/shell_script/nbestToLattice.sh: line 22: /home/tienle/Documents/Develops/DevTools/srilm/bin/i686-m64/nbest-lattice: No such file or directory
-/home/lent/Develops/Solution/eval_agent/eval_agent/feature/../lib/shell_script/nbestToLattice.sh: line 23: /home/tienle/Documents/Develops/DevTools/srilm/bin/i686-m64/wlat-to-pfsg: No such file or directory
-/home/lent/Develops/Solution/eval_agent/eval_agent/feature/../lib/shell_script/nbestToLattice.sh: line 24: /home/tienle/Documents/Develops/DevTools/srilm/bin/i686-m64/lattice-tool: No such file or directory
-head: cannot open 'Phrase880' for reading: No such file or directory
-
-/home/lent/Develops/Solution/eval_agent/eval_agent/feature/../lib/shell_script/nbestToLattice.sh 881
-"""
-
-#Purpose: Extracting the following features: WPP any, Nodes, Min, Max
-
-"""
-#Xac dinh WPP, Nodes, Min, Max trong Confusion Network
-B0: chuan bi input voi 5 (cau) X 1000 = 5000 dong dau tien. Vi day la file trich tu
-1000-bestList from MOSES
-
-B1: Cat tung files chua tu file NBest-List dua vao ID
-~GeTools/WPP-Nodes-Min-Max$ chmod +x split_Nbest.sh
-~GeTools/WPP-Nodes-Min-Max$ ./split_Nbest.sh 5sentences-aligned-1000bestlists
-
-B2:
-
-B2.1.
-
-$copy fastnc vao thu muc (Trong Experiment nay, fastnc de trong thu muc /home/tienle/Documents/Develops/GeTools/WPP-Nodes-Min-Max/fastnc/)
-$chmod +x fastnc (trong thu muc fastnc/bin)
-$chmod +x *.pl (cac file perl trong fastnc/scripts)
-
-Chu y: Muon xoa cac file trong thu muc dung lenh: $rm Phrase*
-
-*** Chu y: Co the dung file 'sua.sh' trong data/backup.homere/home/nluong/ForLuong/Sentenses-FinalWMT13/sua.sh
-de thay doi cau truc trong 1 dong cua Phrase* truoc khi lam buoc 2.2 ***
-
-B2.2. Copy tat ca cac file Phrase* co duoc tu B1 sang thu muc chua file 'nbestToLattice.sh'
-$cp SentenceSet/Phrase* .
-
-B3:
-3.1: Chinh trong code 'nbestToLattice.sh': voi so dong se xu ly (Chu y: khong lay
-phan nhan voi he so 1000BestList, ma chi lay so cau N khac nhau trong PhraseN); Ngoai ra, PHAI cap nhat PATH den SRILM va FASTNC trong file 'nBestToLattice.sh'
-
-3.2. ~GeTools/WPP-Nodes-Min-Max$ ./nbestToLattice.sh
-
-3.3. Sau khi chay xong dong lenh --> Ket qua o file: 'Results.txt'
-
-Chu y: De xoa cac file trung gian va file Phrase* ban dau --> $rm Phrase*
-
-Chu y: Neu file Results.txt rong thi xoa tat ca cac file da sinh ra va Goto B2
-
-*** Results.txt co cau truc nhu sau:
-* Chu y: a	0.51267 --> so 0.51267 chinh la WPP cua tu 'a'
-
-Phrase0 1 0.00 1.00 yet 0.18901
-Phrase0 1 1.00 3.00 a 0.51267
-Phrase0 1 5.00 1.00 step 0.58710
-Phrase0 1 6.00 4.00 the 1.00000
-Phrase0 1 10.00 2.00 balkans 0.82912
-Phrase0 1 12.00 2.00 !NULL 1.00000
-a	0.51267 ( time=0 nodes=5 min=0.03497 max=0.51267 mean=0.20000 var=0.13312 svar=0.36486 )
-crucial	0.15303 ( time=100 nodes=5 min=0.07066 max=0.34638 mean=0.20000 var=0.05109 svar=0.22602 )
-step	0.58710 ( time=200 nodes=5 min=0.04761 max=0.58710 mean=0.20000 var=0.19684 svar=0.44367 )
-for	0.25190 ( time=300 nodes=4 min=0.01560 max=0.44813 mean=0.25000 var=0.09539 svar=0.30885 )
-the	1.00000 ( time=400 nodes=1 min=1.00000 max=1.00000 mean=1.00000 var=0.00000 svar=0.00000 )
-balkans	0.82912 ( time=500 nodes=2 min=0.17088 max=0.82912 mean=0.50000 var=0.21664 svar=0.46544 )
-Phrase1 1 0.00 1.00 since 1.00000
-..........
-
-B4: Lay cac thong tin can thiet tu file Results.txt nhu WPP, NODES, MIN, MAX
-Chu y: WPP = 1 --> co nghia la: tat ca cac cau trong nBestList deu chua tu nay
-
-Chu y: WPP = 0.00001 --> co nghia la: Ton tai it nhat 1 cau chua tu nay trong nBestList --> Tu nay co khi dich KHONG DUOC TOT
-
-~GeTools/WPP-Nodes-Min-Max$ ./buildWPP_nodes_min_max_file.sh Results.txt final_Result_5features.txt
-
-B5: chuan hoa cac thong so ve he so 10 hay 100
-Chu y: Neu lam bang java thi phai update code va javac. Neu khong thi dung file
-Shell.
-~GeTools/WPP-Nodes-Min-Max$ ./round_WPP.sh final_Result_5features.txt final_Result_5features-Normalisation10-2.txt
-
-*** Chu y: Neu muon chuyen sang he so 100 thi can phai cap nhat them trong CODE.
-"""
-
-"""
-Tom lai:
-* Buoc 0:
-+ Xoa tat ca cac files trong thu muc SentenceSet.
-Chu y: Muon xoa cac file trong thu muc dung lenh: $rm Phrase*
-
-* Buoc 1:
-+ Duyet tat ca cac dong trong n-best-list
-+ Dua thong tin cua cac cau gom: ... vao cac file co ID tuong ung
-
-*** Chu y: Co the dung file 'sua.sh' trong data/backup.homere/home/nluong/ForLuong/Sentenses-FinalWMT13/sua.sh
-de thay doi cau truc trong 1 dong cua Phrase* truoc khi lam buoc 2 ***
-
-* Buoc 2: Copy tat ca cac file Phrase* co duoc tu B1 sang thu muc chua file 'nbestToLattice.sh'
-$cp SentenceSet/Phrase* .
-$copy fastnc vao thu muc (Trong Experiment nay, fastnc de trong thu muc /home/tienle/Documents/Develops/GeTools/WPP-Nodes-Min-Max/fastnc/)
-$chmod +x fastnc (trong thu muc fastnc/bin)
-$chmod +x *.pl (cac file perl trong fastnc/scripts)
-#../../../tool/fastnc/scripts/RefToCtm.pl
-#../../../tool/fastnc/bin/fastnc
-
-B3:
-3.1: Chinh trong code 'nbestToLattice.sh': voi so dong se xu ly (Chu y: khong lay
-phan nhan voi he so 1000BestList, ma chi lay so cau N khac nhau trong PhraseN); Ngoai ra, PHAI cap nhat PATH den SRILM va FASTNC trong file 'nBestToLattice.sh' --> nen viet ham xu ly replace trong giai doan "pre-processing"
-
-3.2. ~GeTools/WPP-Nodes-Min-Max$ ./nbestToLattice.sh
-
-3.3. Sau khi chay xong dong lenh --> Ket qua o file: 'Results.txt'
-
-Chu y: Neu file Results.txt rong thi xoa tat ca cac file da sinh ra va Goto B2
-"""
-
 import os
 import sys
 import threading
@@ -342,38 +226,6 @@ def split_sentences_with_id(file_input_path, output_path):
     #end for
 
     return number_of_sentences
-"""
-Phrase253 co 480 cau trong n-best-list.
-Phrase273 co 120 cau trong n-best-list.
-Phrase342 co 120 cau trong n-best-list.
-Phrase379 co 480 cau trong n-best-list.
-Phrase499 co 480 cau trong n-best-list.
-Phrase648 co 40 cau trong n-best-list.
-Phrase671 co 120 cau trong n-best-list.
-Phrase685 co 120 cau trong n-best-list.
-Phrase688 co 480 cau trong n-best-list.
-Phrase744 co 40 cau trong n-best-list.
-So cau trong file hypothesis la: 881
-"""
-
-"""Doi voi du lieu 10881
-
-Phrase3474 co 37 cau trong n-best-list.
-Phrase4178 co 224 cau trong n-best-list.
-Phrase4660 co 370 cau trong n-best-list.
-Phrase4661 co 370 cau trong n-best-list.
-Phrase5755 co 224 cau trong n-best-list.
-Phrase5944 co 464 cau trong n-best-list.
-Phrase7483 co 236 cau trong n-best-list.
-Phrase9075 co 328 cau trong n-best-list.
-Phrase10273 co 633 cau trong n-best-list.
-Phrase10648 co 39 cau trong n-best-list.
-Phrase10744 co 322 cau trong n-best-list.
-"""
-"""
-Phrase4660 co 12 cau trong n-best-list.
-Phrase4661 co 12 cau trong n-best-list.
-"""
 #**************************************************************************#
 def split_sentences_with_id_threads(file_input_path, output_path, n_thread, config_end_user):
     """
@@ -869,19 +721,6 @@ def generate_wpp_nodes_min_max(file_input_path, output_path):
     config_end_user = load_config_end_user()
 
     number_of_sentences = split_sentences_with_id(file_input_path, output_path)
-    #number_of_sentences = 10881
-    #number_of_sentences = 2643
-    #print("number_of_sentences:BEGIN")
-    #print(number_of_sentences)
-    #print("number_of_sentences:END")
-
-    #$1: number of Phrases
-    #$2: path to directory "SRILM_bin"
-    #NOT USED - > Removed - $3: path to language model (target language)
-    #$3: path to file "fastnc"
-    #$4: path to file "RefToCtm.pl" in fastnc
-    #$5: path to file output
-
     command_line = output_path + " " + str(number_of_sentences) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + current_config.WPP_NODES_MIN_MAX_TEMP
 
     print(command_line)
@@ -903,40 +742,12 @@ def generate_wpp_nodes_min_max_threads(file_input_path, output_path , n_thread, 
 
     :raise ValueError: if any path is not existed
     """
-    """
-    + Deleting all files Phrase* in directory that contains code "nbestToLattice.sh"
-    + Change mode execute for 2 files for fastnc & "nbestToLattice.sh"
-    """
-    #just for testing --> should disable
-    #preprocessing_for_extracting()
-
-    #current_config = load_configuration()
-
-    #config_end_user = load_config_end_user()
     tmp_dir = "/tmp/WCE_wpp_min_max_feature"+ "_" + str(n_thread) + "/"
 
     first_index, last_index = split_sentences_with_id_threads(file_input_path, output_path, n_thread, config_end_user)
-    #number_of_sentences = 10881
-    #number_of_sentences = 2643
-    #print("number_of_sentences:BEGIN")
-    #print(number_of_sentences)
-    #print("number_of_sentences:END")
-
-    #$1: number of Phrases
-    #$2: path to directory "SRILM_bin"
-    #NOT USED - > Removed - $3: path to language model (target language)
-    #$3: path to file "fastnc"
-    #$4: path to file "RefToCtm.pl" in fastnc
-    #$5: path to file output
-    #print ("Here I am : " + output_path)
-    #number_of_sentences = 907
     command_line = output_path + " " + str(first_index) + " " + str(last_index) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + tmp_dir +" " + current_config.WPP_NODES_MIN_MAX_TEMP + "." + str(n_thread) + " " + current_config.LANGUAGE_MODEL_TGT
     
-    #print("********************** generate_wpp_nodes_min_max_threads -> " + command_line)
 
-    """
-/home/lent/Develops/Solution/ce_agent/ce_agent/config/../lib/shell_script/nbestToLattice.sh 2643 /home/lent/Develops/DevTools/srilm-1.7.1/bin/i686-m64 /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/bin/fastnc /home/lent/Develops/Solution/ce_agent/input_data/../../tool/fastnc/scripts/RefToCtm.pl /home/lent/Develops/Solution/ce_agent/ce_agent/config/../extracted_features/en.column.feature_wpp_nodes_min_max_temp.txt
-    """
 
     #generate the result with FAST tool and SRILM 1.7.1
     call_script(command_line, output_path)

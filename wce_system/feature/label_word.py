@@ -27,39 +27,6 @@ from common_module.cm_file import is_existed_file
 from common_module.cm_script import call_script, run_chmod
 from common_module.cm_util import get_right_content, is_start_with
 
-"""
-Buoc 0: Cai dat Terp-a. Thay doi duong dan cai dat Terp_a trong "config_end_user.yml" trong thu muc "input_data"
-
-Buoc 1: chuyen format txt sang format sgml
-ref = output of Machine Translation
-hyp = post-edition
-
-#lenh nay dung de dua vao code python
-#$1: refset or tstset
-#$2: input_extension, default = fr
-#$3: output_extension, default = en
-#$4: raw-text-corpus with format row
-#$5: sgml-text-corpus
-#perl ${lib_script}/wrap_text_to_sgm.perl $1 $2 $3 $4 $5
-
-#ref set
-perl ${lib_script}/wrap_text_to_sgm.perl refset ${input_extension} ${output_extension} tgt-mt-all.en tgt-mt-all.en.sgm
-
-#hypothesis set
-perl ${lib_script}/wrap_text_to_sgm.perl tstset ${input_extension} ${output_extension} tgt-pe-all.en tgt-pe-all.en.sgm
-
-Buoc 2: $ bin/terpa -r ../data-10881/10tgt-mt-all.en.sgm -h ../data-10881/10tgt-pe-all.en.sgm --> co normalized trong qua trinh thuc thi terpa
-$ bin/terpa_TienLE_TanLE -r ../data-10881/10tgt-mt-all.en.sgm -h ../data-10881/10tgt-pe-all.en.sgm --> ap dung cho cac ngon ngu khac thi ok, neu ap dung cho tieng Anh thi lam Terp-score tang len
-
-Buoc 3: Trich du lieu can thiet trong result of terp-a & Xoa cac file khong dung nua
---> dung ham "def create_script_temp(command_lines)" line 1139 trong file "common_functions.py" & ref 1171, 1249 ve cach dung script_temp
-
-rm -rf terp.*
-rm -rf TienNLe_TanNLe_system.*.*
-
---> def delete_all_files_temporary_terpa() line 1275
-
-"""
 #**************************************************************************#
 def convert_format_txt_to_sgml(file_input_path, file_output_type, input_extension, output_extension, file_output_path):
     """
@@ -83,32 +50,9 @@ def convert_format_txt_to_sgml(file_input_path, file_output_type, input_extensio
     :raise ValueError: if any path is not existed
     """
 
-    """
-    Buoc 1: chuyen format txt sang format sgml
-    ref = output of Machine Translation
-    hyp = post-edition
-
-    #lenh nay dung de dua vao code python
-    #$1: refset or tstset
-    #$2: input_extension, default = fr
-    #$3: output_extension, default = en
-    #$4: raw-text-corpus with format row
-    #$5: sgml-text-corpus
-    #perl ${lib_script}/wrap_text_to_sgm.perl $1 $2 $3 $4 $5
-
-    #ref set
-    perl ${lib_script}/wrap_text_to_sgm.perl refset ${input_extension} ${output_extension} tgt-mt-all.en tgt-mt-all.en.sgm
-
-    #hypothesis set
-    perl ${lib_script}/wrap_text_to_sgm.perl tstset ${input_extension} ${output_extension} tgt-pe-all.en tgt-pe-all.en.sgm
-    """
     #self.LANGUAGE_ENGLISH = "en"
     #self.LANGUAGE_FRENCH = "fr"
     #check existed paths
-    """
-    if not os.path.exists(file_input_path):
-        raise TypeError('Not Existed file input')
-    """
     str_message_if_not_existed = "Not Existed file corpus input"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
@@ -1055,27 +999,6 @@ if __name__ == "__main__":
     current_config = load_configuration()
     config_end_user = load_config_end_user()
 
-    #extracting_given_label(file_tags_path, file_output_path)
-    """extracting_given_label(config_end_user.TAGS_FILE_PATH, current_config.LABEL_OUTPUT)"""
-
-    #normal command
-    #extracting_label_for_word_format_column( current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
-
-    #checking_moses_2009
-    #config: model
-    #extracting_label_for_word_format_column(current_config.TRANSLATED_MODEL_NO_INCLUDED_ALIGNMENT, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING_CHECKING_MOSES_2009, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
-
-    #config: output10881
-    #extracting_label_for_word_format_column(current_config.TRANSLATED_OUTPUT10881_NO_INCLUDED_ALIGNMENT, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING_CHECKING_MOSES_2009, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
-
-    #TARGET_MT_ALL_FORMAT_ROW
-    #note: file nay copy tu 'WCE-SLT-LIG-master' vao thu muc 'extracted_features'
-    #extracting_label_for_word_format_column(current_config.TARGET_MT_ALL_FORMAT_ROW, current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
-
     extracting_label_for_word_format_column(current_config.TARGET_REF_TEST_FORMAT_ROW, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING, current_config.LANGUAGE_FRENCH, current_config.LANGUAGE_ENGLISH, current_config.LABEL_OUTPUT)
-
-    """10881 FR-EN
-    Total TER: 0,48 (120847,98 / 251410,00)
-    """
 
     print ('OK')

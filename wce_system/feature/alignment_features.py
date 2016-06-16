@@ -279,22 +279,6 @@ def get_alignment_features(file_output_from_moses_included_alignment_word_to_wor
         str_not_existed_back = "_X+1"
 
         for line_in_output_moses in file_reader_output_from_moses:
-                """
-                #can kiem tra lai du lieu cau thu 881
-                #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung
-                #--> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay
-                chua True/False ?
-                if number_of_sentence != 881:
-                        number_of_sentence = number_of_sentence +1
-                        continue
-                """
-                """
-                print("*******************************************")
-                print("Dang duyet cau thu: %d " %number_of_sentence)
-                print("*******************************************")
-                print(line_in_output_moses)
-                print("*******************************************")
-                """
                 #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source.
                 # Moi phan tu tren la mot doi tuong Word_POS_Stemming
                 #trim string
@@ -684,22 +668,6 @@ def get_alignment_features_threads(file_output_from_moses_included_alignment_wor
         print (file_output_treetagger_mt_test_target_language)
         
         for line_in_output_moses in file_reader_output_from_moses:
-                """
-                #can kiem tra lai du lieu cau thu 881
-                #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung
-                #--> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay
-                chua True/False ?
-                if number_of_sentence != 881:
-                        number_of_sentence = number_of_sentence +1
-                        continue
-                """
-                """
-                print("*******************************************")
-                print("Dang duyet cau thu: %d " %number_of_sentence)
-                print("*******************************************")
-                print(line_in_output_moses)
-                print("*******************************************")
-                """
                 #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source.
                 # Moi phan tu tren la mot doi tuong Word_POS_Stemming
                 #trim string
@@ -1101,20 +1069,6 @@ def get_alignment_features_with_output_giza(file_output_from_giza_path, file_out
 
         #for line_in_output_moses in file_reader_output_from_moses:
         for list_alignment_target_to_source in alignment_target_to_source:
-                """
-                #can kiem tra lai du lieu cau thu 881
-                #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
-                if number_of_sentence != 881:
-                        number_of_sentence = number_of_sentence +1
-                        continue
-                """
-                """
-                print("*******************************************")
-                print("Dang duyet cau thu: %d " %number_of_sentence)
-                print("*******************************************")
-                print(line_in_output_moses)
-                print("*******************************************")
-                """
                 #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source. Moi phan tu tren la mot doi tuong Word_POS_Stemming
                 #trim string
                 #line_in_output_moses = line_in_output_moses.strip()
@@ -1524,20 +1478,6 @@ def get_alignment_features_with_output_giza_after_optimising(file_output_from_gi
 
         #for line_in_output_moses in file_reader_output_from_moses:
         for list_alignment_target_to_source in alignment_target_to_source:
-                """
-                #can kiem tra lai du lieu cau thu 881
-                #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
-                if number_of_sentence != 881:
-                        number_of_sentence = number_of_sentence +1
-                        continue
-                """
-                """
-                print("*******************************************")
-                print("Dang duyet cau thu: %d " %number_of_sentence)
-                print("*******************************************")
-                print(line_in_output_moses)
-                print("*******************************************")
-                """
                 #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source. Moi phan tu tren la mot doi tuong Word_POS_Stemming
                 #trim string
                 #line_in_output_moses = line_in_output_moses.strip()
@@ -1949,20 +1889,6 @@ def get_alignment_features_with_output_fast_align(file_output_from_fast_align_pa
 
         for line_in_output_from_fast_align in file_reader_output_from_fast_align:
                 #for list_alignment_target_to_source in alignment_target_to_source:
-                """
-                #can kiem tra lai du lieu cau thu 881
-                #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
-                if number_of_sentence != 881:
-                        number_of_sentence = number_of_sentence +1
-                        continue
-                """
-                """
-                print("*******************************************")
-                print("Dang duyet cau thu: %d " %number_of_sentence)
-                print("*******************************************")
-                print(line_in_output_from_fast_align)
-                print("*******************************************")
-                """
                 #list_output = [] #mang luu ket qua cac tu ket noi theo dinh danh da mo ta o phia dau file; Target; Right_Target; Left_Target; Source; Right_Source; Left_Source. Moi phan tu tren la mot doi tuong Word_POS_Stemming
                 #trim string
                 #line_in_output_from_fast_align = line_in_output_from_fast_align.strip()

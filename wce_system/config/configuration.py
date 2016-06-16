@@ -615,7 +615,7 @@ class config(object):
         self.NUMBER_OF_FOLDS = 10 #folds for cross validation, default = 10
         self.NUMBER_OF_SENTENCES_TRAINING_WAPITI = 1088 #default = 1088
         self.NUMBER_OF_SENTENCES_DEVELOPING_WAPITI = 0
-        self.DELTA = 20 #vi khi chia 10881 cho 10 folds thi du 1 cau --> can phai lay cau nay dua vao test --> Dung delta de: Neu tong so cau - (num_for_testing*order_n_fold - 1) >= delta thi gan index_end = number_of_sentences_merged_file, default = 10
+        self.DELTA = 20 #default = 10
         self.TRAINING_CORPUS_NAME = path + settingsMap[language_pair]['training_corpus_name']
         self.TRAINING_CORPUS_FOR_BOOSTING_PATH = path + settingsMap[language_pair]['training_corpus_for_boosting_path']
         self.TRAINING_NAMES_FOR_BOOSTING_PATH = path + settingsMap[language_pair]['training_names_for_boosting_path']

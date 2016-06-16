@@ -12,87 +12,6 @@ Created on Fri Dec  5 18:20:02 2014
 # URL: tienhuong.weebly.com
 #####################################################################################################
 
-"""
-#Tim n-gram dai nhat doi voi source language
-Vi du:
-Source FR S1 S2 S3 .
-Target EN T1 T2 T3 T4 T5 .
-
-*** Truong hop 1: T2 giong voi S1, S2, S3 --> Chi xet tu dau tien S1 (Trong truong hop co giong hang nhieu)
-
-*** Truong hop 2: T3 giong voi S2, ta co:
-S1: Source Left
-S3: Source Right
-
-T2: Target Left
-T4: Target Right
-
-*** Trong moses - decoder: co Align Target - Source
-*** Cac file phai duoc tokenized va lowercased.
-Buoc 0: + File chua aligned tu moses
-		 + Tokenized va Lowercased file source language.
-
-Buoc 1: File Source-4gram giong nhu cach lam Target-4gram
-Buoc 2: ~GeTools/SourceLMFeature$ ./createSourceNGram.sh 3lines-aligned.es-en.aftercorrect 3lines-wmt13qe_t2.tr.source.tok.tc.lc 3lines-4gram-source-v1
-
-#0 ||| at the end of trade , the stock market in prague in the negative bascula  ||| d: -5 -1.84123 0 -1.02296 -0.899405 0 -2.03688 lm: -173.642 tm: -12.3405 -21.3238 -6.29871 -17.3129 5.99938 w: -15 ||| -185.316 ||| 0-1=0-2 2-3=3-4 4-6=5-8 7-8=9-10 10=11 11-12=12-13 9=14 ||| 0=0,1 1=2 2=3 3=4 4=5 5=6 6=7,8 7=9 8=10 10=11 11=12 12=13 9=14 ||| 0=0 1=0 2=1 3=2 4=3 5=4 6=5 7=6 8=6 9=7 10=8 11=10 12=11 13=12 14=9
-
-meaning: ref Manual MOSES pages 160, 161
-0 --> sentence number (the first sentence)
-at ... bascula --> output sentence the best n-list
-d: -5 ... w: -15 --> individual component scores (unweighted)
--185.316: weighted overall score
-0=0,1 ... 9=14: The SOURCE to TARGET alignment
-0=0 ... 14=9: The SOURCE to TARGET alignment
-
-Example (ref page 161 - Manual MOSES 2014)
-SOURCE - DE (German): ich frage
-TARGET - EN (English): i ask this
-*** The SOURCE to TARGET alignment: 0=0 1=1
-German --> English
-ich    --> i
-frage  --> ask
-
-*** The TARGET to SOURCE alignment: 0=0 1=1 2=-1 means that:
-English --> German
-i       --> ich
-ask     --> frage
-this    -->
-
-Explain: "2=-1" means that the word of index 2 is not associated with any word in the other language
-
-
-Chu y: cap nhat dong code trong file 'createSourceNGram.sh' nhu sau:
-#done < "aligned.en-fr";
-done < $1;
-
-*** Ket qua: trong file 'ngram-sources' co dang:
-4
-3
-	0gram
-2
-
-Buoc 3: Thay the '0gram' thanh so 0
-
-#Bo tab truoc 0gram
-#awk '{print $1}' < ngram-sources > ngram-sources-bo-tab
-
-#Bo chuoi 'gram'
-#sed s/gram//g < ngram-sources-bo-tab > source-ngram
-
-Da tong hop thanh dong lenh shell:
-~GeTools/SourceLMFeature$ ./myCreate-source-ngram-feature.sh ngram-sources result-sources-ngram
-
-result:
-2 : means that "Tu DICH tai index 0 canh le voi tu NGUON co longest gram length la 2 trong Language Model cua ngon ngu NGUON "
-3
-4
-2
-3
-
-....
-
-"""
 
 import os
 import sys
@@ -601,20 +520,6 @@ def feature_longest_gram_source_length(file_output_from_moses_included_alignment
     number_of_word = 0
 
     for line_in_output_moses in file_reader_output_from_moses:
-        """
-        #can kiem tra lai du lieu cau thu 881
-        #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
-        if number_of_sentence != 881:
-            number_of_sentence = number_of_sentence +1
-            continue
-        """
-        """
-        print("*******************************************")
-        print("Dang duyet cau thu: %d " %number_of_sentence)
-        print("*******************************************")
-        print(line_in_output_moses)
-        print("*******************************************")
-        """
         #trim string
         line_in_output_moses = line_in_output_moses.strip()
 
@@ -953,20 +858,6 @@ def feature_longest_gram_source_length_threads(file_output_from_moses_included_a
     number_of_word = 0
 
     for line_in_output_moses in file_reader_output_from_moses:
-        """
-        #can kiem tra lai du lieu cau thu 881
-        #da kiem tra ok, ly do: tu format column chuyen sang format row bi mat sentence column cuoi cung, vi trong file format column khong co dong trong cuoi cung --> giai phap: cap nhat ham convert them flag de kiem tra "da duoc luu" hay chua True/False ?
-        if number_of_sentence != 881:
-            number_of_sentence = number_of_sentence +1
-            continue
-        """
-        """
-        print("*******************************************")
-        print("Dang duyet cau thu: %d " %number_of_sentence)
-        print("*******************************************")
-        print(line_in_output_moses)
-        print("*******************************************")
-        """
         #trim string
         line_in_output_moses = line_in_output_moses.strip()
 

@@ -1710,14 +1710,8 @@ def creating_sequential_corpus_train_dev_test_file_from_merged_file(demo_name, f
     str_message_if_not_existed = "Not Existed file corpus input that contains all features ("+file_input_path+")"
     is_existed_file(file_input_path, str_message_if_not_existed)
 
-    #chu y: chuong trinh se sinh ra theo tuan tu 9000 cau dau cho train + 1000 dev + 881 test
-    #number_of_sentences_in_file_for_training = 9000
-    #number_of_sentences_in_file_for_developing = 1000
-    #number_of_sentences_in_file_for_testing = 881 # co nghia la con lai bao nhieu thi dua qua file testing
 
     number_of_sentences_in_file_for_developing_to = number_of_sentences_in_file_for_training + number_of_sentences_in_file_for_developing
-
-    #number_of_sentences_in_file_for_testing_to = number_of_sentences_in_file_for_developing_to + number_of_sentences_in_file_for_testing
 
     number_of_current_sentence = 1
 
@@ -3742,9 +3736,6 @@ def get_n_fold_cross_validation_index_of_sentences_for_train_dev_test(order_n_fo
         raise Exception("You should check number of sentences in n-fold OR order of n-fold.")
     #end if
 
-    #B1: chon ra duoc list_index_testing
-    #de lay het du lieu testing thi co khi so le nen can phai cho sai so delta = 10
-    #vi khi chia 10881 cho 10 folds thi du 1 cau --> can phai lay cau nay dua vao test --> Dung delta de: Neu tong so cau - (num_for_testing*order_n_fold - 1) >= delta thi gan index_end = number_of_sentences_merged_file
     current_config = load_configuration()
     delta = current_config.DELTA
     if num_for_testing*order_n_fold >= number_of_sentences_merged_file:
@@ -4222,7 +4213,6 @@ def tokenizer_raw_corpus(file_input_path, target_language, file_output_path, cur
 
     call_script(command_line, script_path)
 #**************************************************************************#
-#B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
 def get_output_treetagger_format_row(file_input_path, target_language, file_output_path):
     """
     Getting output from TreeTagger with format row
@@ -4267,13 +4257,6 @@ def get_output_treetagger_format_row(file_input_path, target_language, file_outp
 
     customize_output_treetagger_format_row(file_output_path + ".tmp", file_output_path)
 #**************************************************************************#
-#B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from TreeTagger dong
-#for raw_corpus fr
-#python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.fr
-#convert_format_row_to_format_column(file_input_path, file_output_path)
-#replace "<UNK>||||||" --> "<unk>|||<unk>|||<unk>" trong format dong
-#sed 's-<UNK>||||||-<unk>|||<unk>|||<unk>-g' < file_format_row > file_format_row_after_customizing
-
 def get_output_treetagger_format_row_threads(file_input_path, target_language, file_output_path, current_config, config_end_user):
     """
     Getting output from TreeTagger with format row
@@ -4520,15 +4503,6 @@ def generating_CRF_models(demo_name, is_has_dev_corpus, template_path, order_of_
     current_config = load_configuration()
     config_end_user = load_config_end_user()
 
-    #Goi ham Wapiti + Ung voi tung template --> train ra tung model cu the
-    #wapiti train -a sgd-l1  --stopeps 0.000005 --stopwin 6 --maxiter 200 -p ./template.en DO_FOR_LUCIA/train_1881  DO_FOR_LUCIA/model
-    #wapiti train -a sgd-l1  --stopeps 0.000005 --stopwin 6 --maxiter 200 -p training-10000/template.en_NBESTRESCORING  training-10000/trainingfile-binary-16072013-NBESTLIST.CRF  model_NBESTRESCORING
-    #wapiti train -a l-bfgs/sgd-l1/bcd/rprop -i 200 -e 0.000005 -w 7  -d dev_file_path -p template_file_path train_file_path model_file_path
-
-    #wapiti train -a sgd-l1 -i 200 -e 0.00005 -w 6 -d dev_file_path -p template_file_path train_file_path model_file_path
-
-    #wapiti train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p template_file_path train_file_path model_file_path
-
     command_line = ""
     #script_path = current_config.TOOL_WAPITI
     script_path = config_end_user.TOOL_WAPITI
@@ -4586,11 +4560,6 @@ def generating_CRF_models_original(demo_name, number_of_template, is_has_dev_cor
     current_config = load_configuration()
 
 
-    #Goi ham Wapiti + Ung voi tung template --> train ra tung model cu the
-    #wapiti train -a sgd-l1  --stopeps 0.000005 --stopwin 6 --maxiter 200 -p ./template.en DO_FOR_LUCIA/train_1881  DO_FOR_LUCIA/model
-    #wapiti train -a sgd-l1  --stopeps 0.000005 --stopwin 6 --maxiter 200 -p training-10000/template.en_NBESTRESCORING  training-10000/trainingfile-binary-16072013-NBESTLIST.CRF  model_NBESTRESCORING
-    #wapiti train -a l-bfgs/sgd-l1/bcd/rprop -i 200 -e 0.000005 -w 7  -d dev_file_path -p template_file_path train_file_path model_file_path
-
     command_line = ""
     script_path = current_config.TOOL_WAPITI
     run_chmod(script_path)
@@ -4631,15 +4600,6 @@ def generating_CRF_models_original(demo_name, number_of_template, is_has_dev_cor
         call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
     #end for
 #**************************************************************************#
-#test model CRF
-#./wapiti label -m ./model_NBESTRESCORING  -c -s -p /home/nluong/FEATURE_EXTRACTION_NBEST/FEATURES/881.NBEST.CRF   /home/nluong/FEATURE_EXTRACTION_NBEST/FEATURES/881.NBEST.rs
-#./wapiti label -m DO_FOR_LUCIA/model  -c -s -p DO_FOR_LUCIA/test_9000  DO_FOR_LUCIA/rs
-
-#./wapiti label -m model_path -c -s -p test_file_path result_file_path
-
-#/home/lent/Develops/Solution/eval_agent/eval_agent/config/../../tool/wapiti-1.5.0/./wapiti label -c -s -p /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/en.column.CRF_model_test_file.txt -m /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_with_template2 /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_result_testing_with_model2 2>&1 | tee /home/lent/Develops/Solution/eval_agent/eval_agent/config/../extracted_features/CRF_model_result_testing_with_model_log_file2
-
-#./wapiti-1.5.0/./wapiti label -c -s -p test_file.txt -m CRF_model CRF_result 2>&1 | tee CRF_result_log_file
 def get_result_testing_CRF_models(demo_name, order_of_template = 1):
     """
     Testing phase of labeling within CRF model with K number of model.

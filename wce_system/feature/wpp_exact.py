@@ -199,19 +199,6 @@ def split_sentences_with_id(file_input_path, output_path):
     #end for
 
     return number_of_sentences
-""" Xet du lieu 10881 FR-EN
-Phrase3474 co 37 cau trong n-best-list.
-Phrase4178 co 224 cau trong n-best-list.
-Phrase4660 co 370 cau trong n-best-list.
-Phrase4661 co 370 cau trong n-best-list.
-Phrase5755 co 224 cau trong n-best-list.
-Phrase5944 co 464 cau trong n-best-list.
-Phrase7483 co 236 cau trong n-best-list.
-Phrase9075 co 328 cau trong n-best-list.
-Phrase10273 co 633 cau trong n-best-list.
-Phrase10648 co 39 cau trong n-best-list.
-Phrase10744 co 322 cau trong n-best-list.
-"""
 #**************************************************************************#
 # New version for the multithreaded option
 def split_sentences_with_id_threads(file_input_path, output_path):
@@ -394,7 +381,6 @@ def feature_wpp_exact(file_input_path, file_output_path):
     current_config = load_configuration()
 
     number_of_sentences = split_sentences_with_id(file_input_path, current_config.SCRIPT_TEMP)
-    #number_of_sentences = 10881
 
     #get current working directory
     current_working_directory = os.getcwd()
@@ -521,7 +507,6 @@ def feature_wpp_exact_threads(file_input_path, file_output_path, n_thread,curren
     print (tmp_dir)
 
     first_sentence, number_of_sentences = split_sentences_with_id_threads(file_input_path, tmp_dir)
-    #number_of_sentences = 10881
 
     #get current working directory
     current_working_directory = os.getcwd()

@@ -27,68 +27,6 @@ from common_module.cm_file import copy_file_from_path1_to_path2, lowercase_raw_c
 from common_module.cm_util import print_time, print_result, check_value_boolean
 
 #**************************************************************************#
-#ref: lib/script_moses/server/moses.py
-
-"""
-#  Truecaser wrapper.
-def __init__(self,model):
-    truecase_cmd = moses_root+"/scripts/recaser/truecase.perl"
-    self.cmd = [truecase_cmd,"-b", "--model",model]
-    self.process = None
-    return
-"""
-"""
-!!! Moi buoc nen viet cac ham
-!!! Nen chuan hoa lai cac ten input va output cua preprocessing de khong phu thuoc vao ngon ngu dua vao --> chi nen dung src, tgt
-
-B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser
-
-B2: Generate word_pos_stem cho cac tu trong dong
-
-B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from TreeTagger dong
-
-#for raw_corpus fr
-python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py
-/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.fr
-/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.fr
-
-#for pos fr
-python3 $PYTHON3_PREPROCESSING/convert_format_row_to_format_column.py
-/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr
-/home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.col.pos.stem.fr
-
-B4: generate cac file lien quan den moses
-
-??? lam cach nao lay alignment cho inputs Source and Target
-"""
-#**************************************************************************#
-#B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
-"""
-language_pair=fr_en
-
-## Paths to tools that user must install (You should install SRILM)
-srilm_path=/home/lent/Develops/DevTools/srilm/
-
-## Path to moses.ini
-moses_ini=output_moses2009/moses.ini
-
-## Corpus Names, if NOT CONFIG then we use DEFAULT CONFIG.
-raw_corpus_source_language=./src-ref-all.fr
-raw_corpus_target_language=./tgt-mt-all.en
-post_edition_of_machine_translation_sentences_target_language=./tgt-pe-all.en
-
-## Language Models, if NOT CONFIG then we use DEFAULT CONFIG.
-language_model_source_language=./lm_5gram.fr
-language_model_target_language=./lm_5gram.en
-
-## Output from Google & Bing Translator
-google_translator=./output_Google_Translator.en
-bing_translator=./output_Bing_Translator.en
-
-## n best list using MOSES
-1_best_list-included-alignment=./tgt-mt-all-1_best_list-included-alignment.en
-n_best_list-included-alignment=./tgt-mt-all-1000_best_list-included-alignment.en
-"""
 
 
 def copy_raw_files_threads():
@@ -568,13 +506,6 @@ def preprocessing_corpus(result_output_path):
     feature_name = "BEGIN Task - Preprocessing"
     print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
-    #just for testing MOSES 2009
-    #input:  /corpus/raw_corpus/
-    #output: /corpus/preprocessing/
-    #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_TESTING_MOSES2009, current_config.LANGUAGE_FRENCH,
-    # current_config.SRC_REF_TEST_FORMAT_ROW_TESTING_MOSES2009)
-
-    #B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
     ##########################################################################
     ## Copy Raw Corpus
     ##########################################################################
@@ -585,13 +516,6 @@ def preprocessing_corpus(result_output_path):
     print_result(feature_name, result_output_path)
 
 
-    #B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser   --> da chuyen qua ham cua buoc 0
-    #Khi dung pre-processing.sh se lam lech nhung j ma MT da alignment
-    #dung ham copy luon
-
-    #B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger
-    # /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing
-    # .fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
     ##########################################################################
     ## Using TreeTagger for Source & Target Corpus
     ##########################################################################
@@ -676,13 +600,6 @@ def preprocessing_corpus_threads(result_output_path):
     feature_name = "BEGIN Task - Preprocessing"
     print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
-    #just for testing MOSES 2009
-    #input:  /corpus/raw_corpus/
-    #output: /corpus/preprocessing/
-    #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_TESTING_MOSES2009, current_config.LANGUAGE_FRENCH,
-    # current_config.SRC_REF_TEST_FORMAT_ROW_TESTING_MOSES2009)
-
-    #B0: Dua du lieu tu "input_data" vao "raw_corpus" theo format ten trong file configuration.yml
     ##########################################################################
     ## Copy Raw Corpus
     ##########################################################################
@@ -693,13 +610,6 @@ def preprocessing_corpus_threads(result_output_path):
     print_result(feature_name, result_output_path)
 
 
-    #B1: Chay script pre_processing.sh -->tokenizer, khong lowercaser   --> da chuyen qua ham cua buoc 0
-    #Khi dung pre-processing.sh se lam lech nhung j ma MT da alignment
-    #dung ham copy luon
-
-    #B2: perl /home/lent/Develops/Solution/eval_agent/eval_agent/lib/shell_script/make-factor-pos.tree-tagger-TienLe-TanLe.perl -tree-tagger
-    # /home/lent/Develops/DevTools/treetagger -l fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing
-    # .fr /home/lent/Develops/Solution/eval_agent/eval_agent/corpus/fr_en/preprocessing/881_output_preprocessing.treetagger.fr -wordtaglemma
     ##########################################################################
     ## Using TreeTagger for Source & Target Corpus
     ##########################################################################

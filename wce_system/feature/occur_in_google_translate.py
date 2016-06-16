@@ -121,10 +121,6 @@ def feature_occur_in_google_translate(file_input_path, file_google_translate_pat
 #**************************************************************************#
 
 if __name__ == "__main__":
-    #Test case:
-    #feature_occur_in_google_translate(file_input_path, file_google_translate_path, file_output_path)
-    #PEofMT-881.en-from-Google-Translate.lc.np.tok
-    #feature_occur_in_google_translate('../corpus/corpus.lc.en.column.txt','../corpus/PEofMT-881.en-from-Google-Translate.lc.np.tok.txt','../extracted_features/corpus.lc.en.column.feature_occur_in_google_translate.txt')
 
     current_config = load_configuration()
 
