@@ -14,7 +14,7 @@ Human post-edition: donnes moi des pilules
 First, the toolkit pre-process the data, then, it extract some internal and external features.
 Finally, it outputs a good (G) or a bad (B) label foreach word in of the translation hypothesis based on those features.
 Actually, the internal features belongs to the translation system and the external features uses external toolkits to extract informations (linguistic or probabilistic)</BR> </BR>
-<strong>New:</strong> add DBnary as feature component. More details in the tools directory.
+<strong> + New:</strong> add DBnary as feature component. More details in the tools directory.
 
 ## What are the features extracted?
 Here is the list of all the features which are used in the toolkit.
