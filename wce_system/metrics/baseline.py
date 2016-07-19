@@ -491,28 +491,28 @@ def feature_selection_threads( current_config, config_end_user):
         #self.FEATURE_LIST['OcGG'] = path + settingsMap[TOOL_ROOT]['occur_in_google_translator']
 
     #list_keys=list(current_config.FEATURE_LIST.keys())
-    l_list_keys=[]
+    l_list_keys_to_test=[]
     list_keys=[]
-    #l_list_keys=list(current_config.FEATURE_LIST.keys())
+    #l_list_keys_to_test=list(current_config.FEATURE_LIST.keys())
     
-    # remove the standart feature from the list list_keys but we keep them in the l_list_keys.
-    list_keys.append("SrcPos")
-    list_keys.append("TgtPos")
-    list_keys.append("TgtWrd")
-    list_keys.append("BACKOFF")
-    list_keys.append("LngSrcNg")
-    list_keys.append("LngTgtNg")
-    list_keys.append("WPPMax")
-    list_keys.append("WPPMIN")
-    list_keys.append("Nd")
-    list_keys.append("NbrOcWrd")
-    list_keys.append("Num")
-    list_keys.append("Punct")
-    list_keys.append("StpWrd")
-    list_keys.append("WPPAny")
-    list_keys.append("WPPEx")
+    # remove the standart feature from the list l_list_keys_to_test but we keep them in the l_l_list_keys_to_test_to_test.
+    l_list_keys_to_test.append("SrcPos")
+    l_list_keys_to_test.append("TgtPos")
+    l_list_keys_to_test.append("TgtWrd")
+    l_list_keys_to_test.append("BACKOFF")
+    l_list_keys_to_test.append("LngSrcNg")
+    l_list_keys_to_test.append("LngTgtNg")
+    l_list_keys_to_test.append("WPPMax")
+    l_list_keys_to_test.append("WPPMIN")
+    l_list_keys_to_test.append("Nd")
+    l_list_keys_to_test.append("NbrOcWrd")
+    l_list_keys_to_test.append("Num")
+    l_list_keys_to_test.append("Punct")
+    l_list_keys_to_test.append("StpWrd")
+    l_list_keys_to_test.append("WPPAny")
+    l_list_keys_to_test.append("WPPEx")
     
-    # remove the standart feature from the list l_list_keys but we keep them in the list_keys.
+    # remove the standart feature from the list l_l_list_keys_to_test_to_test but we keep them in the l_list_keys_to_test.
     list_keys.append("AWrd")
     list_keys.append("APos")
     list_keys.append("SrcWrd")
@@ -530,7 +530,7 @@ def feature_selection_threads( current_config, config_end_user):
     #list_keys.append("OcGG")
     #list_keys.append("OcBing")
     
-    l_list_keys.append("")
+    l_list_keys_to_test.append("")
     l_list_best_keys=[]
     l_list_best_scores=[]
     l_list_best_scores_PrG=[]
@@ -544,7 +544,7 @@ def feature_selection_threads( current_config, config_end_user):
     l_Best_feature_id="";
     l_Best_score=0.0;
     l_dict_score_features={}
-    l_cpt=len(l_list_keys)-1;
+    l_cpt=len(l_list_keys_to_test)-1;
 ###########################################
 # Begin of the original part I want to keep    
     #while len(list_keys) > 0:
@@ -553,9 +553,9 @@ def feature_selection_threads( current_config, config_end_user):
       #l_Best_score=0.0
       #l_Best_scores=[0 for x in range(7)]
       #for l_key in list_keys:
-          #l_list_keys[l_cpt]=l_key
-          ##print(l_list_keys)
-          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G = generate_template_for_CRF_and_test(l_list_keys,current_config,config_end_user)
+          #l_list_keys_to_test[l_cpt]=l_key
+          ##print(l_list_keys_to_test)
+          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G = generate_template_for_CRF_and_test(l_list_keys_to_test,current_config,config_end_user)
           #l_dict_score_features[l_key]=(l_F1B+l_F1G)/2
           #if (l_F1B+l_F1G)/2 > l_Best_score:
             #l_Best_feature=l_key
@@ -579,11 +579,11 @@ def feature_selection_threads( current_config, config_end_user):
       l_cpt_threads=0;
       l_max_threads=0;
       for l_key in list_keys:
-        l_list_keys[l_cpt]=l_key
+        l_list_keys_to_test[l_cpt]=l_key
         l_scores_returned.append([float,float,float,float,float,float,str])
         #print ("***************************************************************** HERE WE ARE: "+str(l_cpt_threads))
-        #print(l_list_keys)
-        ts = threading.Thread(target=generate_template_for_CRF_and_test_threads, args=(deepcopy(l_list_keys),current_config,config_end_user, l_scores_returned, l_cpt_threads))
+        #print(l_list_keys_to_test)
+        ts = threading.Thread(target=generate_template_for_CRF_and_test_threads, args=(deepcopy(l_list_keys_to_test),current_config,config_end_user, l_scores_returned, l_cpt_threads))
         l_threads.append(ts)
         l_cpt_threads=l_cpt_threads+1;
         ts.start()
@@ -614,7 +614,7 @@ def feature_selection_threads( current_config, config_end_user):
           l_cpt_threads=l_cpt_threads+1;
         
                                 
-          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G, l_returned_key = generate_template_for_CRF_and_test(l_list_keys,current_config,config_end_user)
+          #l_PrB, l_RcB, l_F1B, l_PrG, l_RcG, l_F1G, l_returned_key = generate_template_for_CRF_and_test(l_list_keys_to_test,current_config,config_end_user)
           #l_dict_score_features[l_key]=(l_F1B+l_F1G)/2
           #if (l_F1B+l_F1G)/2 > l_Best_score:
             #l_Best_feature=l_key
@@ -638,10 +638,10 @@ def feature_selection_threads( current_config, config_end_user):
       l_list_best_scores_PrG.append(l_Best_scores[4])
       l_list_best_scores_RcG.append(l_Best_scores[5])
       l_list_best_scores_F1G.append(l_Best_scores[6])
-      l_list_keys[l_cpt]=l_Best_feature
+      l_list_keys_to_test[l_cpt]=l_Best_feature
       list_keys.remove(l_Best_feature)
       l_cpt=l_cpt+1
-      l_list_keys.append("")
+      l_list_keys_to_test.append("")
       print("********************** Round " + str(l_cpt))
     print("Metrics:\t" + "\t".join(l_list_best_keys))
     print("Precision Bad:\t" + "\t".join("%10.4f" % x for x in l_list_best_scores_PrB))
