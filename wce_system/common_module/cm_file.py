@@ -3082,7 +3082,10 @@ def get_list_of_file_paths_included_nbestlist_not_asr():
     # Polysemy Count - Target POLYSEMY_COUNT_TARGET --> BABEL_NET_OUTPUT_CORPUS_EN_LAST
     #for spanish - target
     #list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_ES_LAST)
-    list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST)
+    #list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST)
+
+    #DBNARY
+    list_of_file_paths.append( current_config.DBNARY_OUTPUT_CORPUS_TGT_LAST)
 
     # Longest Target gram length
     list_of_file_paths.append( current_config.LONGEST_TARGET_GRAM_LENGTH)
