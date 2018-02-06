@@ -20,7 +20,7 @@ from common_module.cm_config import load_configuration, load_config_end_user, ge
 from common_module.cm_util import  is_numeric, is_in_list, is_in_string, print_time, print_result, split_string_to_list_delimeter_tab, get_str_value_given_key, is_match, split_string_to_list_delimeter_comma, print_introduction
 from preprocessing.pre_processing import preprocessing_corpus,preprocessing_corpus_threads
 from feature.extract_all_features import extracting_all_features,extracting_all_features_threads
-from metrics.demo_metrics import demo_baselines_and_systems
+from metrics.demo_metrics import demo_baselines_and_systems, demo_baselines_and_systems_threads
 
 #*****************************************************************************#
 def demo_solution(result_output_path):
