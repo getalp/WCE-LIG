@@ -253,7 +253,7 @@ def split_sentences_with_id_threads(file_input_path, output_path):
         str_index = list_items[0].strip() # trim string
         if first_index == -1:
             first_index = int(str_index)
-        
+
 
         #weighted overall score
         str_weighted_overall_score = list_items[3].strip() # trim string
@@ -491,12 +491,12 @@ def feature_wpp_exact_threads(file_input_path, file_output_path, n_thread,curren
     """
     #Delete all files Phrase* if existed
     #preprocessing_for_extracting()
-    
+
 
     #generate Phrase* with format:
     #weighted overall score|||hypothesis sentence
     #current_config = load_configuration()
-    
+
     tmp_dir = "/tmp/WCE_wpp_exact_feature"+ "_" + str(n_thread)
     try:
       os.stat(tmp_dir)
@@ -603,12 +603,12 @@ def feature_wpp_exact_threads(file_input_path, file_output_path, n_thread,curren
     #ra thu muc hien hanh ban dau
     os.chdir(current_working_directory)
 
-    #Delete Phrase files
-    for root, dirs, files in os.walk(tmp_dir):
-      for f in files:
-        os.unlink(os.path.join(root, f))
-      for d in dirs:
-        shutil.rmtree(os.path.join(root, d))
+    #Delete Phrase files - Tien tam disabled :) just for testing ...
+    # for root, dirs, files in os.walk(tmp_dir):
+    #   for f in files:
+    #     os.unlink(os.path.join(root, f))
+    #   for d in dirs:
+    #     shutil.rmtree(os.path.join(root, d))
     #preprocessing_for_extracting()
 #**************************************************************************#
 

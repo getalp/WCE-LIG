@@ -106,6 +106,38 @@ class config(object):
         self.CURRENT_TARGET_LANGUAGE = language_pair[3:]
 
         #******************************************************#
+        ## for new corpus
+        self.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_NEW_CORPUS = path + settingsMap[language_pair]['input_raw_corpus_source_language_new_corpus']
+        self.INPUT_RAW_CORPUS_TARGET_LANGUAGE_NEW_CORPUS = path + settingsMap[language_pair]['input_raw_corpus_target_language_new_corpus']
+        self.TARGET_REF_TEST_FORMAT_ROW_NEW_CORPUS = path + settingsMap[language_pair]['target_ref_test_format_row_new_corpus']
+        self.SRC_REF_TEST_FORMAT_ROW_NEW_CORPUS = path + settingsMap[language_pair]['src_ref_test_format_row_new_corpus']
+
+        self.GOOGLE_TRANSLATE_CORPUS_NEW_CORPUS = path + settingsMap[language_pair]['google_translate_corpus_new_corpus']
+        self.BING_TRANSLATE_CORPUS_NEW_CORPUS = path + settingsMap[language_pair]['bing_translate_corpus_new_corpus']
+
+        self.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT_NEW_CORPUS = path + settingsMap[language_pair]['mt_hypothesis_output_1_bestlist_included_alignment_new_corpus']
+        self.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT_NEW_CORPUS = path + settingsMap[language_pair]['mt_hypothesis_output_nbestlist_included_alignment_new_corpus']
+
+        ## TreeTagger output with format ROW
+        self.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS = path + settingsMap[language_pair]['src_ref_test_output_treetagger_format_row_new_corpus']
+        self.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS = path + settingsMap[language_pair]['target_ref_test_output_treetagger_format_row_new_corpus']
+
+        ## format COLUMN
+        self.SRC_REF_TEST_FORMAT_COL_NEW_CORPUS = path + settingsMap[language_pair]['src_ref_test_format_col_new_corpus']
+        self.TARGET_REF_TEST_FORMAT_COL_NEW_CORPUS = path + settingsMap[language_pair]['target_ref_test_format_col_new_corpus']
+
+        self.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL_NEW_CORPUS = path + settingsMap[language_pair]['src_ref_test_output_treetagger_format_col_new_corpus']
+        self.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL_NEW_CORPUS = path + settingsMap[language_pair]['target_ref_test_output_treetagger_format_col_new_corpus']
+
+        self.PROBABILITY_HYPOTHESIS_ROW_CORPUS_NEW_CORPUS = path + settingsMap[language_pair]['probability_hypothesis_row_corpus_new_corpus']
+
+
+
+
+
+
+
+
         ##for input corpus
         self.INPUT_RAW_CORPUS_SOURCE_LANGUAGE = path + settingsMap[language_pair]['input_raw_corpus_source_language']
         self.INPUT_RAW_CORPUS_TARGET_LANGUAGE = path + settingsMap[language_pair]['input_raw_corpus_target_language']

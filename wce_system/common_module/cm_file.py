@@ -3125,6 +3125,93 @@ def get_list_of_file_paths_included_nbestlist_not_asr():
 
     return list_of_file_paths
 #**************************************************************************#
+def get_list_of_file_paths_included_nbestlist_not_asr_new_corpus(current_config, extension = "_new_corpus"):
+    """
+    Creating list of file paths that are extracted in process "Extracting Features"
+    """
+
+    list_of_file_paths = []
+
+    #Order of the files ~ Order of the features FOR Merging features
+    # Punctuation
+    list_of_file_paths.append( current_config.PUNCTUATION + extension)
+
+    # Stop Word
+    list_of_file_paths.append( current_config.STOP_WORD + extension)
+
+    # Numeric
+    list_of_file_paths.append( current_config.NUMERIC + extension)
+
+    # Proper Name
+    list_of_file_paths.append( current_config.PROPER_NAME + extension)
+
+    # unknown lemma
+    list_of_file_paths.append( current_config.UNKNOWN_LEMMA + extension)
+
+    # Number Of Occurrences word
+    list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_WORD + extension)
+
+    # Number of occurrences stem (frequency of stemmed word)
+    list_of_file_paths.append( current_config.NUMBER_OF_OCCURRENCES_STEM + extension)
+
+    # Occur in Google Translator
+    list_of_file_paths.append( current_config.OCCUR_IN_GOOGLE_TRANSLATE  + extension)
+
+    # Occur in Bing Translator
+    list_of_file_paths.append( current_config.OCCUR_IN_BING_TRANSLATE + extension)
+
+    # Constituent Label
+    list_of_file_paths.append( current_config.CONSTITUENT_LABEL + extension)
+
+    # Distance to Root
+    list_of_file_paths.append( current_config.DISTANCE_TO_ROOT + extension)
+
+    # Polysemy Count - Target POLYSEMY_COUNT_TARGET --> BABEL_NET_OUTPUT_CORPUS_EN_LAST
+    #for spanish - target
+    #list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_ES_LAST)
+    #list_of_file_paths.append( current_config.BABEL_NET_OUTPUT_CORPUS_TGT_LAST)
+
+    #DBNARY
+    list_of_file_paths.append( current_config.DBNARY_OUTPUT_CORPUS_TGT_LAST + extension)
+
+    # Longest Target gram length
+    list_of_file_paths.append( current_config.LONGEST_TARGET_GRAM_LENGTH + extension)
+
+    # Backoff Behaviour
+    list_of_file_paths.append( current_config.BACKOFF_BEHAVIOUR + extension)
+
+    # Longest Source gram length
+    list_of_file_paths.append( current_config.LONGEST_SOURCE_GRAM_LENGTH_ALIGNED_TARGET + extension)
+
+    # alignment_features : 18 features: Target; Right_Target; Left_Target; Source; Right_Source; Left_Source (Word; POS; Stemming)
+    list_of_file_paths.append( current_config.ALIGNMENT_FEATURES + extension)
+
+    # WPP Exact
+    list_of_file_paths.append( current_config.WPP_EXACT + extension)
+
+    # Chu y: trong file nay column dau tien la word cua Target Language
+    # WPP any
+    # Nodes
+    # Min
+    # Max
+    list_of_file_paths.append( current_config.WPP_NODES_MIN_MAX + extension)
+
+    # Features' values ASR: les        0.509947        -4.38473        1        0        0        0.48        DET:ART
+    # word
+    # Post posterior
+    # LM probability
+    # order of n-gram
+    # Use context
+    # backoff score
+    # length of frame (ton may giay cho tu nay)
+    # POS
+    #list_of_file_paths.append( current_config.FEATURES_ASR_ALIGNED_LAST)
+
+    # label of word Good/Bad
+    #list_of_file_paths.append( current_config.LABEL_OUTPUT)
+
+    return list_of_file_paths
+#**************************************************************************#
 class Feature_Name_And_Path(object):
     """
     This class contains the following information: feature name & feature-template path.
@@ -4310,7 +4397,7 @@ def get_output_treetagger_format_row_threads(file_input_path, target_language, f
         l_threads.append(ts)
         ts.start()
     for myT in l_threads:
-        myT.join()    
+        myT.join()
     time.sleep(1)
     customize_output_treetagger_format_row_threads(file_output_path +".tmp", file_output_path, current_config)
 #**************************************************************************#
@@ -4527,7 +4614,7 @@ def generating_CRF_models(demo_name, is_has_dev_corpus, template_path, order_of_
     model_path = model_file_path_pattern + str(order_of_template)  + "_" + demo_name + ".txt"
     log_path = log_file_pattern + str(order_of_template) +  "_" + demo_name + ".txt"
 
-    command_line += template_path + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) + " 2>&1 | tee " + log_path
+    command_line += template_path + " " + train_file_path + " " + model_path  + " --nthread " + str(current_config.THREADS) + " 2>&1 | tee " + log_path
 
     print("Demo: " + demo_name + " - Training with template " + str(order_of_template))
     print("Template path: %s" %template_path)
@@ -4542,6 +4629,8 @@ def generating_CRF_models(demo_name, is_has_dev_corpus, template_path, order_of_
 
     #Run Script
     call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
+
+    return model_path
 
 #**************************************************************************#
 def generating_CRF_models_original(demo_name, number_of_template, is_has_dev_corpus):
@@ -4715,6 +4804,39 @@ def get_result_testing_CRF_models(demo_name, order_of_template = 1):
     #######################################################################
 
     file_writer.close()
+#**************************************************************************#
+def get_result_labelling_using_trained_CRF_models(model_path, test_file_path, file_output_path, config_end_user, current_config):
+    #current_config = load_configuration()
+    #config_end_user = load_config_end_user()
+
+    command_line = ""
+    script_path = config_end_user.TOOL_WAPITI
+    model_file_path_pattern = current_config.MODEL_PATH
+    result_testing_wapiti_pattern = current_config.RESULT_TESTING_WAPITI
+    log_file_pattern = current_config.LOG_FILE_TESTING_WAPITI
+    #test_file_path = current_config.TEST_FILE_PATH + "_" + demo_name + ".txt"
+
+    command_line = script_path + " label -c -s -p " + test_file_path + " -m "
+
+    #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
+    result_file_path = file_output_path # result_testing_wapiti_pattern + str(order_of_template) +  "_" + demo_name + ".txt"
+    log_path = file_output_path + "_log.txt" # log_file_pattern + str(order_of_template) +  "_" + demo_name + ".txt"
+
+    #For writing log file
+    command_line += model_path + " " + result_file_path + " 2>&1 | tee " + log_path
+    #command_line += model_path + " " + result_file_path
+
+    print("Task: Labelling New Corpus...")
+    print(command_line)
+
+    list_of_commands = []
+
+    ##Generate Shell Script
+    list_of_commands.append(command_line)
+    create_script_temp(list_of_commands)
+
+    #Run Script
+    call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
 #**************************************************************************#
 def get_result_testing_CRF_models_within_given_list_of_models(demo_name, order_of_template, test_file_path, extension = ""):
     """
@@ -5244,6 +5366,45 @@ def wce_system_after_dividing_corpus(demo_name, corpus_type, number_of_sentences
             #end for
     #endif
 #**************************************************************************#
+def get_CRF_model_after_training(demo_name, corpus_type, number_of_sentences_in_file_for_training, number_of_sentences_in_file_for_developing, number_of_template, num_of_template_start, num_of_template_end):
+    current_config = load_configuration()
+    model_path = "Empty_path"
+
+    if number_of_sentences_in_file_for_developing > 0:
+        is_has_dev_corpus = True
+    else:
+        is_has_dev_corpus = False #because number_of_sentences_in_file_for_developing = 0
+
+    #Just for testing with the range of some templates
+    #num_of_template_start = 1
+    #num_of_template_end = 26
+
+    if number_of_template >= 1: #dung cho demo WCE systems
+        template_path_pattern = current_config.TEMPLATE_PATH
+        item_range = range(number_of_template)
+        for item in item_range:
+            #Just for testing with the range of some templates
+            if item >= num_of_template_start - 1 and item <= num_of_template_end -1:
+                template_path = template_path_pattern + str(item+1)
+
+                model_path = generating_CRF_models(demo_name, is_has_dev_corpus, template_path, item + 1)
+
+                #get_result_testing_CRF_models(demo_name, item + 1)
+            #end if
+        #end for
+    else:
+        pass
+    #endif
+
+    return model_path
+#**************************************************************************#
+def label_using_trained_CRF_model(model_path, file_all_features_path, file_output_path, current_config):
+    #current_config = load_configuration()
+
+    number_of_template = 1
+    get_result_testing_CRF_models(demo_name, number_of_template)
+
+#**************************************************************************#
 def demo_system_original(demo_name, corpus_type, number_of_sentences_in_file_for_training, number_of_sentences_in_file_for_developing,  number_of_template):
     """
     Demo System with 2 phases within CRF model such as training phase and labeling phase that we use tool WAPITI (ref: http://wapiti.limsi.fr/)
@@ -5560,7 +5721,7 @@ def split_files(inputFile,numParts,outputName):
     print ("Splitting "+inputFile )
     str_message_if_not_existed = inputFile + " does not exist !!!"
     is_existed_file(inputFile, str_message_if_not_existed)
-    
+
     tot_lines = sum(1 for line in open(inputFile))
     if (tot_lines % numParts != 0 ):
         nbr_lines = int((tot_lines)/numParts) + 1
@@ -5579,7 +5740,7 @@ def split_files(inputFile,numParts,outputName):
         if cpt_lines > nbr_lines:
             outPart+=1
             cpt_lines=1
-        if cpt_lines <= nbr_lines:            
+        if cpt_lines <= nbr_lines:
             fullOutputName=outputName+os.extsep+str(outPart)
             if cpt_lines == 1:
                 openOutputFile=open(fullOutputName,'w')
@@ -5648,8 +5809,8 @@ def merge_files_threads(list_of_file_paths, current_config):
             message="ERROR: "+l_file+"."+str(l_inc)+" does not exists\n"
             is_existed_file(l_file+"."+str(l_inc), message)
             shutil.copyfileobj(open(l_file+"."+str(l_inc), 'r'), target_file)
-        target_file.close()  
-            
+        target_file.close()
+
 #**************************************************************************#
 
 def generate_template_for_CRF_and_test(list_of_template, current_config, config_end_user):
@@ -5659,45 +5820,45 @@ def generate_template_for_CRF_and_test(list_of_template, current_config, config_
     #else:
       #new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + list_of_template
     print (new_template_file)
-    
+
     for l_keys in list_of_template:
       print (current_config.FEATURE_LIST[l_keys])
-      
+
     with open(new_template_file, 'w') as outfile:
       for l_keys in list_of_template:
         with open(current_config.FEATURE_LIST[l_keys]) as infile:
           outfile.write(infile.read())
-     
+
     demo_name = "System_WCE"
     script_path = config_end_user.TOOL_WAPITI
     train_file_path = current_config.TRAIN_FILE_PATH  + "_" + demo_name + ".txt"
     dev_file_path = current_config.DEV_FILE_PATH  + "_" + demo_name + ".txt"
     #template_path_pattern = current_config.TEMPLATE_PATH
     model_file_path_pattern = current_config.MODEL_PATH
-    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI 
+    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI
     log_path = log_file_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + ".txt"
     model_path = model_file_path_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + ".txt"
 
     test_file_path = current_config.TEST_FILE_PATH  + "_" + demo_name + ".txt"
-    
+
     list_of_commands = []
     # train the model
 
     command_line = script_path + " train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p " + new_template_file + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) + " 2>&1 | tee " + log_path
     print(command_line)
     list_of_commands.append(command_line)
-    
+
     # test the model
     command_line = ""
-    
+
     #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
-    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + ".result" 
+    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + ".result"
     log_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + ".log"
 
     command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_path + " " + result_file_path + " 2>&1 | tee " + log_path
 
     #For writing log file
-    #command_line += model_path 
+    #command_line += model_path
     #command_line += model_path + " " + result_file_path
 
     #print("Demo: " + demo_name + " - Testing with template " + str(order_of_template))
@@ -5715,10 +5876,10 @@ def generate_template_for_CRF_and_test(list_of_template, current_config, config_
     #Run Script
     call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
     list_of_oracle_label, list_of_wapiti_label = get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling(result_file_path)
-    
+
     X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good = get_precision_recall_fscore_within_list(list_of_oracle_label, list_of_wapiti_label)
-    
-    
+
+
     line_separate = "-"*63
     file_writer = open(log_path, mode='a', encoding='utf-8')
 
@@ -5768,9 +5929,9 @@ def generate_template_for_CRF_and_test(list_of_template, current_config, config_
     file_writer.write("\n")
     file_writer.write(line_separate)
     file_writer.write("\n")
-    
+
     return Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good
-    #command_line += 
+    #command_line +=
 
 #**************************************************************************#
 
@@ -5778,48 +5939,48 @@ def generate_template_for_CRF_and_test_threads(list_of_template, current_config,
     new_template_file = os.path.dirname(current_config.FEATURE_LIST[list_of_template[0]] ) + "/feature_selection/" + "+".join(list_of_template)
     #print ("************************************************************ "+ str(l_cpt_threads) + " ********* "+ "+".join(list_of_template))
     #print (new_template_file)
-    
+
     #for l_keys in list_of_template:
       #print (current_config.FEATURE_LIST[l_keys])
-      
+
     with open(new_template_file, 'w') as outfile:
       for l_keys in list_of_template:
         with open(current_config.FEATURE_LIST[l_keys]) as infile:
           outfile.write(infile.read())
-     
+
     demo_name = "System_WCE"
     script_path = config_end_user.TOOL_WAPITI
     train_file_path = current_config.TRAIN_FILE_PATH  + "_" + demo_name + ".txt"
     dev_file_path = current_config.DEV_FILE_PATH  + "_" + demo_name + ".txt"
     #template_path_pattern = current_config.TEMPLATE_PATH
     model_file_path_pattern = current_config.MODEL_PATH
-    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI 
+    log_file_pattern = current_config.LOG_FILE_TRAINING_WAPITI
     log_path = log_file_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".txt"
     model_path = model_file_path_pattern + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".txt"
 
     test_file_path = current_config.TEST_FILE_PATH  + "_" + demo_name + ".txt"
-    
+
     list_of_commands = []
     # train the model
 
-    command_line = script_path + " train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p " + new_template_file + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS) 
+    command_line = script_path + " train -a sgd-l1 -i 200 -e 0.00005 -w 6 -p " + new_template_file + " " + train_file_path + " " + model_path  + " --nthread " +str(current_config.THREADS)
     #+ " 2>&1 | tee " + log_path
     print(command_line)
     call_script(command_line,script_path)
     #list_of_commands.append(command_line)
-    
+
     # test the model
     command_line = ""
-    
+
     #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
-    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".result" 
+    result_file_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".result"
     log_path = test_file_path + "_" + "+".join(list_of_template) + "_" + demo_name + "." + str(l_cpt_threads) + ".log"
 
-    command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_path + " " + result_file_path 
+    command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_path + " " + result_file_path
     #+ " 2>&1 | tee " + log_path
 
     #For writing log file
-    #command_line += model_path 
+    #command_line += model_path
     #command_line += model_path + " " + result_file_path
 
     #print("Demo: " + demo_name + " - Testing with template " + str(order_of_template))
@@ -5838,10 +5999,10 @@ def generate_template_for_CRF_and_test_threads(list_of_template, current_config,
     #Run Script
     #call_script(current_config.SCRIPT_TEMP, current_config.SCRIPT_TEMP)
     list_of_oracle_label, list_of_wapiti_label = get_list_of_oracle_label_and_list_of_wapiti_label_from_result_wapiti_labeling(result_file_path)
-    
+
     X_bad, Y_bad, Z_bad, Pr_bad, Rc_bad, F_bad, X_good, Y_good, Z_good, Pr_good, Rc_good, F_good = get_precision_recall_fscore_within_list_threads(list_of_oracle_label, list_of_wapiti_label, current_config)
-    
-    
+
+
     line_separate = "-"*63
     file_writer = open(log_path, mode='a', encoding='utf-8')
 
@@ -5893,9 +6054,9 @@ def generate_template_for_CRF_and_test_threads(list_of_template, current_config,
     file_writer.write("\n")
     print ([Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]])
     l_scores_returned[l_cpt_threads]=[Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]]
-    
+
     #return Pr_bad, Rc_bad, F_bad, Pr_good, Rc_good, F_good, list_of_template[len(list_of_template)-1]
-    #command_line += 
+    #command_line +=
 
 #**************************************************************************#
 def get_result_testing_CRF_models_with_given_model_and_test(model_file_path, test_file_path, current_config, config_end_user):
@@ -5923,7 +6084,7 @@ def get_result_testing_CRF_models_with_given_model_and_test(model_file_path, tes
     command_line = script_path + " label -c -s -p " + test_file_path + " -m " + model_file_path
 
     #model_path = model_file_path_pattern + str(order_of_template) + "_" + demo_name + ".txt"
-    result_file_path = test_file_path + ".result" 
+    result_file_path = test_file_path + ".result"
     log_path = test_file_path + ".log"
 
     #For writing log file

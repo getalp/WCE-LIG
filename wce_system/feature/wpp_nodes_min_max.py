@@ -388,7 +388,7 @@ def split_sentences_with_id_threads(file_input_path, output_path, n_thread, conf
         #os.chdir(current_working_directory)
 
     #end for
-    
+
     last_index=first_index+number_of_sentences
 
     return first_index, last_index
@@ -600,7 +600,7 @@ def extracting_corresponding_features_threads(file_input_path, file_output_path)
         #file_writer.write(str(number_of_items)+" ")
         if (is_extracted_phrase == True and number_of_items == 6):
             file_writer.write("\n");
-            is_extracted_phrase = False 
+            is_extracted_phrase = False
         if number_of_items == 2:
             #word, WPP any, nodes, min, max
             #since      1.00000 ( time=0 nodes=1 min=1.00000 max=1.00000 mean=1.00000 var=0.00000 svar=0.00000 )
@@ -624,7 +624,7 @@ def extracting_corresponding_features_threads(file_input_path, file_output_path)
             #if not is_in_string(string_phrase, item1):
             #    continue
             if not item1.startswith(string_phrase): #Tien Ngoc LE updated 2014.Dec.26
-                is_extracted_phrase = False 
+                is_extracted_phrase = False
                 continue
 
             #Phrase0 1 0.00 1.00 yet 0.18901
@@ -746,7 +746,7 @@ def generate_wpp_nodes_min_max_threads(file_input_path, output_path , n_thread, 
 
     first_index, last_index = split_sentences_with_id_threads(file_input_path, output_path, n_thread, config_end_user)
     command_line = output_path + " " + str(first_index) + " " + str(last_index) + " " + config_end_user.SRILM_BIN_DIRECTORY + " " + config_end_user.TOOL_FASTNC + " " + config_end_user.TOOL_REFTOCTM + " " + tmp_dir +" " + current_config.WPP_NODES_MIN_MAX_TEMP + "." + str(n_thread) + " " + current_config.LANGUAGE_MODEL_TGT
-    
+
 
 
     #generate the result with FAST tool and SRILM 1.7.1
@@ -806,7 +806,7 @@ def feature_wpp_nodes_min_max_threads(file_input_path, tool_path, file_output_te
       time.sleep(1)
     for myT in l_threads:
       myT.join()
-      
+
     print_time("fastnc processes finished", current_config.RESULT_MESSAGE_OUTPUT)
     print_time("Collecting data", current_config.RESULT_MESSAGE_OUTPUT)
 

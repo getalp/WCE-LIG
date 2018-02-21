@@ -40,7 +40,7 @@ def copy_raw_files_threads():
 
     feature_name_start = "BEGIN - Splitting files"
     print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
-    
+
     ###########################################################################
     #corpus: 3 files
     #print("from: %s" %config_end_user.RAW_CORPUS_SOURCE_LANGUAGE)
@@ -50,7 +50,8 @@ def copy_raw_files_threads():
     from_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
     to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
     #copy_file_from_path1_to_path2(from_path, to_path)
-    os.makedirs(os.path.dirname(to_path))
+
+    os.makedirs(os.path.dirname(to_path), exist_ok=True)
     split_files(from_path, current_config.THREADS, to_path)
 
     #raw_corpus.tgt
@@ -118,7 +119,7 @@ def copy_raw_files_threads():
     #TOKENIZER
     is_lowercase = check_value_boolean(config_end_user.LOWERCASE)
     is_tokenizer = check_value_boolean(config_end_user.TOKENIZER)
-    
+
     feature_name_start = "BEGIN - Tokenization"
     print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
@@ -138,9 +139,9 @@ def copy_raw_files_threads():
             tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE+"."+str(l_inc), current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config)
             #tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
         #end if
-        
-        
-        
+
+
+
     #for l_inc in range(1,current_config.THREADS+1):
         #if is_lowercase and not is_tokenizer:
             #print("lowercase_raw_corpus_not_tokenizer")
@@ -228,11 +229,106 @@ def copy_raw_files_threads():
     ###########################################################################
 
     print("Done-copy_raw_files")
-
-
 #**************************************************************************#
+#raw_corpus_source_language_new_corpus_path, raw_corpus_target_language_new_corpus_path, file_output_google_translator, file_output_bing_translator, file_output_1_bestlist_included_alignment, file_output_N_bestlist_included_alignment
+def copy_raw_files_new_corpus_threads(raw_corpus_source_language_new_corpus_path, raw_corpus_target_language_new_corpus_path, file_output_google_translator, file_output_bing_translator, file_output_1_bestlist_included_alignment, file_output_N_bestlist_included_alignment, config_end_user, current_config):
+    """
+    Copy files in config that is defined by user to corresponding paths
+    """
+    #current_config = load_configuration()
+
+    #config_end_user = load_config_end_user()
+    result_output_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
+
+    feature_name_start = "BEGIN - Splitting files - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    ###########################################################################
+    #corpus: 3 files
+    #raw_corpus.src
+    from_path = raw_corpus_source_language_new_corpus_path #config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
+    to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_NEW_CORPUS
+
+    # Create new directory if not existed
+    os.makedirs(os.path.dirname(to_path), exist_ok=True)
+
+    split_files(from_path, current_config.THREADS, to_path)
+
+    #raw_corpus.tgt
+    from_path = raw_corpus_target_language_new_corpus_path # config_end_user.RAW_CORPUS_TARGET_LANGUAGE
+    to_path = current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE_NEW_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+
+    # target language corpus - format ROW
+    from_path = raw_corpus_target_language_new_corpus_path # config_end_user.RAW_CORPUS_TARGET_LANGUAGE
+    to_path = current_config.TARGET_REF_TEST_FORMAT_ROW_NEW_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+
+    feature_name_start = "END - Splitting files - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    #lowercase_raw_corpus_not_tokenizer
+    #LOWERCASE
+    #TOKENIZER
+    is_lowercase = check_value_boolean(config_end_user.LOWERCASE)
+    is_tokenizer = check_value_boolean(config_end_user.TOKENIZER)
+
+    feature_name_start = "BEGIN - Tokenization - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    for l_inc in range(1,current_config.THREADS+1):
+        if is_lowercase and not is_tokenizer:
+            print("lowercase_raw_corpus_not_tokenizer")
+
+            lowercase_raw_corpus_not_tokenizer(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_NEW_CORPUS+"."+str(l_inc), current_config.LANGUAGE_ENGLISH, current_config.SRC_REF_TEST_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc), current_config)
+
+        elif is_lowercase is True and is_tokenizer is True:
+            tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE_NEW_CORPUS+"."+str(l_inc), current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc), current_config)
+        #end if
 
 
+    feature_name_start = "END - Tokenization - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #Output from Google & Bing Translator: 2 files
+
+    feature_name_start = "BEGIN - Splitting translations outputs - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    from_path = file_output_google_translator # config_end_user.GOOGLE_TRANSLATOR
+    to_path = current_config.GOOGLE_TRANSLATE_CORPUS_NEW_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+
+    from_path = file_output_bing_translator # config_end_user.BING_TRANSLATOR
+    to_path = current_config.BING_TRANSLATE_CORPUS_NEW_CORPUS
+    split_files(from_path, current_config.THREADS, to_path)
+
+    feature_name_start = "END - Splitting translations outputs - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #n best list using MOSES: 2 files
+    feature_name_start = "BEGIN - Splitting translations alignement information - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    from_path = file_output_1_bestlist_included_alignment # config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT
+    to_path = current_config.MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT_NEW_CORPUS
+    split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
+
+
+    from_path = file_output_N_bestlist_included_alignment # config_end_user.N_BEST_LIST_INCLUDED_ALIGNMENT
+    to_path = current_config.MT_HYPOTHESIS_OUTPUT_NBESTLIST_INCLUDED_ALIGNMENT_NEW_CORPUS
+    split_files_moses_alignment_output(from_path, current_config.THREADS, to_path)
+
+    feature_name_start = "END - Splitting translations alignement information - New Corpus"
+    print_time(feature_name_start, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    ###########################################################################
+    #version moses
+    version_moses = config_end_user.VERSION_MOSES
+    print("\n Version of moses for this solution: %s" % version_moses)
+    ###########################################################################
+    ###########################################################################
+
+    print("Done-copy_raw_files  - New Corpus")
+#**************************************************************************#
 
 def copy_raw_files():
     """
@@ -250,7 +346,7 @@ def copy_raw_files():
     #raw_corpus.src
     from_path = config_end_user.RAW_CORPUS_SOURCE_LANGUAGE
     to_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
-    os.makedirs(os.path.dirname(to_path))
+    os.makedirs(os.path.dirname(to_path), exist_ok=True)
     copy_file_from_path1_to_path2(from_path, to_path)
 
     #raw_corpus.tgt
@@ -265,48 +361,11 @@ def copy_raw_files():
         copy_file_from_path1_to_path2(from_path, to_path)
     #end if
 
-    """
-    #LIST_OF_ID_SENTENCES_ASR
-    from_path = config_end_user.LIST_OF_ID_SENTENCES_ASR
-    to_path = current_config.LIST_OF_ID_SENTENCES_ASR
-    copy_file_from_path1_to_path2(from_path, to_path)
-
-    #hypothesis_asr_path
-    from_path = config_end_user.HYPOTHESIS_ASR_PATH
-    to_path = current_config.HYPOTHESIS_ASR_PATH
-    copy_file_from_path1_to_path2(from_path, to_path)
-
-    #reference_asr_path
-    from_path = config_end_user.REFERENCE_ASR_PATH
-    to_path = current_config.REFERENCE_ASR_PATH
-    copy_file_from_path1_to_path2(from_path, to_path)
-
-    #lowercasing & tokenizing post-edition
-    tokenizer_raw_corpus(current_config.POST_EDITION_OF_MACHINE_TRANSLATION_SENTENCES_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.POST_EDITION_AFTER_TOKENIZING_LOWERCASING)
-    """
-
-    """tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW)"""
-
-    """
-    from_path = current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE
-    to_path = current_config.SRC_REF_TEST_FORMAT_ROW
-    copy_file_from_path1_to_path2(from_path, to_path)
-    """
-
     #if "is_has_a_file_included_alignment" in "config_end_user" = 1
     #it should get the Target Source from file MT_HYPOTHESIS_OUTPUT_1_BESTLIST_INCLUDED_ALIGNMENT with index = 1
     from_path = current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE
     to_path = current_config.TARGET_REF_TEST_FORMAT_ROW
     copy_file_from_path1_to_path2(from_path, to_path)
-
-    """
-    if config_end_user.IS_HAS_A_FILE_INCLUDED_ALIGNMENT == 1:
-        get_file_hypothethis_from_output_moses(config_end_user.ONE_BEST_LIST_INCLUDED_ALIGNMENT, current_config.TARGET_REF_TEST_FORMAT_ROW)
-    else:
-        #version - bo sung
-        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_SOURCE_LANGUAGE, current_config.LANGUAGE_FRENCH, current_config.SRC_REF_TEST_FORMAT_ROW)
-        tokenizer_raw_corpus(current_config.INPUT_RAW_CORPUS_TARGET_LANGUAGE, current_config.LANGUAGE_ENGLISH, current_config.TARGET_REF_TEST_FORMAT_ROW)
-    """
 
     #lowercase_raw_corpus_not_tokenizer
     #LOWERCASE
@@ -618,7 +677,7 @@ def preprocessing_corpus_threads(result_output_path):
 
     #ce_agent
 
-    
+
     get_output_treetagger_format_row_threads(current_config.SRC_REF_TEST_FORMAT_ROW, current_config.LANGUAGE_FRENCH,
                                      current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW, current_config, config_end_user)
 
@@ -635,7 +694,7 @@ def preprocessing_corpus_threads(result_output_path):
     """
     #return (0)
 
-    print_result(feature_name, result_output_path)  
+    print_result(feature_name, result_output_path)
     #B3: Chuyen format row thanh format cot dung cho Solution, bao gom: chuyen format cho du lieu va cho format output from
     # TreeTagger dong
     #convert_format_row_to_format_column(file_input_path, file_output_path)
@@ -647,9 +706,9 @@ def preprocessing_corpus_threads(result_output_path):
 
     #Corpus###########
     #Source Language
-    
+
     for l_inc in range(1,current_config.THREADS+1):
-        #command_line_thread = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path +"."+str(l_inc) + " " + file_output_path +"."+str(l_inc) + " -   
+        #command_line_thread = command_line + " " + script_path + " -tree-tagger " + tree_tagger_path + " -l " + target_language + " " + file_input_path +"."+str(l_inc) + " " + file_output_path +"."+str(l_inc) + " -
         convert_format_row_to_format_column(current_config.SRC_REF_TEST_FORMAT_ROW+"."+str(l_inc), current_config.SRC_REF_TEST_FORMAT_COL+"."+str(l_inc))
 
     #Target Language
@@ -683,6 +742,76 @@ def preprocessing_corpus_threads(result_output_path):
     feature_name = "END Task - Preprocessing"
     print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
 #**************************************************************************#
+def preprocessing_new_corpus_threads(raw_corpus_source_language_new_corpus_path, raw_corpus_target_language_new_corpus_path, file_output_google_translator, file_output_bing_translator, file_output_1_bestlist_included_alignment, file_output_N_bestlist_included_alignment,
+    result_output_path, config_end_user, current_config):
+
+    feature_name = "BEGIN Task - Preprocessing - New Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    ##########################################################################
+    ## Copy Raw Corpus
+    ##########################################################################
+
+    feature_name = "Copy Raw Corpus - New Corpus"
+
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+    copy_raw_files_new_corpus_threads(raw_corpus_source_language_new_corpus_path, raw_corpus_target_language_new_corpus_path, file_output_google_translator, file_output_bing_translator, file_output_1_bestlist_included_alignment, file_output_N_bestlist_included_alignment, config_end_user, current_config)
+    print_result(feature_name, result_output_path)
+
+
+    ##########################################################################
+    ## Using TreeTagger for Source & Target Corpus
+    ##########################################################################
+    feature_name = "Using TreeTagger for Source & Target Corpus - New Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+
+    get_output_treetagger_format_row_threads(
+        current_config.SRC_REF_TEST_FORMAT_ROW_NEW_CORPUS,
+        current_config.LANGUAGE_FRENCH,
+        current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS,
+        current_config,
+        config_end_user)
+
+    get_output_treetagger_format_row_threads(
+        current_config.TARGET_REF_TEST_FORMAT_ROW_NEW_CORPUS,
+        current_config.LANGUAGE_ENGLISH,
+        current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS,
+        current_config,
+        config_end_user)
+
+
+    print_result(feature_name, result_output_path)
+
+    ##########################################################################
+    ## Converting raw text & POS text from format row to format column
+    ##########################################################################
+    feature_name = "Converting raw text & POS text from format row to format column - New Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+
+    for l_inc in range(1, current_config.THREADS+1):
+        convert_format_row_to_format_column(
+            current_config.SRC_REF_TEST_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc),
+            current_config.SRC_REF_TEST_FORMAT_COL_NEW_CORPUS+"."+str(l_inc))
+
+        convert_format_row_to_format_column(
+            current_config.TARGET_REF_TEST_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc),
+            current_config.TARGET_REF_TEST_FORMAT_COL_NEW_CORPUS+"."+str(l_inc))
+
+        convert_format_row_to_format_column(
+            current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc),
+            current_config.SRC_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL_NEW_CORPUS+"."+str(l_inc))
+
+        convert_format_row_to_format_column(
+            current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_ROW_NEW_CORPUS+"."+str(l_inc),
+            current_config.TARGET_REF_TEST_OUTPUT_TREETAGGER_FORMAT_COL_NEW_CORPUS+"."+str(l_inc))
+
+    print_result(feature_name, result_output_path)
+    ##########################################################################
+
+    feature_name = "END Task - Preprocessing - New Corpus"
+    print_time(feature_name, current_config.PREPROCESSING_MESSAGE_OUTPUT)
+#**************************************************************************#
 
 
 if __name__ == "__main__":
@@ -693,6 +822,6 @@ if __name__ == "__main__":
     else:
       preprocessing_corpus(current_config.PREPROCESSING_MESSAGE_OUTPUT)
 
-    
+
 
     print('OK')
