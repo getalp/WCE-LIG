@@ -71,10 +71,10 @@ def get_labels_with_given_CRF_model(raw_corpus_source_language_new_corpus_path, 
 
     Expected Result:
 
-0   0   0   0   0   1   1   1   1   NNS 8   2   1   F   2   2   2   2   surgeons    NNS surgeon in  IN  in  _X-1    _X-1    _X-1    chirurgiens NOM chirurgien  de  PRP de  les DET le          G   G   G/0.999998
+0   0   0   0   0   1   1   1   1   NNS 8   2   1   F   2   2   2   2   surgeons    NNS surgeon in  IN  in  _X-1    _X-1    _X-1    chirurgiens NOM chirurgien  de  PRP de  les DET le          G   G/0.999998
 0   1   0   0   0   1   1   0   0   IN  8   -1  1   E   2   2   2   2   in  IN  in  los NP  los surgeons    NNS surgeon de  PRP de  los NOM los chirurgiens NOM chirurgien          B   B/0.949764
 ...
-0   1   0   0   0   1   1   1   1   JJ  4   -1  1   D   1   1   1   1   mr  NN  Mr  camus   NN  <unknown>   said    VVD say m.  VER <unknown>   camus   ADJ camus   déclaré VER déclarer            G   G   G/1.000000
+0   1   0   0   0   1   1   1   1   JJ  4   -1  1   D   1   1   1   1   mr  NN  Mr  camus   NN  <unknown>   said    VVD say m.  VER <unknown>   camus   ADJ camus   déclaré VER déclarer            G   G/1.000000
 0   0   0   1   1   1   1   1   1   NN  4   -1  1   D   1   1   1   1   camus   NN  <unknown>   .   SENT    .   mr  NN  Mr  camus   ADJ camus   .   SENT    .   m.  VER <unknown>           G   G/1.000000
 1   0   0   0   0   1   1   1   1   .   2   -1  1   D   2   2   2   2   .   SENT    .   _X+1    _X+1    _X+1    camus   NN  <unknown>   .   SENT    .   _X+1    _X+1    _X+1    camus   ADJ camus           G   G/1.000000
 
