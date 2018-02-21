@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Feb 16 2018
+Created on Thu Feb 21 2018
 """
 
 # Groupe d'Étude pour la Traduction/le Traitement Automatique des Langues
@@ -18,33 +18,22 @@ Task:
 
 Ex:
 path-of-input-data-have-no-post-edited-corpus =
-path-of-trained-model=/home/lent/Develops/Solution/WCE-LIG/wce_system/var/data/CRF_model_with_template1_System_WCE.txt
+path-of-trained-model=WCE-LIG/wce_system/var/data/CRF_model_with_template1_System_WCE.txt
 decision-threshold=0.5 (If confidence score >= decision-threshold then labelling GOOD, otherwise BAD)
 path-of-labelled-output-data-format-column
-
-B1: chuan bi input-data for new corpus (sauf Post-edité)
-
-B2: Extract all features --> Gop lai thanh 1 file chua tat cac cac features
-
-B3: Dung model da duoc huan luyen de labelling all words after having all features.
-
-B4: Trich xuat ra file chua label va confidence score
-
-B5: Dua vao threshold se dua ra label cho cac tu tuong ung dang dong va dang cot
-
 
 # --------------------------------------------------------------------------
 For example - Shell-script for Labelling Phase:
 
 Demo: System_WCE - Labelling Phase
 
-/home/lent/Develops/Solution/WCE-LIG///tools/wapiti-1.5.0/./wapiti label -c -s -p /home/lent/Develops/Solution/WCE-LIG///wce_system/var/data/CRF_tgt.column.test_file_System_WCE.txt -m /home/lent/Develops/Solution/WCE-LIG///wce_system/var/data/CRF_model_with_template1_System_WCE.txt /home/lent/Develops/Solution/WCE-LIG///wce_system/var/data/CRF_model_result_testing1_System_WCE.txt 2>&1 | tee /home/lent/Develops/Solution/WCE-LIG///wce_system/var/data/CRF_model_testing_log_file1_System_WCE.txt
+WCE-LIG///tools/wapiti-1.5.0/./wapiti label -c -s -p WCE-LIG/wce_system/var/data/CRF_tgt.column.test_file_System_WCE.txt -m WCE-LIG/wce_system/var/data/CRF_model_with_template1_System_WCE.txt WCE-LIG/wce_system/var/data/CRF_model_result_testing1_System_WCE.txt 2>&1 | tee WCE-LIG/wce_system/var/data/CRF_model_testing_log_file1_System_WCE.txt
 
 
 # --------------------------------------------------------------------------
 # General Shell-script for Labelling Phase:
 
-/home/lent/Develops/Solution/WCE-LIG///tools/wapiti-1.5.0/./wapiti label -c -s -p path_to_test_file_System_WCE_using_format_column -m path_to_CRF_model_with_template_System_WCE path_to_CRF_model_result_testing_System_WCE.txt 2>&1 | tee path_to_testing_log_file_System_WCE
+WCE-LIG///tools/wapiti-1.5.0/./wapiti label -c -s -p path_to_test_file_System_WCE_using_format_column -m path_to_CRF_model_with_template_System_WCE path_to_CRF_model_result_testing_System_WCE.txt 2>&1 | tee path_to_testing_log_file_System_WCE
 
 # See more detail of the parameters (-c, -s, -p, -m, etc): https://wapiti.limsi.fr/manual.html
 # --------------------------------------------------------------------------
@@ -143,9 +132,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--wce-output', '-out', required=True,
                         help='WCE Output after labelling')
-
-    # script
-    # time python3 /home/lent/Develops/Solution/WCE-LIG/wce_system/solution/get_labels_for_no_having_post_edited_corpus_with_given_model.py --raw-src /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/src-ref-all.fr --raw-tgt /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/tgt-mt-all.en --google-output /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/output_Google_Translator.en --bing-output /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/output_Bing_Translator.en --one-best-list /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/src-ref-all.fr.translated_output --n-best-list /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/src-ref-all.fr.translated_1000_output --model /home/lent/Develops/Solution/WCE-LIG/wce_system/var/data/CRF_model_with_template1_System_WCE.txt --wce-output /home/lent/Develops/Solution/WCE-LIG/input_data/new_corpus_except_post_edited_data/wce_output_after_labelling.txt
 
 
     args = parser.parse_args()
